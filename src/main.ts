@@ -55,6 +55,7 @@ async function run() {
           core.error(`unexpected status ${status}`);
           return;
         }
+        console.log(`finishing deployment for ${deploymentID} with status ${status}`);
 
         const newStatus = status === 'cancelled' ? 'inactive' : status;
         await client.repos.createDeploymentStatus({
@@ -69,6 +70,30 @@ async function run() {
         console.log(`${deploymentID} status set to ${newStatus}`);
       }
       break;
+    case 'update-env':
+      {
+        const environment = core.getInput('env', { required: true });
+
+        const deployments = await client.repos.listDeployments({
+          repo: repo.repo,
+          owner: repo.owner,
+          environment,
+        });
+        if (deployments.data.length !== 1) {
+          core.setFailed(`found multiple deployments for env ${environment}`);
+        }
+
+        const deployment = deployments.data[0];
+        console.log(`setting env ${environment}'s deployment (${deployment.id}) state to "inactive"`)
+        await client.repos.createDeploymentStatus({
+          ...repo,
+          deployment_id: deployment.id,
+          state: 'inactive',
+          description,
+        });
+
+        console.log('deployment updated');
+      }
     default:
       core.setFailed(`unknown step type ${step}`);
     }
