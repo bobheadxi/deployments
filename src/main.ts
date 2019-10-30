@@ -7,8 +7,8 @@ async function run() {
 
     const token = core.getInput('token', { required: true });
     const step = core.getInput('step', { required: true });
-    const logsURL = core.getInput('logs', { required: false });
-    const description = core.getInput('desc', { required: true });
+    const logsURL = core.getInput('logs');
+    const description = core.getInput('desc');
 
     const client = new github.GitHub(token, {
       previews: ['ant-man-preview', 'flash-preview'],
