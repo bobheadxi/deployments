@@ -44,7 +44,7 @@ async function run() {
     case 'finish':
       {
         const deploymentID = core.getInput('deployment_id', { required: true });
-        const envURL = core.getInput('env-url', { required: true });
+        const envURL = core.getInput('env_url', { required: true });
         const status = core.getInput('status', { required: true });
         if (status !== 'success' && status !== 'failure' && status !== 'cancelled') {
           core.error(`unexpected status ${status}`);
