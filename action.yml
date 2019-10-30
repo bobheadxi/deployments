@@ -1,8 +1,12 @@
 name: GitHub Deployments
 description: GitHub action for working painlessly with deployment statuses.
 author: bobheadxi
-icon: bookmark
-color: yellow
+branding:
+  icon: bookmark
+  color: yellow
+runs:
+  using: node12
+  main: lib/main.js
 
 inputs:
   token:
@@ -13,7 +17,3 @@ inputs:
     description: URL to logs
   desc:
     description: Description to set in status
-
-runs:
-  using: 'node12'
-  main: 'lib/main.js'
