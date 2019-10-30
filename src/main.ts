@@ -70,7 +70,7 @@ async function run() {
         console.log(`${deploymentID} status set to ${newStatus}`);
       }
       break;
-    case 'update-env':
+    case 'deactivate-env':
       {
         const environment = core.getInput('env', { required: true });
 
