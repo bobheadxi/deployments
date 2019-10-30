@@ -79,31 +79,27 @@ async function run() {
           owner: repo.owner,
           environment,
         });
-        if (deployments.data.length > 1) {
-          core.setFailed(`found multiple deployments for env ${environment}`);
-          return;
-        }
         if (deployments.data.length < 1) {
           console.log(`found no deployments for env ${environment}`);
           return;
         }
 
-        const deployment = deployments.data[0];
-        if (!deployment) {
-          console.log('Received response:', { deployments })
-          core.setFailed(`found invalid deployment in response`);
-          return;
+        const deadState = 'inactive';
+        let deploymentsUpdated = 0;
+        for (let i = 0; i < deployments.data.length; i++) {
+          deploymentsUpdated++;
+          const deployment = deployments.data[i];
+
+          console.log(`setting deployment '${environment}.${deployment.id}' (${deployment.sha}) state to "${deadState}"`);
+          await client.repos.createDeploymentStatus({
+            ...repo,
+            deployment_id: deployment.id,
+            state: deadState,
+            description,
+          });
         }
 
-        console.log(`setting env ${environment}'s deployment (${deployment.id}) state to "inactive"`)
-        await client.repos.createDeploymentStatus({
-          ...repo,
-          deployment_id: deployment.id,
-          state: 'inactive',
-          description,
-        });
-
-        console.log('deployment updated');
+        console.log(`${deploymentsUpdated} deployments updated`);
       }
     default:
       core.setFailed(`unknown step type ${step}`);
