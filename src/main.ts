@@ -89,6 +89,12 @@ async function run() {
         }
 
         const deployment = deployments.data[0];
+        if (!deployment) {
+          console.log('Received response:', { deployments })
+          core.setFailed(`found invalid deployment in response`);
+          return;
+        }
+
         console.log(`setting env ${environment}'s deployment (${deployment.id}) state to "inactive"`)
         await client.repos.createDeploymentStatus({
           ...repo,
