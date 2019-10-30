@@ -10,12 +10,14 @@ async function run() {
     const logsURL = core.getInput('logs', { required: false });
     const description = core.getInput('desc', { required: true });
 
-    const client = new github.GitHub(token);
+    const client = new github.GitHub(token, {
+      previews: ['ant-man-preview', 'flash-preview'],
+    });
     switch (step) {
     case 'start':
       {
         const environment = core.getInput('env', { required: true });
-        const transient = core.getInput('desc', { required: false }) === 'true';
+        const transient = core.getInput('transient', { required: false }) === 'true';
 
         const deployment = await client.repos.createDeployment({
           owner: repo.owner,
@@ -28,19 +30,21 @@ async function run() {
         });
 
         const deploymentID = deployment.data.id.toString();
-        core.debug(`created deployment ${deploymentID}`);
+        core.debug(`created deployment ${deploymentID} for env ${environment}`);
         core.setOutput('deployment_id', deploymentID);
+        core.setOutput('env', environment);
     
         await client.repos.createDeploymentStatus({
           ...repo,
           deployment_id: deployment.data.id,
-          state: 'pending',
+          state: 'in_progress',
           log_url: logsURL || `https://github.com/${repo.owner}/${repo.repo}/commit/${sha}/checks`,
           description,
         });
 
-        core.debug('deployment status set to "pending"');
+        core.debug('deployment status set to "in_progress"');
       }
+      break;
     case 'finish':
       {
         const deploymentID = core.getInput('deployment_id', { required: true });
@@ -63,11 +67,12 @@ async function run() {
 
         core.debug(`${deploymentID} status set to ${newStatus}`);
       }
+      break;
     default:
       core.setFailed(`unknown step type ${step}`);
     }
   } catch (error) {
-    core.setFailed(error.message);
+    core.setFailed(`unexpected error encounterd: ${error.message}`);
   }
 }
 
