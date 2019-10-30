@@ -18,6 +18,7 @@ async function run() {
       {
         const environment = core.getInput('env', { required: true });
         const transient = core.getInput('transient', { required: false }) === 'true';
+        console.log(`initializing deployment for ${environment}`);
 
         const deployment = await client.repos.createDeployment({
           owner: repo.owner,
@@ -30,7 +31,7 @@ async function run() {
         });
 
         const deploymentID = deployment.data.id.toString();
-        core.debug(`created deployment ${deploymentID} for env ${environment}`);
+        console.log(`created deployment ${deploymentID} for env ${environment}`);
         core.setOutput('deployment_id', deploymentID);
         core.setOutput('env', environment);
     
@@ -42,7 +43,7 @@ async function run() {
           description,
         });
 
-        core.debug('deployment status set to "in_progress"');
+        console.log('deployment status set to "in_progress"');
       }
       break;
     case 'finish':
@@ -65,7 +66,7 @@ async function run() {
           description,
         });
 
-        core.debug(`${deploymentID} status set to ${newStatus}`);
+        console.log(`${deploymentID} status set to ${newStatus}`);
       }
       break;
     default:
