@@ -1,6 +1,9 @@
 name: GitHub Deployments
 description: GitHub action for working painlessly with deployment statuses.
 author: bobheadxi
+icon: bookmark
+color: yellow
+
 inputs:
   token:
     description: GitHub token
