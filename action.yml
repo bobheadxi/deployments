@@ -2,9 +2,15 @@ name: 'Your name here'
 description: 'Provide a description here'
 author: 'Your name or organization here'
 inputs:
-  myInput:              # change this
-    description: 'input description here'
-    default: 'default value if applicable'
+  token:
+    description: GitHub token
+  step:
+    description: One of 'start' and 'finish'
+  logs:
+    description: URL to logs
+  desc:
+    description: Description to set in status
+
 runs:
   using: 'node12'
   main: 'lib/main.js'
