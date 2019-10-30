@@ -79,8 +79,13 @@ async function run() {
           owner: repo.owner,
           environment,
         });
-        if (deployments.data.length !== 1) {
+        if (deployments.data.length > 1) {
           core.setFailed(`found multiple deployments for env ${environment}`);
+          return;
+        }
+        if (deployments.data.length < 1) {
+          console.log(`found no deployments for env ${environment}`);
+          return;
         }
 
         const deployment = deployments.data[0];
