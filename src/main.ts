@@ -34,12 +34,12 @@ async function run() {
         await client.repos.createDeploymentStatus({
           ...repo,
           deployment_id: deployment.data.id,
-          state: 'in_progress',
+          state: 'pending',
           log_url: logsURL || `https://github.com/${repo.owner}/${repo.repo}/commit/${sha}/checks`,
           description,
         });
 
-        core.debug('deployment status set to "in_progress"');
+        core.debug('deployment status set to "pending"');
       }
     case 'finish':
       {
