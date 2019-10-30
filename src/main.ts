@@ -46,6 +46,7 @@ async function run() {
         console.log('deployment status set to "in_progress"');
       }
       break;
+
     case 'finish':
       {
         const deploymentID = core.getInput('deployment_id', { required: true });
@@ -70,6 +71,7 @@ async function run() {
         console.log(`${deploymentID} status set to ${newStatus}`);
       }
       break;
+
     case 'deactivate-env':
       {
         const environment = core.getInput('env', { required: true });
@@ -101,6 +103,8 @@ async function run() {
 
         console.log(`${deploymentsUpdated} deployments updated`);
       }
+      break;
+
     default:
       core.setFailed(`unknown step type ${step}`);
     }
