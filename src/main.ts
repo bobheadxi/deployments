@@ -66,14 +66,17 @@ async function run() {
         }
         console.log(`finishing deployment for ${deploymentID} with status ${status}`);
 
-        const newStatus = status === 'cancelled' ? 'inactive' : status;
+        const newStatus = (status === 'cancelled') ? 'inactive' : status;
         await client.repos.createDeploymentStatus({
           ...repo,
           deployment_id: parseInt(deploymentID, 10),
           state: newStatus,
-          log_url: logsURL || `https://github.com/${repo.owner}/${repo.repo}/commit/${sha}/checks`,
-          environment_url: envURL,
           description,
+
+          // only set environment_url if deployment worked
+          environment_url: (newStatus === 'success') ? envURL : '',
+          // set log_url to action by default
+          log_url: logsURL || `https://github.com/${repo.owner}/${repo.repo}/commit/${sha}/checks`,
         });
 
         console.log(`${deploymentID} status set to ${newStatus}`);
