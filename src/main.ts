@@ -1,6 +1,8 @@
 import * as core from "@actions/core";
 import * as github from "@actions/github";
 
+import deactivateEnvironment from './deactivate';
+
 async function run() {
   try {
     const { repo, ref, sha } = github.context;
@@ -17,9 +19,15 @@ async function run() {
     case 'start':
       {
         const environment = core.getInput('env', { required: true });
-        const transient = core.getInput('transient', { required: false }) === 'true';
+        const noOverride = core.getInput('no_override') === 'true';
         console.log(`initializing deployment for ${environment}`);
 
+        // mark existing deployments of this environment as inactive
+        if (!noOverride) {
+          deactivateEnvironment(client, repo, environment);
+        }
+
+        const transient = core.getInput('transient', { required: false }) === 'true';
         const deployment = await client.repos.createDeployment({
           owner: repo.owner,
           repo: repo.repo,
@@ -76,32 +84,7 @@ async function run() {
       {
         const environment = core.getInput('env', { required: true });
 
-        const deployments = await client.repos.listDeployments({
-          repo: repo.repo,
-          owner: repo.owner,
-          environment,
-        });
-        if (deployments.data.length < 1) {
-          console.log(`found no deployments for env ${environment}`);
-          return;
-        }
-
-        const deadState = 'inactive';
-        let deploymentsUpdated = 0;
-        for (let i = 0; i < deployments.data.length; i++) {
-          deploymentsUpdated++;
-          const deployment = deployments.data[i];
-
-          console.log(`setting deployment '${environment}.${deployment.id}' (${deployment.sha}) state to "${deadState}"`);
-          await client.repos.createDeploymentStatus({
-            ...repo,
-            deployment_id: deployment.id,
-            state: deadState,
-            description,
-          });
-        }
-
-        console.log(`${deploymentsUpdated} deployments updated`);
+        deactivateEnvironment(client, repo, environment);
       }
       break;
 
