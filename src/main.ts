@@ -24,7 +24,7 @@ async function run() {
 
         // mark existing deployments of this environment as inactive
         if (!noOverride) {
-          deactivateEnvironment(client, repo, environment);
+          await deactivateEnvironment(client, repo, environment);
         }
 
         const transient = core.getInput('transient', { required: false }) === 'true';
@@ -87,7 +87,7 @@ async function run() {
       {
         const environment = core.getInput('env', { required: true });
 
-        deactivateEnvironment(client, repo, environment);
+        await deactivateEnvironment(client, repo, environment);
       }
       break;
 
