@@ -1,6 +1,6 @@
 # Deployments
 
-GitHub action for working painlessly with deployment statuses.
+GitHub action for working painlessly with deployment statuses. See [this blog post](https://dev.to/bobheadxi/branch-previews-with-google-app-engine-and-github-actions-3pco) for a more practical example.
 
 ```yml
 jobs:
