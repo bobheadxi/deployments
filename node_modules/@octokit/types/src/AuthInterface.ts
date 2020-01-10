@@ -12,8 +12,11 @@ import { Route } from "./Route";
  * For the official implementations of the most common authentication
  * strategies, see https://github.com/octokit/auth.js
  */
-export interface AuthInterface {
-  (options?: any): Promise<any>;
+export interface AuthInterface<
+  AuthOptions extends any[],
+  Authentication extends any
+> {
+  (...args: AuthOptions): Promise<Authentication>;
 
   hook: {
     /**
