@@ -1,14 +1,17 @@
 # Deployments
 
-GitHub action for working painlessly with deployment statuses. Instead of exposing with an Action
-configuration that mirrors that of the [GitHub API](https://developer.github.com/v3/repos/deployments/)
+`bobheadxi/deployments` is a GitHub action for working painlessly with deployment statuses. Instead
+of exposing with convoluted Action configuration that mirrors that of the
+[GitHub API](https://developer.github.com/v3/repos/deployments/)
 like some of the other available Actions do, this Action simply exposes a number of
-[configurable "steps" common to most deployment flows](#features).
+configurable, easy-to-use "steps" common to most deployment flows.
 
 - [Features](#features)
   - [step: start](#step-start)
   - [step: finish](#step-finish)
   - [step: deactivate-env](#step-deactivate-env)
+
+A simple example:
 
 ```yml
 on:
@@ -103,6 +106,8 @@ jobs:
 </p>
 </details>
 
+<br />
+
 ### `step: finish`
 
 This is best used after `step: start` and should follow whatever deployment tasks you want to do in the same workflow. `finish` marks an in-progress deployment as complete:
@@ -150,6 +155,8 @@ jobs:
 
 </p>
 </details>
+
+<br />
 
 ### `step: deactivate-env`
 
@@ -204,3 +211,5 @@ jobs:
 
 </p>
 </details>
+
+<br />
