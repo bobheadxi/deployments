@@ -1,7 +1,7 @@
 # Deployments
 
 `bobheadxi/deployments` is a GitHub action for working painlessly with deployment statuses. Instead
-of exposing with convoluted Action configuration that mirrors that of the
+of exposing convoluted Action configuration that mirrors that of the
 [GitHub API](https://developer.github.com/v3/repos/deployments/)
 like some of the other available Actions do, this Action simply exposes a number of
 configurable, easy-to-use "steps" common to most deployment flows.
