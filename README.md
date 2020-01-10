@@ -1,6 +1,6 @@
 # Deployments
 
-GitHub action for working painlessly with deployment statuses. See [this blog post](https://dev.to/bobheadxi/branch-previews-with-google-app-engine-and-github-actions-3pco) for a more practical example.
+GitHub action for working painlessly with deployment statuses. See [this blog post](https://dev.to/bobheadxi/branch-previews-with-google-app-engine-and-github-actions-3pco) for a bit of background and a more practical example.
 
 ```yml
 jobs:
@@ -28,3 +28,7 @@ jobs:
         deployment_id: ${{ steps.deployment.outputs.deployment_id }}
 
 ```
+
+More examples:
+
+* [`xt0rted/actions-cake-demo`](https://github.com/xt0rted/actions-cake-demo/blob/master/.github/workflows/deploy.yml) - demo project using GitHub Actions and Cake to build & deploy a .NET Core site to Azure App Services
