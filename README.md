@@ -112,7 +112,7 @@ jobs:
 
 This is best used after `step: start` and should follow whatever deployment tasks you want to do in the same workflow. `finish` marks an in-progress deployment as complete:
 
-![deploy finished](.static/finished.png)
+![deploy finished](.static/finish.png)
 
 The following [`inputs`](https://help.github.com/en/articles/workflow-syntax-for-github-actions#jobsjob_idstepswith)
 are available:
