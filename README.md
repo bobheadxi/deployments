@@ -7,9 +7,9 @@ like some of the other available Actions do, this Action simply exposes a number
 configurable, easy-to-use "steps" common to most deployment flows.
 
 - [Features](#features)
-  - [step: start](#step-start)
-  - [step: finish](#step-finish)
-  - [step: deactivate-env](#step-deactivate-env)
+  - [`step: start`](#step-start)
+  - [`step: finish`](#step-finish)
+  - [`step: deactivate-env`](#step-deactivate-env)
 
 A simple example:
 
@@ -44,9 +44,11 @@ jobs:
 ```
 
 See [this blog post](https://dev.to/bobheadxi/branch-previews-with-google-app-engine-and-github-actions-3pco)
-for a bit of background and more practical example. Other examples:
+for a bit of background and more practical example. Other examples in the wild:
 
 * [`xt0rted/actions-cake-demo`](https://github.com/xt0rted/actions-cake-demo/blob/master/.github/workflows/deploy.yml) - demo project using GitHub Actions and Cake to build & deploy a .NET Core site to Azure App Services
+* [`conveyal/analysis-ui`](https://github.com/conveyal/analysis-ui/blob/dev/.github/workflows/deploy.yml#L17) -
+Conveyal's frontend for creating and analyzing transportation scenarios
 
 ## Features
 
