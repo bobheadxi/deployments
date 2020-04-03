@@ -63,14 +63,15 @@ deployment tasks you want to do, and it creates and marks a deployment as "start
 The following [`inputs`](https://help.github.com/en/articles/workflow-syntax-for-github-actions#jobsjob_idstepswith)
 are available:
 
-| Variable      | Default                     | Purpose
-| ------------- | --------------------------- | -------
-| `step`        |                             | must be `start` for this step
-| `token`       |                             | provide your `${{ secrets.GITHUB_TOKEN }}` for API access
-| `logs`        | URL to GitHub commit checks | URL of your deployment logs
-| `desc`        |                             | description for this deployment
-| `env`         |                             | identifier for environment to deploy to (e.g. `staging`, `prod`, `master`)
-| `no_override` | `true`                      | toggle whether to mark existing deployments of this environment as inactive
+| Variable        | Default                     | Purpose
+| --------------- | --------------------------- | -------
+| `step`          |                             | must be `start` for this step
+| `token`         |                             | provide your `${{ secrets.GITHUB_TOKEN }}` for API access
+| `logs`          | URL to GitHub commit checks | URL of your deployment logs
+| `desc`          |                             | description for this deployment
+| `env`           |                             | identifier for environment to deploy to (e.g. `staging`, `prod`, `master`)
+| `no_override`   | `true`                      | toggle whether to mark existing deployments of this environment as inactive
+| `deployment_id` |                             | Use an existing deployment instead of creating a new one (e.g. `${{ github.event.deployment.id }}`)
 
 The following [`outputs`](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#steps-context)
 are available:

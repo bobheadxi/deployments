@@ -20,7 +20,8 @@ async function run() {
       {
         const environment = core.getInput('env', { required: true });
         const noOverride = core.getInput('no_override') === 'true';
-        console.log(`initializing deployment for ${environment}`);
+        let deploymentID = core.getInput('deployment_id', { required: false });
+        console.log(`initializing deployment ${deploymentID} for ${environment}`);
 
         // mark existing deployments of this environment as inactive
         if (!noOverride) {
@@ -28,24 +29,26 @@ async function run() {
         }
 
         const transient = core.getInput('transient', { required: false }) === 'true';
-        const deployment = await client.repos.createDeployment({
-          owner: repo.owner,
-          repo: repo.repo,
-          ref: ref,
-          required_contexts: [],
-          environment,
-          auto_merge: false,
-          transient_environment: transient,
-        });
+        if (!deploymentID) {
+          const deployment = await client.repos.createDeployment({
+            owner: repo.owner,
+            repo: repo.repo,
+            ref: ref,
+            required_contexts: [],
+            environment,
+            auto_merge: false,
+            transient_environment: transient,
+          });
+          deploymentID = deployment.data.id.toString();
+        }
 
-        const deploymentID = deployment.data.id.toString();
         console.log(`created deployment ${deploymentID} for env ${environment}`);
         core.setOutput('deployment_id', deploymentID);
         core.setOutput('env', environment);
     
         await client.repos.createDeploymentStatus({
           ...repo,
-          deployment_id: deployment.data.id,
+          deployment_id: parseInt(deploymentID, 10),
           state: 'in_progress',
           log_url: logsURL || `https://github.com/${repo.owner}/${repo.repo}/commit/${sha}/checks`,
           description,
