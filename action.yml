@@ -10,10 +10,18 @@ runs:
 
 inputs:
   token:
+    required: true
     description: GitHub token
   step:
+    required: true
     description: One of 'start' and 'finish'
   logs:
+    required: false
     description: URL to logs
   desc:
+    required: false
     description: Description to set in status
+  ref:
+    required: false
+    description: The git ref to use for the deploy, defaults to github.ref
+

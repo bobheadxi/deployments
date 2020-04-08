@@ -20,20 +20,22 @@ async function run() {
       {
         const environment = core.getInput('env', { required: true });
         const noOverride = core.getInput('no_override') === 'true';
-        let deploymentID = core.getInput('deployment_id', { required: false });
-        console.log(`initializing deployment ${deploymentID} for ${environment}`);
+        const transient = core.getInput('transient') === 'true';
+        const git_ref = core.getInput('ref') || ref;
+
+        let deploymentID = core.getInput('deployment_id');
+        console.log(`initializing deployment ${deploymentID} for ${environment} @ ${git_ref}`);
 
         // mark existing deployments of this environment as inactive
         if (!noOverride) {
           await deactivateEnvironment(client, repo, environment);
         }
 
-        const transient = core.getInput('transient', { required: false }) === 'true';
         if (!deploymentID) {
           const deployment = await client.repos.createDeployment({
             owner: repo.owner,
             repo: repo.repo,
-            ref: ref,
+            ref: git_ref,
             required_contexts: [],
             environment,
             auto_merge: false,
@@ -42,10 +44,10 @@ async function run() {
           deploymentID = deployment.data.id.toString();
         }
 
-        console.log(`created deployment ${deploymentID} for env ${environment}`);
+        console.log(`created deployment ${deploymentID} for ${environment} @ ${git_ref}`);
         core.setOutput('deployment_id', deploymentID);
         core.setOutput('env', environment);
-    
+
         await client.repos.createDeploymentStatus({
           ...repo,
           deployment_id: parseInt(deploymentID, 10),
