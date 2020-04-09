@@ -72,6 +72,7 @@ are available:
 | `env`           |                             | identifier for environment to deploy to (e.g. `staging`, `prod`, `master`)
 | `no_override`   | `true`                      | toggle whether to mark existing deployments of this environment as inactive
 | `deployment_id` |                             | Use an existing deployment instead of creating a new one (e.g. `${{ github.event.deployment.id }}`)
+| `ref`           | `github.ref`                | Specify a particular git ref to use,  (e.g. `${{ github.head_ref }}`)
 
 The following [`outputs`](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#steps-context)
 are available:
@@ -82,7 +83,7 @@ are available:
 | `env`           | name of configured environment
 
 <details>
-<summary>Simple Example</summary>
+<summary>Simple Push Example</summary>
 <p>
 
 ```yml
@@ -101,6 +102,35 @@ jobs:
         step: start
         token: ${{ secrets.GITHUB_TOKEN }}
         env: release
+
+    - name: do my deploy
+      # ...
+```
+
+</p>
+</details>
+
+<br />
+
+<details>
+<summary>Simple Pull Request Example</summary>
+<p>
+
+```yml
+on:
+  pull_request:
+
+jobs:
+  deploy:
+    steps:
+    - name: start deployment
+      uses: bobheadxi/deployments@master
+      id: deployment
+      with:
+        step: start
+        token: ${{ secrets.GITHUB_TOKEN }}
+        env: integration
+        ref: ${{ github.head_ref }}
 
     - name: do my deploy
       # ...
