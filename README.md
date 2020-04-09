@@ -1,6 +1,6 @@
-# Deployments
+# GitHub Deployments [![View Action](https://img.shields.io/badge/view-github%20action-yellow.svg)](https://bobheadxi.dev/r/deployments/)
 
-`bobheadxi/deployments` is a GitHub action for working painlessly with deployment statuses. Instead
+`bobheadxi/deployments` is a [GitHub Action](https://github.com/features/actions) for working painlessly with deployment statuses. Instead
 of exposing convoluted Action configuration that mirrors that of the
 [GitHub API](https://developer.github.com/v3/repos/deployments/)
 like some of the other available Actions do, this Action simply exposes a number of
