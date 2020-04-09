@@ -19,7 +19,7 @@ async function run() {
     case 'start':
       {
         const environment = core.getInput('env', { required: true });
-        const noOverride = core.getInput('no_override') === 'true';
+        const noOverride = core.getInput('no_override') !== 'false';
         let deploymentID = core.getInput('deployment_id', { required: false });
         console.log(`initializing deployment ${deploymentID} for ${environment}`);
 
@@ -45,7 +45,7 @@ async function run() {
         console.log(`created deployment ${deploymentID} for env ${environment}`);
         core.setOutput('deployment_id', deploymentID);
         core.setOutput('env', environment);
-    
+
         await client.repos.createDeploymentStatus({
           ...repo,
           deployment_id: parseInt(deploymentID, 10),
