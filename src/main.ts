@@ -19,7 +19,7 @@ async function run() {
     case 'start':
       {
         const environment = core.getInput('env', { required: true });
-        const noOverride = core.getInput('no_override') === 'true';
+        const noOverride = core.getInput('no_override') !== 'false';
         const transient = core.getInput('transient') === 'true';
         const gitRef = core.getInput('ref') || ref;
 
