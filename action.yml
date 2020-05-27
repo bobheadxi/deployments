@@ -15,6 +15,9 @@ inputs:
   step:
     required: true
     description: One of 'start' and 'finish'
+  auto_inactive:
+    required: false
+    description: Set auto_inactive
   logs:
     required: false
     description: URL to logs

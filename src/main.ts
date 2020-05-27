@@ -9,6 +9,7 @@ async function run() {
 
     const token = core.getInput('token', { required: true });
     const step = core.getInput('step', { required: true });
+    const autoInactive = core.getInput('auto_inactive') !== 'false';
     const logsURL = core.getInput('logs');
     const description = core.getInput('desc');
 
@@ -52,6 +53,7 @@ async function run() {
           ...repo,
           deployment_id: parseInt(deploymentID, 10),
           state: 'in_progress',
+          auto_inactive: autoInactive,
           log_url: logsURL || `https://github.com/${repo.owner}/${repo.repo}/commit/${sha}/checks`,
           description,
         });
@@ -76,6 +78,7 @@ async function run() {
           ...repo,
           deployment_id: parseInt(deploymentID, 10),
           state: newStatus,
+          auto_inactive: autoInactive,
           description,
 
           // only set environment_url if deployment worked
