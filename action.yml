@@ -15,6 +15,9 @@ inputs:
   step:
     required: true
     description: One of 'start' and 'finish'
+  auto_inactive:
+    required: false
+    description: Set auto_inactive (see https://developer.github.com/v3/repos/deployments/#inactive-deployments)
   logs:
     required: false
     description: URL to logs
@@ -24,4 +27,3 @@ inputs:
   ref:
     required: false
     description: The git ref to use for the deploy, defaults to github.ref
-
