@@ -1,34 +1,24 @@
 {
-  "name": "typescript-action",
+  "name": "@bobheadxi/deployments",
   "version": "0.0.0",
   "private": true,
-  "description": "TypeScript template action",
+  "description": "GitHub Action for working painlessly with deployment statuses",
   "main": "lib/main.js",
   "scripts": {
-    "build": "tsc",
-    "test": "jest"
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/bobheadxi/deployments.git"
   },
-  "keywords": [
-    "actions",
-    "node",
-    "setup"
-  ],
-  "author": "YourNameOrOrganization",
+  "author": "bobheadxi",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "1.2.3",
-    "@actions/github": "2.1.1"
+    "@actions/core": "1.2.4",
+    "@actions/github": "2.2.0"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.13",
-    "@types/node": "^12.0.4",
-    "jest": "^24.8.0",
-    "jest-circus": "^24.7.1",
-    "ts-jest": "^24.0.2",
-    "typescript": "^3.8.3"
+    "@types/node": "14.0.13",
+    "typescript": "3.9.5"
   }
 }
