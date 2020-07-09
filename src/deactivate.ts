@@ -1,7 +1,5 @@
-import * as github from "@actions/github";
-
 async function deactivateEnvironment(
-  client: github.GitHub,
+  client: any,
   repo: {
     owner: string;
     repo: string;
