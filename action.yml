@@ -1,4 +1,4 @@
-name: Deployments
+name: Deployments-octokit
 description: GitHub action for working painlessly with deployment statuses.
 author: Tallyb
 branding:
