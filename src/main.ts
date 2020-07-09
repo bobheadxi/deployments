@@ -13,9 +13,7 @@ async function run() {
     const logsURL = core.getInput('logs');
     const description = core.getInput('desc');
 
-    const client = new github.GitHub(token, {
-      previews: ['ant-man-preview', 'flash-preview'],
-    });
+    const client = github.getOctokit(token);
     switch (step) {
     case 'start':
       {
@@ -34,15 +32,14 @@ async function run() {
 
         if (!deploymentID) {
           const deployment = await client.repos.createDeployment({
-            owner: repo.owner,
-            repo: repo.repo,
+            ...repo,
             ref: gitRef,
             required_contexts: [],
             environment,
             auto_merge: false,
             transient_environment: transient,
           });
-          deploymentID = deployment.data.id.toString();
+          deploymentID = deployment.data['id'].toString();
         }
 
         console.log(`created deployment ${deploymentID} for ${environment} @ ${gitRef}`);
