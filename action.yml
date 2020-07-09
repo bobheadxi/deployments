@@ -1,6 +1,6 @@
-name: GitHub Deployments
+name: Deployments
 description: GitHub action for working painlessly with deployment statuses.
-author: bobheadxi
+author: Tallyb
 branding:
   icon: bookmark
   color: yellow
