@@ -1,9 +1,16 @@
 module.exports = {
     "env": {
         "browser": true,
-        "es6": true
+        "es6": true,
+        "node": true,
+        "jest/globals": true
     },
     "extends": "eslint:recommended",
+    parser: '@typescript-eslint/parser',
+    plugins: [
+    '@typescript-eslint',
+    'jest'
+  ],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
@@ -13,5 +20,6 @@ module.exports = {
         "sourceType": "module"
     },
     "rules": {
+        "no-console":0
     }
 };
