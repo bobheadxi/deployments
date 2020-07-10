@@ -1,0 +1,32 @@
+on: [push]
+
+jobs:
+  test-flow:
+    runs-on: ubuntu-latest
+    name: A job to test the action
+    steps:
+      # To use this repository's private action,
+      # you must check out the repository
+      - name: Checkout
+        uses: actions/checkout@v2
+       - name: start deployment
+        uses: ./
+        id: deployment
+        with:
+          step: start
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env: my-mockup
+          ref: ${{github.sha}}
+          transient: true
+
+      - name: update deployment status
+        uses: ./
+        if: always()
+        with:
+          step: finish
+          token: ${{ secrets.GITHUB_TOKEN }}
+          status: ${{ job.status }}
+          desc: my mockup
+          env_url: https://google.com
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          
