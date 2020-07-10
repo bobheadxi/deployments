@@ -19,7 +19,13 @@ module.exports =
 /******/ 		};
 /******/
 /******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 		var threw = true;
+/******/ 		try {
+/******/ 			modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 			threw = false;
+/******/ 		} finally {
+/******/ 			if(threw) delete installedModules[moduleId];
+/******/ 		}
 /******/
 /******/ 		// Flag the module as loaded
 /******/ 		module.l = true;
@@ -246,9 +252,9 @@ module.exports = require("tls");
 /***/ }),
 
 /***/ 18:
-/***/ (function() {
+/***/ (function(module) {
 
-eval("require")("encoding");
+module.exports = eval("require")("encoding");
 
 
 /***/ }),
@@ -556,7 +562,7 @@ function run() {
                 case "finish":
                     {
                         const deploymentID = core_1.default.getInput("deployment_id", {
-                            required: true
+                            required: true,
                         });
                         const envURL = core_1.default.getInput("env_url", { required: false });
                         const status = core_1.default
@@ -9548,7 +9554,7 @@ function deactivateEnvironment(client, repo, environment) {
         const deployments = yield client.repos.listDeployments({
             repo: repo.repo,
             owner: repo.owner,
-            environment
+            environment,
         });
         const existing = deployments.data.length;
         if (existing < 1) {

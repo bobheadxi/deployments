@@ -46,7 +46,7 @@ export async function run() {
               required_contexts: [],
               environment,
               auto_merge: false,
-              transient_environment: transient
+              transient_environment: transient,
             });
             console.log(JSON.stringify(deployment));
             deploymentID = deployment.data["id"].toString();
@@ -68,7 +68,7 @@ export async function run() {
             log_url:
               logsURL ||
               `https://github.com/${repo.owner}/${repo.repo}/commit/${sha}/checks`,
-            description
+            description,
           });
 
           console.log('deployment status set to "in_progress"');
@@ -78,7 +78,7 @@ export async function run() {
       case "finish":
         {
           const deploymentID = core.getInput("deployment_id", {
-            required: true
+            required: true,
           });
           const envURL = core.getInput("env_url", { required: false });
           const status = core
@@ -109,7 +109,7 @@ export async function run() {
             // set log_url to action by default
             log_url:
               logsURL ||
-              `https://github.com/${repo.owner}/${repo.repo}/commit/${sha}/checks`
+              `https://github.com/${repo.owner}/${repo.repo}/commit/${sha}/checks`,
           });
 
           console.log(`${deploymentID} status set to ${newStatus}`);
