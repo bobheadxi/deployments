@@ -29,10 +29,10 @@ export async function run() {
 
           // mark existing deployments of this environment as inactive
           if (!noOverride) {
-            await deactivateEnvironment(client, repo, environment);
+            //await deactivateEnvironment(client, repo, environment);
           }
           console.log(`The deployment id is ${deploymentID}`);
-          
+
           if (!deploymentID) {
             const deployment = await client.repos.createDeployment({
               ...repo,
