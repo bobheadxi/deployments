@@ -1,0 +1,39 @@
+name: Deployments-octokit
+description: GitHub action for working painlessly with deployment statuses.
+author: Tallyb
+branding:
+  icon: bookmark
+  color: yellow
+runs:
+  using: node12
+  main: lib/main.js
+
+inputs:
+  token:
+    required: true
+    description: GitHub token
+  step:
+    required: true
+    description: One of 'start' and 'finish'
+  auto_inactive:
+    required: false
+    description: Set auto_inactive (see https://developer.github.com/v3/repos/deployments/#inactive-deployments)
+  logs:
+    required: false
+    description: URL to logs
+  desc:
+    required: false
+    description: Description to set in status
+  ref:
+    required: false
+    description: The git ref to use for the deploy, defaults to github.ref
+  env: 
+    required: true
+    description: Environment to create
+  status: 
+    required: false
+    description: deployment status to set (for finish)
+  deployment_id: 
+    required: false
+    description: the deployment id. Required for finish
+
