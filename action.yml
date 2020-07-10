@@ -1,6 +1,6 @@
-name: Deployments-octokit
+name: GitHub Deployments
 description: GitHub action for working painlessly with deployment statuses.
-author: Tallyb
+author: bobheadxi
 branding:
   icon: bookmark
   color: yellow
