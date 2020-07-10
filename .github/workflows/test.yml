@@ -1,5 +1,8 @@
 on: [push]
 
+env: 
+  ACTIONS_STEP_DEBUG: true
+  
 jobs:
   test-flow:
     runs-on: ubuntu-latest
