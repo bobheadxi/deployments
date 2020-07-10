@@ -45,7 +45,6 @@ export async function run() {
               auto_merge: false,
               transient_environment: transient,
             });
-            console.log(JSON.stringify(deployment));
             deploymentID = deployment.data["id"].toString();
           }
 
@@ -55,7 +54,7 @@ export async function run() {
           core.setOutput("deployment_id", deploymentID);
           core.setOutput("env", environment);
 
-          const response = await client.repos.createDeploymentStatus({
+          await client.repos.createDeploymentStatus({
             ...repo,
             deployment_id: parseInt(deploymentID, 10),
             state: "in_progress",
@@ -65,7 +64,6 @@ export async function run() {
               `https://github.com/${repo.owner}/${repo.repo}/commit/${sha}/checks`,
             description,
           });
-          console.log("response", response);
           console.log('deployment status set to "in_progress"');
         }
         break;
