@@ -42,9 +42,10 @@ export async function run() {
               transient_environment: transient,
               state: "in_progress"
             });
+            console.log(JSON.stringify(deployment));
             deploymentID = deployment.data["id"].toString();
           }
-
+          
           console.log(
             `created deployment ${deploymentID} for ${environment} @ ${gitRef}`
           );
