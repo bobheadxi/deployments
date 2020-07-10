@@ -46,14 +46,14 @@ export async function run() {
               required_contexts: [],
               environment,
               auto_merge: false,
-              transient_environment: transient,
+              transient_environment: transient
             });
             console.log(JSON.stringify(deployment));
             deploymentID = deployment.data["id"].toString();
             response = deployment.data;
           }
 
-          console.log('response', response);
+          console.log("response", response);
           console.log(
             `created deployment ${deploymentID} for ${environment} @ ${gitRef}`
           );
