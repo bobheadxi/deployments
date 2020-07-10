@@ -13,8 +13,9 @@ export async function run() {
     const logsURL = core.getInput("logs");
     const description = core.getInput("desc");
 
-    console.log("STEP", step);
-    const client = github.getOctokit(token);
+    const client = github.getOctokit(token, {
+      previews: ["ant-man-preview", "flash-preview"],
+    });
     switch (step) {
       case "start":
         {
@@ -30,14 +31,9 @@ export async function run() {
 
           // mark existing deployments of this environment as inactive
           if (!noOverride) {
-            console.log(`Deactivating pervious environments`);
-
             await deactivateEnvironment(client, repo, environment);
           }
 
-          console.log("After Deactivate previous");
-
-          let response;
           if (!deploymentID) {
             console.log(`The deployment id is ${deploymentID}`);
 
@@ -51,17 +47,15 @@ export async function run() {
             });
             console.log(JSON.stringify(deployment));
             deploymentID = deployment.data["id"].toString();
-            response = deployment.data;
           }
 
-          console.log("response", response);
           console.log(
             `created deployment ${deploymentID} for ${environment} @ ${gitRef}`
           );
           core.setOutput("deployment_id", deploymentID);
           core.setOutput("env", environment);
 
-          await client.repos.createDeploymentStatus({
+          const response = await client.repos.createDeploymentStatus({
             ...repo,
             deployment_id: parseInt(deploymentID, 10),
             state: "in_progress",
@@ -71,7 +65,7 @@ export async function run() {
               `https://github.com/${repo.owner}/${repo.repo}/commit/${sha}/checks`,
             description,
           });
-
+          console.log("response", response);
           console.log('deployment status set to "in_progress"');
         }
         break;

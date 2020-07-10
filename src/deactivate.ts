@@ -5,7 +5,7 @@ async function deactivateEnvironment(
     repo: string;
   },
   environment: string
-) {
+): Promise<void> {
   const deployments = await client.repos.listDeployments({
     repo: repo.repo,
     owner: repo.owner,

@@ -1,5 +1,11 @@
+import { run } from "./main";
+
 describe("main", () => {
   test("start", () => {
-    expect(true).toBeTruthy();
+    try {
+      run();
+    } catch (e) {
+      return;
+    }
   });
 });

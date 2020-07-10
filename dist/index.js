@@ -545,8 +545,9 @@ function run() {
             const autoInactive = core.getInput("auto_inactive") !== "false";
             const logsURL = core.getInput("logs");
             const description = core.getInput("desc");
-            console.log("STEP", step);
-            const client = github.getOctokit(token);
+            const client = github.getOctokit(token, {
+                previews: ["ant-man-preview", "flash-preview"],
+            });
             switch (step) {
                 case "start":
                     {
@@ -558,24 +559,20 @@ function run() {
                         console.log(`initializing deployment ${deploymentID} for ${environment} @ ${gitRef}`);
                         // mark existing deployments of this environment as inactive
                         if (!noOverride) {
-                            console.log(`Deactivating pervious environments`);
                             yield deactivate_1.default(client, repo, environment);
                         }
-                        console.log("After Deactivate previous");
-                        let response;
                         if (!deploymentID) {
                             console.log(`The deployment id is ${deploymentID}`);
                             const deployment = yield client.repos.createDeployment(Object.assign(Object.assign({}, repo), { ref: gitRef, required_contexts: [], environment, auto_merge: false, transient_environment: transient }));
                             console.log(JSON.stringify(deployment));
                             deploymentID = deployment.data["id"].toString();
-                            response = deployment.data;
                         }
-                        console.log("response", response);
                         console.log(`created deployment ${deploymentID} for ${environment} @ ${gitRef}`);
                         core.setOutput("deployment_id", deploymentID);
                         core.setOutput("env", environment);
-                        yield client.repos.createDeploymentStatus(Object.assign(Object.assign({}, repo), { deployment_id: parseInt(deploymentID, 10), state: "in_progress", auto_inactive: autoInactive, log_url: logsURL ||
+                        const response = yield client.repos.createDeploymentStatus(Object.assign(Object.assign({}, repo), { deployment_id: parseInt(deploymentID, 10), state: "in_progress", auto_inactive: autoInactive, log_url: logsURL ||
                                 `https://github.com/${repo.owner}/${repo.repo}/commit/${sha}/checks`, description }));
+                        console.log("response", response);
                         console.log('deployment status set to "in_progress"');
                     }
                     break;
