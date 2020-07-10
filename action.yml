@@ -30,6 +30,9 @@ inputs:
   env: 
     required: true
     description: Environment to create
+  env_url: 
+    required: false
+    description: The url pointing to the created environment
   status: 
     required: false
     description: deployment status to set (for finish)

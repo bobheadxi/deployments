@@ -36,6 +36,7 @@ export async function run() {
 
           console.log("After Deactivate previous");
 
+          let response;
           if (!deploymentID) {
             console.log(`The deployment id is ${deploymentID}`);
 
@@ -46,12 +47,13 @@ export async function run() {
               environment,
               auto_merge: false,
               transient_environment: transient,
-              state: "in_progress"
             });
             console.log(JSON.stringify(deployment));
             deploymentID = deployment.data["id"].toString();
+            response = deployment.data;
           }
 
+          console.log('response', response);
           console.log(
             `created deployment ${deploymentID} for ${environment} @ ${gitRef}`
           );
