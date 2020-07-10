@@ -500,6 +500,25 @@ module.exports = require("child_process");
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -514,27 +533,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.run = void 0;
-const core_1 = __importDefault(__webpack_require__(470));
-const github_1 = __importDefault(__webpack_require__(469));
+const core = __importStar(__webpack_require__(470));
+const github = __importStar(__webpack_require__(469));
 const deactivate_1 = __importDefault(__webpack_require__(972));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const { repo, ref, sha } = github_1.default.context;
-            const token = core_1.default.getInput("token", { required: true });
-            const step = core_1.default.getInput("step", { required: true });
-            const autoInactive = core_1.default.getInput("auto_inactive") !== "false";
-            const logsURL = core_1.default.getInput("logs");
-            const description = core_1.default.getInput("desc");
-            const client = github_1.default.getOctokit(token);
+            const { repo, ref, sha } = github.context;
+            const token = core.getInput("token", { required: true });
+            const step = core.getInput("step", { required: true });
+            const autoInactive = core.getInput("auto_inactive") !== "false";
+            const logsURL = core.getInput("logs");
+            const description = core.getInput("desc");
+            console.log("STEP", step);
+            const client = github.getOctokit(token);
             switch (step) {
                 case "start":
                     {
-                        const environment = core_1.default.getInput("env", { required: true });
-                        const noOverride = core_1.default.getInput("no_override") !== "false";
-                        const transient = core_1.default.getInput("transient") === "true";
-                        const gitRef = core_1.default.getInput("ref") || ref;
-                        let deploymentID = core_1.default.getInput("deployment_id");
+                        const environment = core.getInput("env", { required: true });
+                        const noOverride = core.getInput("no_override") !== "false";
+                        const transient = core.getInput("transient") === "true";
+                        const gitRef = core.getInput("ref") || ref;
+                        let deploymentID = core.getInput("deployment_id");
                         console.log(`initializing deployment ${deploymentID} for ${environment} @ ${gitRef}`);
                         // mark existing deployments of this environment as inactive
                         if (!noOverride) {
@@ -552,8 +572,8 @@ function run() {
                         }
                         console.log("response", response);
                         console.log(`created deployment ${deploymentID} for ${environment} @ ${gitRef}`);
-                        core_1.default.setOutput("deployment_id", deploymentID);
-                        core_1.default.setOutput("env", environment);
+                        core.setOutput("deployment_id", deploymentID);
+                        core.setOutput("env", environment);
                         yield client.repos.createDeploymentStatus(Object.assign(Object.assign({}, repo), { deployment_id: parseInt(deploymentID, 10), state: "in_progress", auto_inactive: autoInactive, log_url: logsURL ||
                                 `https://github.com/${repo.owner}/${repo.repo}/commit/${sha}/checks`, description }));
                         console.log('deployment status set to "in_progress"');
@@ -561,17 +581,17 @@ function run() {
                     break;
                 case "finish":
                     {
-                        const deploymentID = core_1.default.getInput("deployment_id", {
+                        const deploymentID = core.getInput("deployment_id", {
                             required: true,
                         });
-                        const envURL = core_1.default.getInput("env_url", { required: false });
-                        const status = core_1.default
+                        const envURL = core.getInput("env_url", { required: false });
+                        const status = core
                             .getInput("status", { required: true })
                             .toLowerCase();
                         if (status !== "success" &&
                             status !== "failure" &&
                             status !== "cancelled") {
-                            core_1.default.error(`unexpected status ${status}`);
+                            core.error(`unexpected status ${status}`);
                             return;
                         }
                         console.log(`finishing deployment for ${deploymentID} with status ${status}`);
@@ -587,16 +607,16 @@ function run() {
                     break;
                 case "deactivate-env":
                     {
-                        const environment = core_1.default.getInput("env", { required: true });
+                        const environment = core.getInput("env", { required: true });
                         yield deactivate_1.default(client, repo, environment);
                     }
                     break;
                 default:
-                    core_1.default.setFailed(`unknown step type ${step}`);
+                    core.setFailed(`unknown step type ${step}`);
             }
         }
         catch (error) {
-            core_1.default.setFailed(`unexpected error encounterd: ${error.message}`);
+            core.setFailed(`unexpected error encounterd: ${error.message}`);
         }
     });
 }

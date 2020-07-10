@@ -1,5 +1,5 @@
-import core from "@actions/core";
-import github from "@actions/github";
+import * as core from "@actions/core";
+import * as github from "@actions/github";
 
 import deactivateEnvironment from "./deactivate";
 
@@ -13,6 +13,7 @@ export async function run() {
     const logsURL = core.getInput("logs");
     const description = core.getInput("desc");
 
+    console.log("STEP", step);
     const client = github.getOctokit(token);
     switch (step) {
       case "start":
