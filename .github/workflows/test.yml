@@ -9,7 +9,7 @@ jobs:
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v2
-       - name: start deployment
+      - name: start deployment
         uses: ./
         id: deployment
         with:
