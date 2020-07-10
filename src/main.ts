@@ -31,7 +31,8 @@ export async function run() {
           if (!noOverride) {
             await deactivateEnvironment(client, repo, environment);
           }
-
+          console.log(`The deployment id is ${deploymentID}`);
+          
           if (!deploymentID) {
             const deployment = await client.repos.createDeployment({
               ...repo,
