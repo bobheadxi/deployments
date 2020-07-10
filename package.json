@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "description": "GitHub Action for working painlessly with deployment statuses",
-  "main": "dist/index.js",
+  "main": "src/main.ts",
   "scripts": {
     "build": "tsc",
     "format": "prettier --write **/*.ts",
