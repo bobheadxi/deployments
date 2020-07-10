@@ -29,11 +29,16 @@ export async function run() {
 
           // mark existing deployments of this environment as inactive
           if (!noOverride) {
-            //await deactivateEnvironment(client, repo, environment);
+            console.log(`Deactivating pervious environments`);
+
+            await deactivateEnvironment(client, repo, environment);
           }
-          console.log(`The deployment id is ${deploymentID}`);
+
+          console.log("After Deactivate previous");
 
           if (!deploymentID) {
+            console.log(`The deployment id is ${deploymentID}`);
+
             const deployment = await client.repos.createDeployment({
               ...repo,
               ref: gitRef,
@@ -46,7 +51,7 @@ export async function run() {
             console.log(JSON.stringify(deployment));
             deploymentID = deployment.data["id"].toString();
           }
-          
+
           console.log(
             `created deployment ${deploymentID} for ${environment} @ ${gitRef}`
           );
