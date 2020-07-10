@@ -39,7 +39,8 @@ export async function run() {
               required_contexts: [],
               environment,
               auto_merge: false,
-              transient_environment: transient
+              transient_environment: transient,
+              state: "in_progress"
             });
             deploymentID = deployment.data["id"].toString();
           }
