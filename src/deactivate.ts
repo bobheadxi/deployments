@@ -9,7 +9,7 @@ async function deactivateEnvironment(
   const deployments = await client.repos.listDeployments({
     repo: repo.repo,
     owner: repo.owner,
-    environment,
+    environment
   });
   const existing = deployments.data.length;
   if (existing < 1) {
@@ -30,7 +30,7 @@ async function deactivateEnvironment(
     await client.repos.createDeploymentStatus({
       ...repo,
       deployment_id: deployment.id,
-      state: deadState,
+      state: deadState
     });
   }
 
