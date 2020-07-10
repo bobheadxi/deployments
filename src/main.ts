@@ -35,8 +35,6 @@ export async function run() {
           }
 
           if (!deploymentID) {
-            console.log(`The deployment id is ${deploymentID}`);
-
             const deployment = await client.repos.createDeployment({
               ...repo,
               ref: gitRef,
