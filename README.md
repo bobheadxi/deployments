@@ -1,11 +1,14 @@
-# GitHub Deployments [![View Action](https://img.shields.io/badge/view-github%20action-yellow.svg)](https://bobheadxi.dev/r/deployments/)
+# GitHub Deployments [![View Action](https://img.shields.io/badge/view-github%20action-yellow.svg)]
 
-`bobheadxi/deployments` is a [GitHub Action](https://github.com/features/actions) for working painlessly with deployment statuses. Instead
+## Credit 
+
+Work is based on:  `bobheadxi/deployments` is a [GitHub Action](https://github.com/features/actions) for working painlessly with deployment statuses. Instead
 of exposing convoluted Action configuration that mirrors that of the
 [GitHub API](https://developer.github.com/v3/repos/deployments/)
 like some of the other available Actions do, this Action simply exposes a number of
 configurable, easy-to-use "steps" common to most deployment flows.
 
+## Features
 - [Features](#features)
   - [`step: start`](#step-start)
   - [`step: finish`](#step-finish)
@@ -23,7 +26,7 @@ jobs:
   deploy:
     steps:
     - name: start deployment
-      uses: bobheadxi/deployments@master
+      uses: tallyb/deployments@master
       id: deployment
       with:
         step: start
@@ -34,7 +37,7 @@ jobs:
       # ...
 
     - name: update deployment status
-      uses: bobheadxi/deployments@master
+      uses: tallyb/deployments@master
       if: always()
       with:
         step: finish
@@ -43,7 +46,7 @@ jobs:
         deployment_id: ${{ steps.deployment.outputs.deployment_id }}
 ```
 
-See [this blog post](https://dev.to/bobheadxi/branch-previews-with-google-app-engine-and-github-actions-3pco)
+See [this blog post](https://dev.to/tallyb/branch-previews-with-google-app-engine-and-github-actions-3pco)
 for a bit of background and more practical example. Other examples in the wild:
 
 * [`xt0rted/actions-cake-demo`](https://github.com/xt0rted/actions-cake-demo/blob/master/.github/workflows/deploy.yml) - demo project using GitHub Actions and Cake to build & deploy a .NET Core site to Azure App Services
@@ -96,7 +99,7 @@ jobs:
   deploy:
     steps:
     - name: start deployment
-      uses: bobheadxi/deployments@master
+      uses: tallyb/deployments@master
       id: deployment
       with:
         step: start
@@ -124,7 +127,7 @@ jobs:
   deploy:
     steps:
     - name: start deployment
-      uses: bobheadxi/deployments@master
+      uses: tallyb/deployments@master
       id: deployment
       with:
         step: start
@@ -177,7 +180,7 @@ jobs:
       # ...
 
     - name: update deployment status
-      uses: bobheadxi/deployments@master
+      uses: tallyb/deployments@master
       if: always()
       with:
         step: finish
@@ -234,7 +237,7 @@ jobs:
       # ...
 
     - name: mark environment as deactivated
-      uses: bobheadxi/deployments@master
+      uses: tallyb/deployments@master
       with:
         step: deactivate-env
         token: ${{ secrets.GITHUB_TOKEN }}

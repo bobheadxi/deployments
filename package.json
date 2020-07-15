@@ -1,5 +1,5 @@
 {
-  "name": "@bobheadxi/deployments",
+  "name": "@tallyb/deployments",
   "version": "0.0.0",
   "private": true,
   "description": "GitHub Action for working painlessly with deployment statuses",
@@ -15,9 +15,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bobheadxi/deployments.git"
+    "url": "git+https://github.com/tallyb/deployments.git"
   },
-  "author": "bobheadxi",
+  "author": "Tallyb",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "1.2.4",

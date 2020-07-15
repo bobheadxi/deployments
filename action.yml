@@ -1,6 +1,6 @@
-name: GitHub Deployments
-description: GitHub action for working painlessly with deployment statuses.
-author: bobheadxi
+name: Deploy github
+description: GitHub action for updating deployment and releases.
+author: tallyb
 branding:
   icon: bookmark
   color: yellow
