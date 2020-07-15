@@ -1,4 +1,4 @@
-name: Deployments
+name: Deploy to Github Environment
 description: GitHub action for updating deployment and releases.
 author: tallyb
 branding:
