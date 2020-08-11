@@ -44,11 +44,13 @@ jobs:
 ```
 
 See [this blog post](https://dev.to/bobheadxi/branch-previews-with-google-app-engine-and-github-actions-3pco)
-for a bit of background and more practical example. Other examples in the wild:
+for a bit of background and more practical example. Other usage examples in the wild:
 
-* [`xt0rted/actions-cake-demo`](https://github.com/xt0rted/actions-cake-demo/blob/master/.github/workflows/deploy.yml) - demo project using GitHub Actions and Cake to build & deploy a .NET Core site to Azure App Services
+* [`mirumee/saleor`](https://sourcegraph.com/search?q=repo:%5Egithub%5C.com/mirumee/saleor%24+bobheadxi/deployments&patternType=literal) - a modular, high performance, headless e-commerce storefront
+* [`skylines-project/skylines`](https://sourcegraph.com/search?q=repo:%5Egithub%5C.com/skylines-project/skylines%24+bobheadxi/deployments&patternType=literal) - live tracking, flight database and competition framework
 * [`conveyal/analysis-ui`](https://github.com/conveyal/analysis-ui/blob/dev/.github/workflows/deploy.yml#L17) -
 Conveyal's frontend for creating and analyzing transportation scenarios
+* [`xt0rted/actions-cake-demo`](https://github.com/xt0rted/actions-cake-demo/blob/master/.github/workflows/deploy.yml) - demo project using GitHub Actions and Cake to build & deploy a .NET Core site to Azure App Services
 
 ## Features
 
