@@ -26,4 +26,19 @@ inputs:
     description: Description to set in status
   ref:
     required: false
-    description: The git ref to use for the deploy, defaults to github.ref
+    description: The git ref to use for the deploy, defaults to `github.ref`
+  env:
+    required: false
+    description: The name of the deployment environment for Github. (Required for `start` and `deactivate-env` only)
+  transient:
+    required: false
+    description: Whether this is a transient (short-lived) environment. (For `start` only)
+  deployment_id:
+    required: false
+    description: The deployment id to update (if specified during `start`, the deployment will be updated instead of a new one created)
+  env_url:
+    required: false
+    description: The environment URL. (For `finish` only)
+  status:
+    required: false
+    description: The deployment status. (For `finish` only)
