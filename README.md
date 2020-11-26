@@ -23,7 +23,7 @@ jobs:
   deploy:
     steps:
     - name: start deployment
-      uses: bobheadxi/deployments@master
+      uses: bobheadxi/deployments@v0.4.3
       id: deployment
       with:
         step: start
@@ -34,7 +34,7 @@ jobs:
       # ...
 
     - name: update deployment status
-      uses: bobheadxi/deployments@master
+      uses: bobheadxi/deployments@v0.4.3
       if: always()
       with:
         step: finish
@@ -98,7 +98,7 @@ jobs:
   deploy:
     steps:
     - name: start deployment
-      uses: bobheadxi/deployments@master
+      uses: bobheadxi/deployments@v0.4.3
       id: deployment
       with:
         step: start
@@ -126,7 +126,7 @@ jobs:
   deploy:
     steps:
     - name: start deployment
-      uses: bobheadxi/deployments@master
+      uses: bobheadxi/deployments@v0.4.3
       id: deployment
       with:
         step: start
@@ -179,7 +179,7 @@ jobs:
       # ...
 
     - name: update deployment status
-      uses: bobheadxi/deployments@master
+      uses: bobheadxi/deployments@v0.4.3
       if: always()
       with:
         step: finish
@@ -236,7 +236,7 @@ jobs:
       # ...
 
     - name: mark environment as deactivated
-      uses: bobheadxi/deployments@master
+      uses: bobheadxi/deployments@v0.4.3
       with:
         step: deactivate-env
         token: ${{ secrets.GITHUB_TOKEN }}
