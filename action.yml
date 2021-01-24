@@ -42,3 +42,7 @@ inputs:
   status:
     required: false
     description: The deployment status. (For `finish` only)
+  no_override:
+    required: false
+    description: Whether to mark existing deployments of this environment as inactive
+    default: 'true'
