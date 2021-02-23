@@ -46,10 +46,7 @@ Other usage examples in the wild:
 
 - [`mirumee/saleor`](https://sourcegraph.com/search?q=repo:%5Egithub%5C.com/mirumee/saleor%24+bobheadxi/deployments\&patternType=literal) - a modular, high performance, headless e-commerce storefront
 - [`skylines-project/skylines`](https://sourcegraph.com/search?q=repo:%5Egithub%5C.com/skylines-project/skylines%24+bobheadxi/deployments\&patternType=literal) - live tracking, flight database and competition framework
-- [`conveyal/analysis-ui`](https://github.com/conveyal/analysis-ui/blob/dev/.github/workflows/deploy.yml#L17) -
-
-Conveyal's frontend for creating and analyzing transportation scenarios
-
+- [`conveyal/analysis-ui`](https://github.com/conveyal/analysis-ui/blob/dev/.github/workflows/deploy.yml#L17) - Conveyal's frontend for creating and analyzing transportation scenarios
 - [`xt0rted/actions-cake-demo`](https://github.com/xt0rted/actions-cake-demo/blob/master/.github/workflows/deploy.yml) - demo project using GitHub Actions and Cake to build & deploy a .NET Core site to Azure App Services
 
 ## Features
