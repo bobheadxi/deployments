@@ -5,7 +5,8 @@
   "description": "GitHub Action for working painlessly with deployment statuses",
   "main": "lib/main.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "prettier": "prettier src --write"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,7 @@
   },
   "devDependencies": {
     "@types/node": "14.0.13",
-    "typescript": "3.9.5"
+    "typescript": "3.9.5",
+    "prettier": "^2.2.1"
   }
 }

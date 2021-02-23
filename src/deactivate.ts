@@ -6,7 +6,7 @@ async function deactivateEnvironment(
     owner: string;
     repo: string;
   },
-  environment: string,
+  environment: string
 ) {
   const deployments = await client.repos.listDeployments({
     repo: repo.repo,
@@ -19,12 +19,16 @@ async function deactivateEnvironment(
     return;
   }
 
-  const deadState = 'inactive';
-  console.log(`found ${existing} existing deployments for env ${environment} - marking as ${deadState}`);
+  const deadState = "inactive";
+  console.log(
+    `found ${existing} existing deployments for env ${environment} - marking as ${deadState}`
+  );
   for (let i = 0; i < existing; i++) {
     const deployment = deployments.data[i];
 
-    console.log(`setting deployment '${environment}.${deployment.id}' (${deployment.sha}) state to "${deadState}"`);
+    console.log(
+      `setting deployment '${environment}.${deployment.id}' (${deployment.sha}) state to "${deadState}"`
+    );
     await client.repos.createDeploymentStatus({
       ...repo,
       deployment_id: deployment.id,
