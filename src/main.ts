@@ -102,7 +102,8 @@ async function run() {
             `finishing deployment for ${args.deploymentID} with status ${args.status}`
           );
 
-          const newStatus = args.status === "cancelled" ? "inactive" : args.status;
+          const newStatus =
+            args.status === "cancelled" ? "inactive" : args.status;
           await client.repos.createDeploymentStatus({
             ...repo,
             deployment_id: parseInt(args.deploymentID, 10),
