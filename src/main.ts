@@ -91,18 +91,18 @@ async function run() {
           }
 
           if (
-            status !== "success" &&
-            status !== "failure" &&
-            status !== "cancelled"
+            args.status !== "success" &&
+            args.status !== "failure" &&
+            args.status !== "cancelled"
           ) {
-            core.error(`unexpected status ${status}`);
+            core.error(`unexpected status ${args.status}`);
             return;
           }
           console.log(
-            `finishing deployment for ${args.deploymentID} with status ${status}`
+            `finishing deployment for ${args.deploymentID} with status ${args.status}`
           );
 
-          const newStatus = status === "cancelled" ? "inactive" : status;
+          const newStatus = args.status === "cancelled" ? "inactive" : args.status;
           await client.repos.createDeploymentStatus({
             ...repo,
             deployment_id: parseInt(args.deploymentID, 10),
