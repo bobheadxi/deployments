@@ -6,7 +6,8 @@
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
-    "prettier": "prettier src --write"
+    "prettier": "prettier src --write",
+    "check-prettier": "prettier src --check"
   },
   "repository": {
     "type": "git",
