@@ -10,6 +10,7 @@ configurable, easy-to-use "steps" common to most deployment flows.
   - [`step: start`](#step-start)
   - [`step: finish`](#step-finish)
   - [`step: deactivate-env`](#step-deactivate-env)
+- [Debugging](#debugging)
 
 A simple example:
 
@@ -246,5 +247,9 @@ jobs:
 
 </p>
 </details>
+
+## Debugging
+
+The argument `log_args: true` can be provided to print arguments used by `deployments`.
 
 <br />
