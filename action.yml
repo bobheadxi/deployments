@@ -46,3 +46,7 @@ inputs:
     required: false
     description: Whether to mark existing deployments of this environment as inactive
     default: 'true'
+  log_args:
+    required: false
+    description: Print arguments used by this action.
+    default: 'false'
