@@ -246,4 +246,6 @@ jobs:
 
 The argument `log_args: true` can be provided to print arguments used by `deployments`.
 
+If you run into an problems or have any questions, feel free to open an [issue](https://github.com/bobheadxi/deployments/issues) or [discussion](https://github.com/bobheadxi/deployments/discussions)!
+
 <br />
