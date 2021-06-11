@@ -50,3 +50,6 @@ inputs:
     required: false
     description: Print arguments used by this action.
     default: 'false'
+  repository:
+    required: false
+    description: Set status for a different owner/repository (optional, defaults to the same repo and owner as the action)

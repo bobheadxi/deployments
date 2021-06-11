@@ -2,15 +2,13 @@ import * as github from "@actions/github";
 
 async function deactivateEnvironment(
   client: github.GitHub,
-  repo: {
-    owner: string;
-    repo: string;
-  },
+  owner: string,
+  repo: string,
   environment: string
 ) {
   const deployments = await client.repos.listDeployments({
-    repo: repo.repo,
-    owner: repo.owner,
+    owner,
+    repo,
     environment,
   });
   const existing = deployments.data.length;
@@ -30,7 +28,8 @@ async function deactivateEnvironment(
       `setting deployment '${environment}.${deployment.id}' (${deployment.sha}) state to "${deadState}"`
     );
     await client.repos.createDeploymentStatus({
-      ...repo,
+      owner,
+      repo,
       deployment_id: deployment.id,
       state: deadState,
     });
