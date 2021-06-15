@@ -268,8 +268,8 @@ interface NumberConstructor {
 
     /**
      * Converts A string to an integer.
-     * @param s A string to convert into a number.
-     * @param radix A value between 2 and 36 that specifies the base of the number in numString.
+     * @param string A string to convert into a number.
+     * @param radix A value between 2 and 36 that specifies the base of the number in `string`.
      * If this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.
      * All other strings are considered decimal.
      */
@@ -454,48 +454,48 @@ interface String {
     startsWith(searchString: string, position?: number): boolean;
 
     /**
-     * Returns an <a> HTML anchor element and sets the name attribute to the text value
+     * Returns an `<a>` HTML anchor element and sets the name attribute to the text value
      * @param name
      */
     anchor(name: string): string;
 
-    /** Returns a <big> HTML element */
+    /** Returns a `<big>` HTML element */
     big(): string;
 
-    /** Returns a <blink> HTML element */
+    /** Returns a `<blink>` HTML element */
     blink(): string;
 
-    /** Returns a <b> HTML element */
+    /** Returns a `<b>` HTML element */
     bold(): string;
 
-    /** Returns a <tt> HTML element */
+    /** Returns a `<tt>` HTML element */
     fixed(): string;
 
-    /** Returns a <font> HTML element and sets the color attribute value */
+    /** Returns a `<font>` HTML element and sets the color attribute value */
     fontcolor(color: string): string;
 
-    /** Returns a <font> HTML element and sets the size attribute value */
+    /** Returns a `<font>` HTML element and sets the size attribute value */
     fontsize(size: number): string;
 
-    /** Returns a <font> HTML element and sets the size attribute value */
+    /** Returns a `<font>` HTML element and sets the size attribute value */
     fontsize(size: string): string;
 
-    /** Returns an <i> HTML element */
+    /** Returns an `<i>` HTML element */
     italics(): string;
 
-    /** Returns an <a> HTML element and sets the href attribute value */
+    /** Returns an `<a>` HTML element and sets the href attribute value */
     link(url: string): string;
 
-    /** Returns a <small> HTML element */
+    /** Returns a `<small>` HTML element */
     small(): string;
 
-    /** Returns a <strike> HTML element */
+    /** Returns a `<strike>` HTML element */
     strike(): string;
 
-    /** Returns a <sub> HTML element */
+    /** Returns a `<sub>` HTML element */
     sub(): string;
 
-    /** Returns a <sup> HTML element */
+    /** Returns a `<sup>` HTML element */
     sup(): string;
 }
 
