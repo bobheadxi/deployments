@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "description": "GitHub Action for working painlessly with deployment statuses",
-  "main": "build/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "prettier": "prettier src --write",
     "prettier:check": "prettier src --check",
