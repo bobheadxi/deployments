@@ -3,12 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "description": "GitHub Action for working painlessly with deployment statuses",
-  "main": "lib/main.js",
+  "main": "dist/index.js",
   "scripts": {
     "prettier": "prettier src --write",
     "prettier:check": "prettier src --check",
-    "build": "tsc",
-    "build:check": "npm run build && git diff --quiet build"
+    "build": "ncc build src/main.ts --out dist --minify --source-map --license LICENSES",
+    "build:check": "npm run build && git diff --quiet dist"
   },
   "repository": {
     "type": "git",
@@ -18,11 +18,10 @@
   "license": "MIT",
   "dependencies": {
     "@actions/core": "1.4.0",
-    "@actions/github": "5.0.0"
-  },
-  "devDependencies": {
-    "@types/node": "^12.0.0",
-    "typescript": "~4.3.2",
-    "prettier": "^2.3.1"
+    "@actions/github": "5.0.0",
+    "@vercel/ncc": "0.28.6",
+    "@types/node": "12.20.15",
+    "typescript": "4.3.2",
+    "prettier": "2.3.1"
   }
 }
