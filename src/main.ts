@@ -1,5 +1,6 @@
 import * as core from "@actions/core";
 import { collectDeploymentContext } from "./lib/context";
+
 import { run, Step } from "./steps/steps";
 
 const context = collectDeploymentContext();

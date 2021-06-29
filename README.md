@@ -8,6 +8,7 @@ Instead of exposing convoluted Action configuration that mirrors that of the [Gi
   - [`step: finish`](#step-finish)
   - [`step: deactivate-env`](#step-deactivate-env)
 - [Debugging](#debugging)
+- [Migrating to V1](#migrating-to-v1)
 
 A simple example:
 
@@ -19,9 +20,10 @@ on:
 
 jobs:
   deploy:
+    runs-on: ubuntu-latest
     steps:
     - name: start deployment
-      uses: bobheadxi/deployments@v0.4.3
+      uses: bobheadxi/deployments@v1
       id: deployment
       with:
         step: start
@@ -32,7 +34,7 @@ jobs:
       # ...
 
     - name: update deployment status
-      uses: bobheadxi/deployments@v0.4.3
+      uses: bobheadxi/deployments@v1
       if: always()
       with:
         step: finish
@@ -54,6 +56,17 @@ You can find [more usages of this action on Sourcegraph](https://sourcegraph.com
 
 ## Features
 
+The following configuration options are for *all steps*:
+
+| Variable     | Default                     | Purpose                                                                                          |
+| ------------ | --------------------------- | ------------------------------------------------------------------------------------------------ |
+| `step`       |                             | One of [`start`](#step-start), [`finish`](#step-finish), or [`deactivate`](#step-deactivate-env) |
+| `token`      |                             | provide your `${{ secrets.GITHUB_TOKEN }}` for API access                                        |
+| `repository` | Current repository          | target a specific repository for updates                                                         |
+| `logs`       | URL to GitHub commit checks | URL of your deployment logs                                                                      |
+| `desc`       | GitHub-generated description | description for this deployment                                                                  |
+| `env`           |                             | identifier for environment to deploy to (e.g. `staging`, `prod`, `master`)                          |
+
 ### `step: start`
 
 This is best used on the `push: { branches: [ ... ] }` event, but you can also have `release: { types: [ published ] }` trigger this event.
@@ -65,12 +78,7 @@ The following [`inputs`](https://help.github.com/en/articles/workflow-syntax-for
 
 | Variable        | Default                     | Purpose                                                                                             |
 | --------------- | --------------------------- | --------------------------------------------------------------------------------------------------- |
-| `step`          |                             | must be `start` for this step                                                                       |
-| `token`         |                             | provide your `${{ secrets.GITHUB_TOKEN }}` for API access                                           |
-| `logs`          | URL to GitHub commit checks | URL of your deployment logs                                                                         |
-| `desc`          |                             | description for this deployment                                                                     |
-| `env`           |                             | identifier for environment to deploy to (e.g. `staging`, `prod`, `master`)                          |
-| `no_override`   | `true`                      | toggle whether to mark existing deployments of this environment as inactive                         |
+| `override`      | `true`                      | whether to mark existing deployments of this environment as inactive                                |
 | `deployment_id` |                             | Use an existing deployment instead of creating a new one (e.g. `${{ github.event.deployment.id }}`) |
 | `ref`           | `github.ref`                | Specify a particular git ref to use,  (e.g. `${{ github.head_ref }}`)                               |
 
@@ -95,7 +103,7 @@ jobs:
   deploy:
     steps:
     - name: start deployment
-      uses: bobheadxi/deployments@v0.4.3
+      uses: bobheadxi/deployments@v1
       id: deployment
       with:
         step: start
@@ -121,9 +129,10 @@ on:
 
 jobs:
   deploy:
+    runs-on: ubuntu-latest
     steps:
     - name: start deployment
-      uses: bobheadxi/deployments@v0.4.3
+      uses: bobheadxi/deployments@v1
       id: deployment
       with:
         step: start
@@ -151,11 +160,8 @@ The following [`inputs`](https://help.github.com/en/articles/workflow-syntax-for
 
 | Variable        | Default                     | Purpose                                                                           |
 | --------------- | --------------------------- | --------------------------------------------------------------------------------- |
-| `step`          |                             | must be `finish` for this step                                                    |
-| `token`         |                             | provide your `${{ secrets.GITHUB_TOKEN }}` for API access                         |
-| `logs`          | URL to GitHub commit checks | URL of your deployment logs                                                       |
-| `desc`          |                             | description for this deployment                                                   |
 | `status`        |                             | provide the current deployment job status `${{ job.status }}`                     |
+| `override`      | `true`                      | whether to mark existing deployments of this environment as inactive              |
 | `deployment_id` |                             | identifier for deployment to update (see outputs of [`step: start`](#step-start)) |
 | `env_url`       |                             | URL to view deployed environment                                                  |
 
@@ -176,7 +182,7 @@ jobs:
       # ...
 
     - name: update deployment status
-      uses: bobheadxi/deployments@v0.4.3
+      uses: bobheadxi/deployments@v1
       if: always()
       with:
         step: finish
@@ -231,7 +237,7 @@ jobs:
       # ...
 
     - name: mark environment as deactivated
-      uses: bobheadxi/deployments@v0.4.3
+      uses: bobheadxi/deployments@v1
       with:
         step: deactivate-env
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -244,8 +250,17 @@ jobs:
 
 ## Debugging
 
-The argument `log_args: true` can be provided to print arguments used by `deployments`.
+The argument `debug: true` can be provided to print arguments used by `deployments` and log debug information.
 
 If you run into an problems or have any questions, feel free to open an [issue](https://github.com/bobheadxi/deployments/issues) or [discussion](https://github.com/bobheadxi/deployments/discussions)!
+
+## Migrating to V1
+
+`v1.0.0` makes the following breaking changes from `v0.7.x`:
+
+- **CHANGED `no_override` is now `override`**, and the default behaviour is `override: true`.
+- **CHANGED `log_args` is now `debug`**, but does the same thing as before.
+- **REMOVED `auto_inactive`** - use `override` instead.
+- **REMOVED `transient`** - all deployments created by this action are `transient` by default, with removals handled by `override` or `step: deactivate-env`.
 
 <br />

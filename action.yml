@@ -7,6 +7,7 @@ branding:
 runs:
   using: node12
   main: dist/index.js
+  post: dist/index.js
 
 inputs:
   token:
@@ -15,9 +16,9 @@ inputs:
   step:
     required: true
     description: One of 'start' and 'finish'
-  auto_inactive:
+  repository:
     required: false
-    description: Set auto_inactive (see https://developer.github.com/v3/repos/deployments/#inactive-deployments)
+    description: Set status for a different repository, using the format `$owner/$repository` (optional, defaults to the current repository)
   logs:
     required: false
     description: URL to logs
@@ -42,14 +43,11 @@ inputs:
   status:
     required: false
     description: The deployment status. (For `finish` only)
-  no_override:
+  override:
     required: false
     description: Whether to mark existing deployments of this environment as inactive
     default: 'true'
-  log_args:
+  debug:
     required: false
-    description: Print arguments used by this action.
+    description: Print arguments used by this action and other debug information.
     default: 'false'
-  repository:
-    required: false
-    description: Set status for a different repository, using the format `$owner/$repository` (optional, defaults to the current repository)
