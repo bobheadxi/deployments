@@ -1,6 +1,7 @@
 import { getInput } from "@actions/core";
 import { context, getOctokit } from "@actions/github";
 import { GitHub } from "@actions/github/lib/utils";
+import Logger from "./log";
 
 export interface DeploymentContext {
   ref: string;
@@ -8,15 +9,30 @@ export interface DeploymentContext {
   owner: string;
   repo: string;
   github: InstanceType<typeof GitHub>;
+  log: Logger;
 
   coreArgs: {
-    autoInactive: boolean;
-    logsURL: string;
     description?: string;
-    logArgs: boolean;
+    environment: string;
+    logsURL: string;
   };
 }
 
+/**
+ * Alternative to @actions/core.getBooleanInput that supports default values
+ */
+export function getBooleanInput(key: string, defaultTrue: boolean) {
+  if (defaultTrue) {
+    // unless 'false', always true
+    return getInput(key) !== "false";
+  }
+  // unless 'true', always false
+  return getInput(key) === "true";
+}
+
+/**
+ * Generates configuration for this action run.
+ */
 export function collectDeploymentContext(): DeploymentContext {
   const { ref, sha } = context;
 
@@ -35,18 +51,18 @@ export function collectDeploymentContext(): DeploymentContext {
   });
 
   return {
-    ref,
+    ref: getInput("ref") || ref,
     sha,
     owner,
     repo,
     github,
+    log: new Logger({ debug: getBooleanInput("debug", false) }),
     coreArgs: {
-      autoInactive: getInput("auto_inactive") !== "false",
+      environment: getInput("env", { required: true }),
+      description: getInput("desc"),
       logsURL:
         getInput("logs") ||
         `https://github.com/${owner}/${repo}/commit/${sha}/checks`,
-      description: getInput("desc"),
-      logArgs: getInput("log_args") === "true",
     },
   };
 }
