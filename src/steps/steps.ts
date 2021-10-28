@@ -77,6 +77,7 @@ export async function run(step: Step, context: DeploymentContext) {
             envURL: getInput("env_url", { required: false }),
             status: getInput("status", { required: true }).toLowerCase(),
             envURLs: getInput("env_urls", { required: false }),
+            prefixUrl: getInput("prefix_url", { required: false }),
           };
           if (args.logArgs) {
             console.log(`'${step}' arguments`, args);
@@ -106,7 +107,7 @@ export async function run(step: Step, context: DeploymentContext) {
               state: newStatus,
               auto_inactive: args.autoInactive,
               description: args.description,
-              environment_url: newStatus === "success" ? urlArray[i]: "",
+              environment_url: newStatus === "success" ? args.prefixUrl ? `${args.prefixUrl}${urlArray[i]}` : `${urlArray[i]}`  : "",
               log_url: args.logsURL,
             }))
           }
@@ -132,7 +133,7 @@ export async function run(step: Step, context: DeploymentContext) {
       default:
         setFailed(`unknown step type ${step}`);
     }
-  } catch (error) {
+  } catch (error: any) {
     setFailed(`unexpected error encountered: ${error.message}`);
   }
 }
