@@ -99,20 +99,27 @@ export async function run(step: Step, context: DeploymentContext) {
           const newStatus =
             args.status === "cancelled" ? "inactive" : args.status;
           const urlArray = args.envURLs.split(args.splitter);
-          const promises: Array<Promise<unknown>> = []
-          for(let i=0; i<urlArray.length; i++) {
-            promises.push(github.rest.repos.createDeploymentStatus({
-              owner: context.owner,
-              repo: context.repo,
-              deployment_id: parseInt(args.deploymentID, 10),
-              state: newStatus,
-              auto_inactive: args.autoInactive,
-              description: args.description,
-              environment_url: newStatus === "success" ? args.prefixUrl ? `${args.prefixUrl}${urlArray[i]}` : `${urlArray[i]}`  : "",
-              log_url: args.logsURL,
-            }))
+          const promises: Array<Promise<unknown>> = [];
+          for (let i = 0; i < urlArray.length; i++) {
+            promises.push(
+              github.rest.repos.createDeploymentStatus({
+                owner: context.owner,
+                repo: context.repo,
+                deployment_id: parseInt(args.deploymentID, 10),
+                state: newStatus,
+                auto_inactive: args.autoInactive,
+                description: args.description,
+                environment_url:
+                  newStatus === "success"
+                    ? args.prefixUrl
+                      ? `${args.prefixUrl}${urlArray[i]}`
+                      : `${urlArray[i]}`
+                    : "",
+                log_url: args.logsURL,
+              })
+            );
           }
-          await Promise.all(promises)
+          await Promise.all(promises);
           console.log(`${args.deploymentID} status set to ${newStatus}`);
         }
         break;
