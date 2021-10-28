@@ -76,6 +76,7 @@ export async function run(step: Step, context: DeploymentContext) {
             deploymentID: getInput("deployment_id", { required: true }),
             envURL: getInput("env_url", { required: false }),
             status: getInput("status", { required: true }).toLowerCase(),
+            envURLs: getInput("env_urls", { required: false }),
           };
           if (args.logArgs) {
             console.log(`'${step}' arguments`, args);
@@ -95,20 +96,21 @@ export async function run(step: Step, context: DeploymentContext) {
 
           const newStatus =
             args.status === "cancelled" ? "inactive" : args.status;
-          await github.rest.repos.createDeploymentStatus({
-            owner: context.owner,
-            repo: context.repo,
-            deployment_id: parseInt(args.deploymentID, 10),
-            state: newStatus,
-            auto_inactive: args.autoInactive,
-            description: args.description,
-
-            // only set environment_url if deployment worked
-            environment_url: newStatus === "success" ? args.envURL : "",
-            // set log_url to action by default
-            log_url: args.logsURL,
-          });
-
+          const urlArray = args.envURLs.split(" ");
+          const promises: Array<Promise<unknown>> = []
+          for(let i=0; i<urlArray.length; i++) {
+            promises.push(github.rest.repos.createDeploymentStatus({
+              owner: context.owner,
+              repo: context.repo,
+              deployment_id: parseInt(args.deploymentID, 10),
+              state: newStatus,
+              auto_inactive: args.autoInactive,
+              description: args.description,
+              environment_url: newStatus === "success" ? urlArray[i]: "",
+              log_url: args.logsURL,
+            }))
+          }
+          await Promise.all(promises)
           console.log(`${args.deploymentID} status set to ${newStatus}`);
         }
         break;
