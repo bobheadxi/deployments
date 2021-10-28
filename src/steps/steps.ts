@@ -78,6 +78,7 @@ export async function run(step: Step, context: DeploymentContext) {
             status: getInput("status", { required: true }).toLowerCase(),
             envURLs: getInput("env_urls", { required: false }),
             prefixUrl: getInput("prefix_url", { required: false }),
+            splitter: getInput("splitter", { required: false }),
           };
           if (args.logArgs) {
             console.log(`'${step}' arguments`, args);
@@ -97,7 +98,7 @@ export async function run(step: Step, context: DeploymentContext) {
 
           const newStatus =
             args.status === "cancelled" ? "inactive" : args.status;
-          const urlArray = args.envURLs.split(" ");
+          const urlArray = args.envURLs.split(args.splitter);
           const promises: Array<Promise<unknown>> = []
           for(let i=0; i<urlArray.length; i++) {
             promises.push(github.rest.repos.createDeploymentStatus({
