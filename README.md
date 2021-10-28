@@ -1,6 +1,6 @@
-# GitHub Deployments [![View Action](https://img.shields.io/badge/view-github%20action-yellow.svg)](https://bobheadxi.dev/r/deployments/)
+# GitHub Deployments [![View Action](https://img.shields.io/badge/view-github%20action-yellow.svg)](https://maxgfr.dev/r/deployments/)
 
-`bobheadxi/deployments` is a [GitHub Action](https://github.com/features/actions) for working painlessly with deployment statuses.
+`maxgfr/deployments` is a [GitHub Action](https://github.com/features/actions) for working painlessly with deployment statuses.
 Instead of exposing convoluted Action configuration that mirrors that of the [GitHub API](https://developer.github.com/v3/repos/deployments/) like some of the other available Actions do, this Action simply exposes a number of configurable, easy-to-use "steps" common to most deployment flows.
 
 - [Features](#features)
@@ -21,7 +21,7 @@ jobs:
   deploy:
     steps:
     - name: start deployment
-      uses: bobheadxi/deployments@v0.4.3
+      uses: maxgfr/deployments@v0.0.1
       id: deployment
       with:
         step: start
@@ -32,7 +32,7 @@ jobs:
       # ...
 
     - name: update deployment status
-      uses: bobheadxi/deployments@v0.4.3
+      uses: maxgfr/deployments@v0.0.1
       if: always()
       with:
         step: finish
@@ -41,16 +41,16 @@ jobs:
         deployment_id: ${{ steps.deployment.outputs.deployment_id }}
 ```
 
-See [this blog post](https://dev.to/bobheadxi/branch-previews-with-google-app-engine-and-github-actions-3pco) for a bit of background and more practical example.
+See [this blog post](https://dev.to/maxgfr/branch-previews-with-google-app-engine-and-github-actions-3pco) for a bit of background and more practical example.
 You can also refer to other projects that also use this action:
 
-- [`github/super-linter`](https://sourcegraph.com/search?q=context:global+repo:%5Egithub%5C.com/github/super-linter%24+file:%5E%5C.github/workflows+bobheadxi/deployments&patternType=literal) [![GitHub Repo stars](https://img.shields.io/github/stars/github/super-linter?style=social)](https://github.com/github/super-linter) - [GitHub's all-in-one linter Action](https://github.blog/2020-06-18-introducing-github-super-linter-one-linter-to-rule-them-all/)
-- [`mxcl/PromiseKit`](https://sourcegraph.com/search?q=context:global+repo:%5Egithub%5C.com/mxcl/PromiseKit%24+file:%5E%5C.github/workflows+bobheadxi/deployments&patternType=literal) [![GitHub Repo stars](https://img.shields.io/github/stars/mxcl/PromiseKit?style=social)](https://github.com/mxcl/PromiseKit) - promises for Swift and Objective-C
-- [`mirumee/saleor`](https://sourcegraph.com/search?q=repo:%5Egithub%5C.com/mirumee/saleor%24+bobheadxi/deployments\&patternType=literal) [![GitHub Repo stars](https://img.shields.io/github/stars/mirumee/saleor?style=social)](https://github.com/mirumee/saleor) - modular, high performance, headless e-commerce storefront
-- [`sharetribe/sharetribe`](https://sourcegraph.com/search?q=context:global+repo:%5Egithub%5C.com/sharetribe/sharetribe%24+file:%5E%5C.github/workflows+bobheadxi/deployments&patternType=literal) [![GitHub Repo stars](https://img.shields.io/github/stars/sharetribe/sharetribe?style=social)](https://github.com/sharetribe/sharetribe) - marketplace software
-- [`skylines-project/skylines`](https://sourcegraph.com/search?q=repo:%5Egithub%5C.com/skylines-project/skylines%24+bobheadxi/deployments\&patternType=literal) [![GitHub Repo stars](https://img.shields.io/github/stars/skylines-project/skylines?style=social)](https://github.com/skylines-project/skylines) - live tracking, flight database and competition web platform
+- [`github/super-linter`](https://sourcegraph.com/search?q=context:global+repo:%5Egithub%5C.com/github/super-linter%24+file:%5E%5C.github/workflows+maxgfr/deployments&patternType=literal) [![GitHub Repo stars](https://img.shields.io/github/stars/github/super-linter?style=social)](https://github.com/github/super-linter) - [GitHub's all-in-one linter Action](https://github.blog/2020-06-18-introducing-github-super-linter-one-linter-to-rule-them-all/)
+- [`mxcl/PromiseKit`](https://sourcegraph.com/search?q=context:global+repo:%5Egithub%5C.com/mxcl/PromiseKit%24+file:%5E%5C.github/workflows+maxgfr/deployments&patternType=literal) [![GitHub Repo stars](https://img.shields.io/github/stars/mxcl/PromiseKit?style=social)](https://github.com/mxcl/PromiseKit) - promises for Swift and Objective-C
+- [`mirumee/saleor`](https://sourcegraph.com/search?q=repo:%5Egithub%5C.com/mirumee/saleor%24+maxgfr/deployments\&patternType=literal) [![GitHub Repo stars](https://img.shields.io/github/stars/mirumee/saleor?style=social)](https://github.com/mirumee/saleor) - modular, high performance, headless e-commerce storefront
+- [`sharetribe/sharetribe`](https://sourcegraph.com/search?q=context:global+repo:%5Egithub%5C.com/sharetribe/sharetribe%24+file:%5E%5C.github/workflows+maxgfr/deployments&patternType=literal) [![GitHub Repo stars](https://img.shields.io/github/stars/sharetribe/sharetribe?style=social)](https://github.com/sharetribe/sharetribe) - marketplace software
+- [`skylines-project/skylines`](https://sourcegraph.com/search?q=repo:%5Egithub%5C.com/skylines-project/skylines%24+maxgfr/deployments\&patternType=literal) [![GitHub Repo stars](https://img.shields.io/github/stars/skylines-project/skylines?style=social)](https://github.com/skylines-project/skylines) - live tracking, flight database and competition web platform
 
-You can find [more usages of this action on Sourcegraph](https://sourcegraph.com/search?q=context:global+bobheadxi/deployments+file:%5E%5C.github/workflows+-repo:bobheadxi&patternType=literal)!
+You can find [more usages of this action on Sourcegraph](https://sourcegraph.com/search?q=context:global+maxgfr/deployments+file:%5E%5C.github/workflows+-repo:maxgfr&patternType=literal)!
 
 ## Features
 
@@ -95,7 +95,7 @@ jobs:
   deploy:
     steps:
     - name: start deployment
-      uses: bobheadxi/deployments@v0.4.3
+      uses: maxgfr/deployments@v0.0.1
       id: deployment
       with:
         step: start
@@ -123,7 +123,7 @@ jobs:
   deploy:
     steps:
     - name: start deployment
-      uses: bobheadxi/deployments@v0.4.3
+      uses: maxgfr/deployments@v0.0.1
       id: deployment
       with:
         step: start
@@ -176,7 +176,7 @@ jobs:
       # ...
 
     - name: update deployment status
-      uses: bobheadxi/deployments@v0.4.3
+      uses: maxgfr/deployments@v0.0.1
       if: always()
       with:
         step: finish
@@ -219,7 +219,7 @@ on:
 jobs:
   prune:
     steps:
-    # see https://dev.to/bobheadxi/branch-previews-with-google-app-engine-and-github-actions-3pco
+    # see https://dev.to/maxgfr/branch-previews-with-google-app-engine-and-github-actions-3pco
     - name: extract branch name
       id: get_branch
       shell: bash
@@ -231,7 +231,7 @@ jobs:
       # ...
 
     - name: mark environment as deactivated
-      uses: bobheadxi/deployments@v0.4.3
+      uses: maxgfr/deployments@v0.0.1
       with:
         step: deactivate-env
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -246,6 +246,6 @@ jobs:
 
 The argument `log_args: true` can be provided to print arguments used by `deployments`.
 
-If you run into an problems or have any questions, feel free to open an [issue](https://github.com/bobheadxi/deployments/issues) or [discussion](https://github.com/bobheadxi/deployments/discussions)!
+If you run into an problems or have any questions, feel free to open an [issue](https://github.com/maxgfr/deployments/issues) or [discussion](https://github.com/maxgfr/deployments/discussions)!
 
 <br />

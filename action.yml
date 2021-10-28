@@ -1,9 +1,9 @@
-name: GitHub Deployments
-description: GitHub action for working painlessly with deployment statuses.
-author: bobheadxi
+name: GitHub Deployments for multiple url
+description: GitHub action for working painlessly with deployment statuses (and with multiples url).
+author: maxgfr
 branding:
   icon: bookmark
-  color: yellow
+  color: blue
 runs:
   using: node12
   main: dist/index.js
