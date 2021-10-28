@@ -39,6 +39,15 @@ inputs:
   env_url:
     required: false
     description: The environment URL. (For `finish` only)
+  env_urls:
+    required: false
+    description: Array of the environment URLs. (For `finish` only)
+  prefix_url:
+    required: false
+    description: Prefix url set to the env_url or env_urls items. (For `finish` only)
+  splitter:
+    required: false
+    description: Splitter for the array of the environment URLs. (For `finish` only)
   status:
     required: false
     description: The deployment status. (For `finish` only)
