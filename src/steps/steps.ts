@@ -151,7 +151,7 @@ export async function run(step: Step, context: DeploymentContext) {
             await deactivateEnvironment(context, args.environment);
           }
 
-          const urlArray = args.envURLs.split(args.splitter);
+          const urlArray = args.envURLs.split(args.splitter).map((v) => v.replace(/ /g, ''));
           const promises: Array<Promise<unknown>> = [];
 
           console.log(urlArray);
