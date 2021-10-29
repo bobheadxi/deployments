@@ -143,9 +143,8 @@ export async function run(step: Step, context: DeploymentContext) {
             splitter: getInput("splitter", { required: false }),
           };
 
-          if (args.logArgs) {
-            console.log(`'${step}' arguments`, args);
-          }
+          console.log(`'${step}' arguments`, args);
+
 
           // mark existing deployments of this environment as inactive
           if (!args.noOverride) {
@@ -154,6 +153,8 @@ export async function run(step: Step, context: DeploymentContext) {
 
           const urlArray = args.envURLs.split(args.splitter);
           const promises: Array<Promise<unknown>> = [];
+
+          console.log(urlArray);
 
           for (let i = 0; i < urlArray.length; i++) {
             promises.push(
