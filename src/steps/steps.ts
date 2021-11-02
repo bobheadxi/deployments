@@ -173,7 +173,7 @@ export async function run(step: Step, context: DeploymentContext) {
           try {
             deploymentIDs = await Promise.all(promises);
           } catch(e) {
-            console.log(e)
+            console.error(e)
           }
           console.log(deploymentIDs)
 
@@ -206,7 +206,12 @@ export async function run(step: Step, context: DeploymentContext) {
             );
           });
 
-          await Promise.all(secondPromises);
+          try {
+            await Promise.all(secondPromises);
+          } catch(e) {
+            console.error(e)
+          }
+          
         }
         break;
 
