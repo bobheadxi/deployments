@@ -178,15 +178,17 @@ export async function run(step: Step, context: DeploymentContext) {
           console.log(deploymentIDs)
 
           console.log(
-            `created deployment ${deploymentIDs.toString()} for ${
+            `created deployment for ${
               args.environment
             } @ ${args.gitRef}`
           );
+
           setOutput("env", args.environment);
 
           const secondPromises: Array<Promise<unknown>> = [];
 
-          deploymentIDs.map((deploymentID: any, i: number) => {
+          deploymentIDs.map((deploymentID: any,) => {
+            console.log(deploymentID)
             setOutput("deployment_id", deploymentID);
             secondPromises.push(
               github.rest.repos.createDeploymentStatus({
@@ -195,10 +197,10 @@ export async function run(step: Step, context: DeploymentContext) {
                 deployment_id: parseInt(deploymentID, 10),
                 state: "success",
                 auto_inactive: args.autoInactive,
-                description: args.description,
+                description: `Deployment environment: ${deploymentID}`,
                 environment_url: args.prefixUrl
-                  ? `${args.prefixUrl}${urlArray[i]}`
-                  : `${urlArray[i]}`,
+                  ? `${args.prefixUrl}${deploymentID}`
+                  : `${deploymentID}`,
                 log_url: args.logsURL,
               })
             );
