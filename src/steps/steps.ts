@@ -163,13 +163,19 @@ export async function run(step: Step, context: DeploymentContext) {
                 repo: context.repo,
                 ref: args.gitRef,
                 required_contexts: [],
-                environment: args.environment,
+                environment: `${args.environment}`,
                 auto_merge: false,
                 transient_environment: args.transient,
               })
             );
           }
-          const deploymentIDs = await Promise.all(promises);
+          let deploymentIDs: any = []
+          try {
+            deploymentIDs = await Promise.all(promises);
+          } catch(e) {
+            console.log(e)
+          }
+          console.log(deploymentIDs)
 
           console.log(
             `created deployment ${deploymentIDs.toString()} for ${
