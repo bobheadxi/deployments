@@ -183,17 +183,15 @@ export async function run(step: Step, context: DeploymentContext) {
 
           setOutput("env", args.environment);
 
-          const secondPromises: Array<Promise<unknown>> = [];
+          const secondPromises: any = [];
 
           deploymentIDs.map((deploymentID: any, index: number) => {
-            setOutput("deployment_id", deploymentID);
             secondPromises.push(
               github.rest.repos.createDeploymentStatus({
                 owner: context.owner,
                 repo: context.repo,
                 deployment_id: parseInt(deploymentID.data.id, 10),
                 state: "success",
-                auto_inactive: args.autoInactive,
                 description: `Deployment URL: ${urlArray[index]}`,
                 environment_url: args.prefixUrl
                   ? `${args.prefixUrl}${urlArray[index]}`
