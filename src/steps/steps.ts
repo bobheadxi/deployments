@@ -132,7 +132,6 @@ export async function run(step: Step, context: DeploymentContext) {
         {
           const args = {
             ...context.coreArgs,
-            noOverride: getInput("no_override") !== "false",
             transient: getInput("transient") === "true",
             gitRef: getInput("ref") || context.ref,
             status: getInput("status", { required: true }).toLowerCase(),
@@ -153,9 +152,7 @@ export async function run(step: Step, context: DeploymentContext) {
           console.log(urlArray);
 
           urlArray.map((v: string) => {
-            if (!args.noOverride) {
-              deactivatePromises.push(deactivateEnvironment(context, v));
-            }
+            deactivatePromises.push(deactivateEnvironment(context, v));
             promises.push(
               github.rest.repos.createDeployment({
                 owner: context.owner,
@@ -172,8 +169,8 @@ export async function run(step: Step, context: DeploymentContext) {
           let deploymentIDs: any = [];
 
           try {
-            deploymentIDs = await Promise.all(promises);
             await Promise.all(deactivatePromises);
+            deploymentIDs = await Promise.all(promises);
           } catch (e) {
             console.error(e);
           }
