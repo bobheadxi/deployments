@@ -145,13 +145,14 @@ export async function run(step: Step, context: DeploymentContext) {
 
           console.log(`'${step}' arguments`, args);
 
-
           // mark existing deployments of this environment as inactive
           if (!args.noOverride) {
             await deactivateEnvironment(context, args.environment);
           }
 
-          const urlArray = args.envURLs.split(args.splitter).map((v) => v.replace(/ /g, ''));
+          const urlArray = args.envURLs
+            .split(args.splitter)
+            .map((v) => v.replace(/ /g, ""));
           const promises: Array<Promise<unknown>> = [];
 
           console.log(urlArray);
@@ -169,26 +170,24 @@ export async function run(step: Step, context: DeploymentContext) {
               })
             );
           }
-          let deploymentIDs: any = []
+          let deploymentIDs: any = [];
           try {
             deploymentIDs = await Promise.all(promises);
-          } catch(e) {
-            console.error(e)
+          } catch (e) {
+            console.error(e);
           }
-          console.log(deploymentIDs)
+          console.log(deploymentIDs);
 
           console.log(
-            `created deployment for ${
-              args.environment
-            } @ ${args.gitRef}`
+            `created deployment for ${args.environment} @ ${args.gitRef}`
           );
 
           setOutput("env", args.environment);
 
           const secondPromises: Array<Promise<unknown>> = [];
 
-          deploymentIDs.map((deploymentID: any,) => {
-            console.log(deploymentID)
+          deploymentIDs.map((deploymentID: any) => {
+            console.log(deploymentID);
             setOutput("deployment_id", deploymentID);
             secondPromises.push(
               github.rest.repos.createDeploymentStatus({
@@ -208,10 +207,9 @@ export async function run(step: Step, context: DeploymentContext) {
 
           try {
             await Promise.all(secondPromises);
-          } catch(e) {
-            console.error(e)
+          } catch (e) {
+            console.error(e);
           }
-          
         }
         break;
 

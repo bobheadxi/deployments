@@ -7,8 +7,8 @@
   "scripts": {
     "prettier": "prettier src --write",
     "prettier:check": "prettier src --check",
-    "build": "ncc build src/main.ts --out dist --minify --source-map --license LICENSES",
-    "build:check": "npm run build && git diff --quiet dist"
+    "build": "yarn prettier && ncc build src/main.ts --out dist --minify --source-map --license LICENSES",
+    "precommit": "yarn build"
   },
   "repository": {
     "type": "git",
