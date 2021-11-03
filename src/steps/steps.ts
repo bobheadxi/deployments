@@ -163,7 +163,7 @@ export async function run(step: Step, context: DeploymentContext) {
                 repo: context.repo,
                 ref: args.gitRef,
                 required_contexts: [],
-                environment: `${args.environment}`,
+                environment: `${args.environment}-${i+1}`,
                 auto_merge: false,
                 transient_environment: args.transient,
               })
