@@ -26,7 +26,4 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - run: npm install
-
-      # Checks
-      - run: npm run prettier:check
-      - run: npm run build:check
+      - run: npm run build
