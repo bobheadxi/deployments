@@ -191,7 +191,7 @@ export async function run(step: Step, context: DeploymentContext) {
                 owner: context.owner,
                 repo: context.repo,
                 deployment_id: parseInt(deploymentID.data.id, 10),
-                auto_inactive: false,
+                auto_inactive: true,
                 state: "success",
                 description: `Deployment URL: ${urlArray[index]}`,
                 environment_url: args.prefixUrl
