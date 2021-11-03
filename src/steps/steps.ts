@@ -136,7 +136,6 @@ export async function run(step: Step, context: DeploymentContext) {
             noOverride: getInput("no_override") !== "false",
             transient: getInput("transient") === "true",
             gitRef: getInput("ref") || context.ref,
-            envURL: getInput("env_url", { required: false }),
             status: getInput("status", { required: true }).toLowerCase(),
             envURLs: getInput("env_urls", { required: false }),
             prefixUrl: getInput("prefix_url", { required: false }),
@@ -186,20 +185,19 @@ export async function run(step: Step, context: DeploymentContext) {
 
           const secondPromises: Array<Promise<unknown>> = [];
 
-          deploymentIDs.map((deploymentID: any) => {
-            console.log(deploymentID);
+          deploymentIDs.map((deploymentID: any, index: number) => {
             setOutput("deployment_id", deploymentID);
             secondPromises.push(
               github.rest.repos.createDeploymentStatus({
                 owner: context.owner,
                 repo: context.repo,
-                deployment_id: parseInt(deploymentID, 10),
+                deployment_id: parseInt(deploymentID.data.id, 10),
                 state: "success",
                 auto_inactive: args.autoInactive,
-                description: `Deployment environment: ${deploymentID}`,
+                description: `Deployment URL: ${urlArray[index]}`,
                 environment_url: args.prefixUrl
-                  ? `${args.prefixUrl}${deploymentID}`
-                  : `${deploymentID}`,
+                  ? `${args.prefixUrl}${urlArray[index]}`
+                  : `${urlArray[index]}`,
                 log_url: args.logsURL,
               })
             );
