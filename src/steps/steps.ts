@@ -132,7 +132,6 @@ export async function run(step: Step, context: DeploymentContext) {
         {
           const args = {
             ...context.coreArgs,
-            environment: getInput("env", { required: true }),
             noOverride: getInput("no_override") !== "false",
             transient: getInput("transient") === "true",
             gitRef: getInput("ref") || context.ref,
@@ -144,44 +143,41 @@ export async function run(step: Step, context: DeploymentContext) {
 
           console.log(`'${step}' arguments`, args);
 
-          // mark existing deployments of this environment as inactive
-          if (!args.noOverride) {
-            await deactivateEnvironment(context, args.environment);
-          }
-
           const urlArray = args.envURLs
             .split(args.splitter)
             .map((v) => v.replace(/ /g, ""));
-          const promises: Array<Promise<unknown>> = [];
+
+          const promises: any = [];
+          const deactivatePromises: any = [];
 
           console.log(urlArray);
 
-          for (let i = 0; i < urlArray.length; i++) {
+          urlArray.map((v: string) => {
+            if (!args.noOverride) {
+              deactivatePromises.push(deactivateEnvironment(context, v));
+            }
             promises.push(
               github.rest.repos.createDeployment({
                 owner: context.owner,
                 repo: context.repo,
                 ref: args.gitRef,
                 required_contexts: [],
-                environment: `${args.environment}-${i + 1}`,
+                environment: v,
                 auto_merge: false,
                 transient_environment: args.transient,
               })
             );
-          }
+          });
+
           let deploymentIDs: any = [];
+
           try {
             deploymentIDs = await Promise.all(promises);
+            await Promise.all(deactivatePromises);
           } catch (e) {
             console.error(e);
           }
           console.log(deploymentIDs);
-
-          console.log(
-            `created deployment for ${args.environment} @ ${args.gitRef}`
-          );
-
-          setOutput("env", args.environment);
 
           const secondPromises: any = [];
 
