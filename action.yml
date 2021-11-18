@@ -57,6 +57,7 @@ inputs:
   num_environment: 
     required: false
     description: Number of environments to create. (For `start-multi` only)
+    default: '1'
   status:
     required: false
     description: The deployment status. (For `finish` only)

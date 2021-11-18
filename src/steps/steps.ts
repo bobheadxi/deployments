@@ -8,6 +8,7 @@ export enum Step {
   DeactivateEnv = "deactivate-env",
   StartMulti = "start-multi",
   EndMulti = "end-multi",
+  DeactivateMultiEnv = "deactivate-multi",
 }
 
 export async function run(step: Step, context: DeploymentContext) {
@@ -264,6 +265,31 @@ export async function run(step: Step, context: DeploymentContext) {
             await Promise.all(promises);
           } catch (e) {
             error("Cannot generate deployment status");
+          }
+        }
+        break;
+
+      case Step.DeactivateMultiEnv:
+        {
+          const args = {
+            ...context.coreArgs,
+            deploymentIDs: getInput("deployment_ids", { required: true }),
+          };
+          if (args.logArgs) {
+            console.log(`'${step}' arguments`, args);
+          }
+
+          const deploymentIDs = args.deploymentIDs.split(",");
+          const promises: any = [];
+
+          deploymentIDs.map((deploymentID: any) => {
+            promises.push(deactivateEnvironment(context, deploymentID.data.id));
+          });
+
+          try {
+            await Promise.all(promises);
+          } catch (e) {
+            error("Cannot deactivate deployment status");
           }
         }
         break;
