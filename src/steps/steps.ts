@@ -6,7 +6,8 @@ export enum Step {
   Start = "start",
   Finish = "finish",
   DeactivateEnv = "deactivate-env",
-  Global = "global",
+  StartMulti = "start-multi",
+  EndMulti = "end-multi",
 }
 
 export async function run(step: Step, context: DeploymentContext) {
@@ -128,19 +129,22 @@ export async function run(step: Step, context: DeploymentContext) {
         }
         break;
 
-      case Step.Global:
+      case Step.StartMulti:
         {
           const args = {
             ...context.coreArgs,
             transient: getInput("transient") === "true",
             gitRef: getInput("ref") || context.ref,
+            noOverride: getInput("no_override") !== "false",
             status: getInput("status", { required: true }).toLowerCase(),
             envURLs: getInput("env_urls", { required: false }),
             prefixUrl: getInput("prefix_url", { required: false }),
             splitter: getInput("splitter", { required: false }),
           };
 
-          console.log(`'${step}' arguments`, args);
+          if (args.logArgs) {
+            console.log(`'${step}' arguments`, args);
+          }
 
           const urlArray = args.envURLs
             .split(args.splitter)
@@ -149,10 +153,15 @@ export async function run(step: Step, context: DeploymentContext) {
           const promises: any = [];
           const deactivatePromises: any = [];
 
-          console.log(urlArray);
+          if (args.logArgs) {
+            console.log("Array of URL");
+            console.log(urlArray);
+          }
 
           urlArray.map((v: string) => {
-            deactivatePromises.push(deactivateEnvironment(context, v));
+            if (!args.noOverride) {
+              deactivatePromises.push(deactivateEnvironment(context, v));
+            }
             promises.push(
               github.rest.repos.createDeployment({
                 owner: context.owner,
@@ -171,15 +180,71 @@ export async function run(step: Step, context: DeploymentContext) {
           try {
             await Promise.all(deactivatePromises);
             deploymentIDs = await Promise.all(promises);
-          } catch (e) {
-            console.error(e);
+          } catch {
+            error("Cannot generate deployments");
           }
-          console.log(deploymentIDs);
+
+          if (args.logArgs) {
+            console.log("Deployment ID");
+            console.log(deploymentIDs);
+          }
 
           const secondPromises: any = [];
 
-          deploymentIDs.map((deploymentID: any, index: number) => {
+          deploymentIDs.map((deploymentID: any) => {
             secondPromises.push(
+              github.rest.repos.createDeploymentStatus({
+                owner: context.owner,
+                repo: context.repo,
+                deployment_id: parseInt(deploymentID.data.id, 10),
+                state: "in_progress",
+                auto_inactive: args.autoInactive,
+                log_url: args.logsURL,
+                description: args.description,
+              })
+            );
+          });
+
+          try {
+            await Promise.all(secondPromises);
+          } catch (e) {
+            error("Cannot generate deployment status");
+          }
+        }
+        break;
+
+      case Step.EndMulti:
+        {
+          const args = {
+            ...context.coreArgs,
+            transient: getInput("transient") === "true",
+            gitRef: getInput("ref") || context.ref,
+            status: getInput("status", { required: true }).toLowerCase(),
+            envURLs: getInput("env_urls", { required: false }),
+            prefixUrl: getInput("prefix_url", { required: false }),
+            deploymentIDs: getInput("deployment_ids", { required: true }),
+            deploymentSplitter: getInput("deployment_splitter", {
+              required: false,
+            }),
+            splitter: getInput("splitter", { required: false }) || ",",
+          };
+
+          if (args.logArgs) {
+            console.log(`'${step}' arguments`, args);
+            console.log("Deployment ID");
+            console.log(args.deploymentIDs);
+          }
+
+          const urlArray = args.envURLs
+            .split(args.splitter)
+            .map((v) => v.replace(/ /g, ""));
+
+          const deploymentIDs = args.deploymentIDs.split(",");
+
+          const promises: any = [];
+
+          deploymentIDs.map((deploymentID: any, index: number) => {
+            promises.push(
               github.rest.repos.createDeploymentStatus({
                 owner: context.owner,
                 repo: context.repo,
@@ -196,9 +261,9 @@ export async function run(step: Step, context: DeploymentContext) {
           });
 
           try {
-            await Promise.all(secondPromises);
+            await Promise.all(promises);
           } catch (e) {
-            console.error(e);
+            error("Cannot generate deployment status");
           }
         }
         break;
