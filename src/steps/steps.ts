@@ -206,7 +206,7 @@ export async function run(step: Step, context: DeploymentContext) {
 
           try {
             await Promise.all(secondPromises);
-            setOutput("deployment_ids", deploymentIDs);
+            setOutput("deployment_ids", JSON.stringify(deploymentIDs));
           } catch (e) {
             error("Cannot generate deployment status");
           }
@@ -221,10 +221,6 @@ export async function run(step: Step, context: DeploymentContext) {
             gitRef: getInput("ref") || context.ref,
             status: getInput("status", { required: true }).toLowerCase(),
             deploymentIDs: getInput("deployment_ids", { required: true }),
-            deploymentSplitter:
-              getInput("deployment_splitter", {
-                required: false,
-              }) || ",",
             prefixUrl: getInput("prefix_url", { required: false }),
             envURLs: getInput("env_urls", { required: false }),
             splitter: getInput("splitter", { required: false }) || ",",
@@ -238,9 +234,9 @@ export async function run(step: Step, context: DeploymentContext) {
 
           const urlArray = args.envURLs
             .split(args.splitter)
-            .map((v) => v.replace(/ /g, ""));
+            .map(v => v.replace(/ /g, ""));
 
-          const deploymentIDs = args.deploymentIDs.split(",");
+          const deploymentIDs = JSON.parse(args.deploymentIDs);
 
           const promises: any = [];
 
