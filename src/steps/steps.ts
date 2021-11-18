@@ -6,9 +6,6 @@ export enum Step {
   Start = "start",
   Finish = "finish",
   DeactivateEnv = "deactivate-env",
-  StartMulti = "start-multi",
-  EndMulti = "end-multi",
-  DeactivateMultiEnv = "deactivate-multi",
 }
 
 export async function run(step: Step, context: DeploymentContext) {
@@ -20,139 +17,27 @@ export async function run(step: Step, context: DeploymentContext) {
           const args = {
             ...context.coreArgs,
             environment: getInput("env", { required: true }),
-            noOverride: getInput("no_override") !== "false",
-            transient: getInput("transient") === "true",
-            gitRef: getInput("ref") || context.ref,
-          };
-          if (args.logArgs) {
-            console.log(`'${step}' arguments`, args);
-          }
-
-          let deploymentID = getInput("deployment_id");
-          console.log(
-            `initializing deployment ${deploymentID} for ${args.environment} @ ${args.gitRef}`
-          );
-
-          // mark existing deployments of this environment as inactive
-          if (!args.noOverride) {
-            await deactivateEnvironment(context, args.environment);
-          }
-
-          if (!deploymentID) {
-            const deployment = await github.rest.repos.createDeployment({
-              owner: context.owner,
-              repo: context.repo,
-              ref: args.gitRef,
-              required_contexts: [],
-              environment: args.environment,
-              auto_merge: false,
-              transient_environment: args.transient,
-            });
-            // TODO: why does typecheck fail on `data.id`?
-            deploymentID = (deployment.data as any).id.toString();
-          }
-
-          console.log(
-            `created deployment ${deploymentID} for ${args.environment} @ ${args.gitRef}`
-          );
-          setOutput("deployment_id", deploymentID);
-          setOutput("env", args.environment);
-
-          await github.rest.repos.createDeploymentStatus({
-            owner: context.owner,
-            repo: context.repo,
-            deployment_id: parseInt(deploymentID, 10),
-            state: "in_progress",
-            auto_inactive: args.autoInactive,
-            log_url: args.logsURL,
-            description: args.description,
-          });
-
-          console.log('deployment status set to "in_progress"');
-        }
-        break;
-
-      case Step.Finish:
-        {
-          const args = {
-            ...context.coreArgs,
-            deploymentID: getInput("deployment_id", { required: true }),
-            envURL: getInput("env_url", { required: false }),
-            status: getInput("status", { required: true }).toLowerCase(),
-          };
-          if (args.logArgs) {
-            console.log(`'${step}' arguments`, args);
-          }
-
-          if (
-            args.status !== "success" &&
-            args.status !== "failure" &&
-            args.status !== "cancelled"
-          ) {
-            error(`unexpected status ${args.status}`);
-            return;
-          }
-          console.log(
-            `finishing deployment for ${args.deploymentID} with status ${args.status}`
-          );
-
-          const newStatus =
-            args.status === "cancelled" ? "inactive" : args.status;
-          await github.rest.repos.createDeploymentStatus({
-            owner: context.owner,
-            repo: context.repo,
-            deployment_id: parseInt(args.deploymentID, 10),
-            state: newStatus,
-            auto_inactive: args.autoInactive,
-            description: args.description,
-
-            // only set environment_url if deployment worked
-            environment_url: newStatus === "success" ? args.envURL : "",
-            // set log_url to action by default
-            log_url: args.logsURL,
-          });
-
-          console.log(`${args.deploymentID} status set to ${newStatus}`);
-        }
-        break;
-
-      case Step.DeactivateEnv:
-        {
-          const args = {
-            ...context.coreArgs,
-            environment: getInput("env", { required: true }),
-          };
-          if (args.logArgs) {
-            console.log(`'${step}' arguments`, args);
-          }
-
-          await deactivateEnvironment(context, args.environment);
-        }
-        break;
-
-      case Step.StartMulti:
-        {
-          const args = {
-            ...context.coreArgs,
-            environment: getInput("env", { required: true }),
             numberEnvironment: getInput("num_environment", { required: true }),
             noOverride: getInput("no_override") !== "false",
             transient: getInput("transient") === "true",
             gitRef: getInput("ref") || context.ref,
           };
 
+          const numEnvironment = parseInt(args.numberEnvironment);
+
           if (args.logArgs) {
             console.log(`'${step}' arguments`, args);
+            console.log("Number of environment", numEnvironment);
           }
 
           const promises: any = [];
           const deactivatePromises: any = [];
-          for (let i = 0; i < parseInt(args.numberEnvironment); i++) {
+          for (let i = 0; i < numEnvironment; i++) {
             if (!args.noOverride) {
               deactivatePromises.push(
                 deactivateEnvironment(
                   context,
-                  parseInt(args.numberEnvironment) > 1
+                  numEnvironment > 1
                     ? `${args.environment}-${i + 1}`
                     : args.environment
                 )
@@ -165,7 +50,7 @@ export async function run(step: Step, context: DeploymentContext) {
                 ref: args.gitRef,
                 required_contexts: [],
                 environment:
-                  parseInt(args.numberEnvironment) > 1
+                  numEnvironment > 1
                     ? `${args.environment}-${i + 1}`
                     : args.environment,
                 auto_merge: false,
@@ -207,13 +92,17 @@ export async function run(step: Step, context: DeploymentContext) {
           try {
             await Promise.all(secondPromises);
             setOutput("deployment_ids", JSON.stringify(deploymentIDs));
+            if (numEnvironment === 1) {
+              setOutput("deployment_id", deploymentIDs[0].data.id);
+            }
+            setOutput("env", args.environment);
           } catch (e) {
             error("Cannot generate deployment status");
           }
         }
         break;
 
-      case Step.EndMulti:
+      case Step.Finish:
         {
           const args = {
             ...context.coreArgs,
@@ -221,20 +110,53 @@ export async function run(step: Step, context: DeploymentContext) {
             gitRef: getInput("ref") || context.ref,
             status: getInput("status", { required: true }).toLowerCase(),
             deploymentIDs: getInput("deployment_ids", { required: true }),
-            prefixUrl: getInput("prefix_url", { required: false }),
             envURLs: getInput("env_urls", { required: false }),
-            splitter: getInput("splitter", { required: false }) || ",",
+            multi: getInput("multi", { required: false }) === "true",
+            deploymentID: getInput("deployment_id", { required: true }),
+            envURL: getInput("env_url", { required: false }),
           };
 
           if (args.logArgs) {
             console.log(`'${step}' arguments`, args);
             console.log("Deployment ID");
             console.log(args.deploymentIDs);
+            console.log("Env urls");
+            console.log(args.envURLs);
           }
 
-          const urlArray = args.envURLs
-            .split(args.splitter)
-            .map(v => v.replace(/ /g, ""));
+          if (
+            args.status !== "success" &&
+            args.status !== "failure" &&
+            args.status !== "cancelled"
+          ) {
+            error(`unexpected status ${args.status}`);
+            return;
+          }
+          console.log(
+            `finishing deployment for ${args.deploymentID} with status ${args.status}`
+          );
+
+          const newStatus =
+            args.status === "cancelled" ? "inactive" : args.status;
+
+          if (!args.multi) {
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.owner,
+              repo: context.repo,
+              deployment_id: parseInt(args.deploymentID, 10),
+              state: newStatus,
+              auto_inactive: args.autoInactive,
+              description: args.description,
+
+              // only set environment_url if deployment worked
+              environment_url: newStatus === "success" ? args.envURL : "",
+              // set log_url to action by default
+              log_url: args.logsURL,
+            });
+            return;
+          }
+
+          const urlArray = JSON.parse(args.envURLs);
 
           const deploymentIDs = JSON.parse(args.deploymentIDs);
 
@@ -249,9 +171,7 @@ export async function run(step: Step, context: DeploymentContext) {
                 auto_inactive: true,
                 state: "success",
                 description: `Deployment URL: ${urlArray[index]}`,
-                environment_url: args.prefixUrl
-                  ? `${args.prefixUrl}${urlArray[index]}`
-                  : `${urlArray[index]}`,
+                environment_url: `${urlArray[index]}`,
                 log_url: args.logsURL,
               })
             );
@@ -265,27 +185,35 @@ export async function run(step: Step, context: DeploymentContext) {
         }
         break;
 
-      case Step.DeactivateMultiEnv:
+      case Step.DeactivateEnv:
         {
           const args = {
             ...context.coreArgs,
-            deploymentIDs: getInput("deployment_ids", { required: true }),
+            environment: getInput("env", { required: true }),
+            multi: getInput("multi", { required: false }) === "true",
+            deploymentIDs: getInput("deployment_ids", { required: false }),
           };
           if (args.logArgs) {
             console.log(`'${step}' arguments`, args);
           }
 
-          const deploymentIDs = args.deploymentIDs.split(",");
-          const promises: any = [];
+          if (args.multi) {
+            const deploymentIDs = JSON.parse(args.deploymentIDs);
+            const promises: any = [];
 
-          deploymentIDs.map((deploymentID: any) => {
-            promises.push(deactivateEnvironment(context, deploymentID.data.id));
-          });
+            deploymentIDs.map((deploymentID: any) => {
+              promises.push(
+                deactivateEnvironment(context, deploymentID.data.id)
+              );
+            });
 
-          try {
-            await Promise.all(promises);
-          } catch (e) {
-            error("Cannot deactivate deployment status");
+            try {
+              await Promise.all(promises);
+            } catch (e) {
+              error("Cannot deactivate deployment status");
+            }
+          } else {
+            await deactivateEnvironment(context, args.environment);
           }
         }
         break;
