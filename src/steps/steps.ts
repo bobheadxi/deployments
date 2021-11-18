@@ -134,7 +134,7 @@ export async function run(step: Step, context: DeploymentContext) {
           const args = {
             ...context.coreArgs,
             environment: getInput("env", { required: true }),
-            numberEnvironment: getInput("num_env", { required: true }),
+            numberEnvironment: getInput("num_environment", { required: true }),
             noOverride: getInput("no_override") !== "false",
             transient: getInput("transient") === "true",
             gitRef: getInput("ref") || context.ref,

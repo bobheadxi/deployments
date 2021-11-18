@@ -54,7 +54,7 @@ inputs:
   deployment_splitter:
     required: false
     description: Splitter for the array of the deployment_ids URLs. (For `end-multi` only)
-  num_env: 
+  num_environment: 
     required: false
     description: Number of environments to create. (For `start-multi` only)
   status:
