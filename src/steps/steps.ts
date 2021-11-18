@@ -133,34 +133,29 @@ export async function run(step: Step, context: DeploymentContext) {
         {
           const args = {
             ...context.coreArgs,
+            environment: getInput("env", { required: true }),
+            numberEnvironment: getInput("num_env", { required: true }),
+            noOverride: getInput("no_override") !== "false",
             transient: getInput("transient") === "true",
             gitRef: getInput("ref") || context.ref,
-            noOverride: getInput("no_override") !== "false",
-            status: getInput("status", { required: true }).toLowerCase(),
-            envURLs: getInput("env_urls", { required: false }),
-            prefixUrl: getInput("prefix_url", { required: false }),
-            splitter: getInput("splitter", { required: false }),
           };
 
           if (args.logArgs) {
             console.log(`'${step}' arguments`, args);
           }
 
-          const urlArray = args.envURLs
-            .split(args.splitter)
-            .map((v) => v.replace(/ /g, ""));
-
           const promises: any = [];
           const deactivatePromises: any = [];
-
-          if (args.logArgs) {
-            console.log("Array of URL");
-            console.log(urlArray);
-          }
-
-          urlArray.map((v: string) => {
+          for (let i = 0; i < parseInt(args.numberEnvironment); i++) {
             if (!args.noOverride) {
-              deactivatePromises.push(deactivateEnvironment(context, v));
+              deactivatePromises.push(
+                deactivateEnvironment(
+                  context,
+                  parseInt(args.numberEnvironment) > 1
+                    ? `${args.environment}-${i + 1}`
+                    : args.environment
+                )
+              );
             }
             promises.push(
               github.rest.repos.createDeployment({
@@ -168,12 +163,15 @@ export async function run(step: Step, context: DeploymentContext) {
                 repo: context.repo,
                 ref: args.gitRef,
                 required_contexts: [],
-                environment: v,
+                environment:
+                  parseInt(args.numberEnvironment) > 1
+                    ? `${args.environment}-${i + 1}`
+                    : args.environment,
                 auto_merge: false,
                 transient_environment: args.transient,
               })
             );
-          });
+          }
 
           let deploymentIDs: any = [];
 
@@ -207,6 +205,7 @@ export async function run(step: Step, context: DeploymentContext) {
 
           try {
             await Promise.all(secondPromises);
+            setOutput("deployment_ids", deploymentIDs);
           } catch (e) {
             error("Cannot generate deployment status");
           }
@@ -220,12 +219,13 @@ export async function run(step: Step, context: DeploymentContext) {
             transient: getInput("transient") === "true",
             gitRef: getInput("ref") || context.ref,
             status: getInput("status", { required: true }).toLowerCase(),
-            envURLs: getInput("env_urls", { required: false }),
-            prefixUrl: getInput("prefix_url", { required: false }),
             deploymentIDs: getInput("deployment_ids", { required: true }),
-            deploymentSplitter: getInput("deployment_splitter", {
-              required: false,
-            }),
+            deploymentSplitter:
+              getInput("deployment_splitter", {
+                required: false,
+              }) || ",",
+            prefixUrl: getInput("prefix_url", { required: false }),
+            envURLs: getInput("env_urls", { required: false }),
             splitter: getInput("splitter", { required: false }) || ",",
           };
 
