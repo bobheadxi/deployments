@@ -112,7 +112,7 @@ export async function run(step: Step, context: DeploymentContext) {
             deploymentIDs: getInput("deployment_ids", { required: true }),
             envURLs: getInput("env_urls", { required: false }),
             multi: getInput("multi", { required: false }) === "true",
-            deploymentID: getInput("deployment_id", { required: true }),
+            deploymentID: getInput("deployment_id", { required: false }),
             envURL: getInput("env_url", { required: false }),
           };
 
