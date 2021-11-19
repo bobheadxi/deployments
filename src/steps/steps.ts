@@ -112,8 +112,6 @@ export async function run(step: Step, context: DeploymentContext) {
         {
           const args = {
             ...context.coreArgs,
-            transient: getInput("transient") === "true",
-            gitRef: getInput("ref") || context.ref,
             status: getInput("status", { required: true }).toLowerCase(),
             deployments: getInput("deployments", { required: true }),
             deploymentID: getInput("deployment_id", { required: false }),

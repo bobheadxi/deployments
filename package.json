@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "scripts": {
     "prettier": "prettier src --write",
-    "build": "yarn prettier && ncc build src/main.ts --out dist --minify --source-map --license LICENSES"
+    "build": "ncc build src/main.ts --out dist --minify --source-map --license LICENSES"
   },
   "repository": {
     "type": "git",
@@ -17,9 +17,17 @@
   "dependencies": {
     "@actions/core": "1.4.0",
     "@actions/github": "5.0.0",
-    "@vercel/ncc": "0.28.6",
+    "@vercel/ncc": "0.28.6"
+  },
+  "devDependencies": {
     "@types/node": "12.20.15",
-    "typescript": "4.3.2",
-    "prettier": "2.3.1"
+    "husky": "^7.0.4",
+    "prettier": "2.3.1",
+    "typescript": "4.3.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   }
 }
