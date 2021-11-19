@@ -23,6 +23,7 @@
     "@types/node": "12.20.15",
     "husky": "^7.0.4",
     "prettier": "2.3.1",
+    "pretty-quick": "^3.1.2",
     "typescript": "4.3.2"
   },
   "husky": {
