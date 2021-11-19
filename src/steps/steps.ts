@@ -101,7 +101,7 @@ export async function run(step: Step, context: DeploymentContext) {
               );
               setOutput("envs", args.environments);
             }
-            setOutput("env", args.environment);
+               setOutput("env", args.environment);
           } catch (e) {
             error("Cannot generate deployment status");
           }

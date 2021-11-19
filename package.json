@@ -5,7 +5,7 @@
   "description": "GitHub Action for working painlessly with deployment statuses",
   "main": "dist/index.js",
   "scripts": {
-    "prettier": "prettier src --write",
+    "prepare": "husky install",
     "pretty-quick": "pretty-quick",
     "build": "ncc build src/main.ts --out dist --minify --source-map --license LICENSES"
   },
