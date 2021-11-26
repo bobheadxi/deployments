@@ -51,6 +51,7 @@ export async function run(step: Step, context: DeploymentContext) {
                 environment: isMulti ? environments[i] : args.environment,
                 auto_merge: false,
                 transient_environment: args.transient,
+                description: args.description,
               })
             );
           }
