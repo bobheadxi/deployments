@@ -137,6 +137,6 @@ export async function run(step: Step, context: DeploymentContext) {
         setFailed(`unknown step type ${step}`);
     }
   } catch (error) {
-    setFailed(`unexpected error encountered: ${error.message}`);
+    setFailed(`unexpected error encountered: ${error}`);
   }
 }
