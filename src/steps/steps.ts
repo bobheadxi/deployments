@@ -85,7 +85,12 @@ export async function run(step: Step, context: DeploymentContext) {
           if (
             args.status !== "success" &&
             args.status !== "failure" &&
-            args.status !== "cancelled"
+            args.status !== "cancelled" &&
+            args.status !== "error" &&
+            args.status !== "inactive" &&
+            args.status !== "in_progress" &&
+            args.status !== "queued" &&
+            args.status !== "pending"
           ) {
             error(`unexpected status ${args.status}`);
             return;
