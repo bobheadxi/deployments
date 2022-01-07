@@ -63,16 +63,17 @@ This is best used on the `push: { branches: [ ... ] }` event, but you can also h
 
 The following [`inputs`](https://help.github.com/en/articles/workflow-syntax-for-github-actions#jobsjob_idstepswith) are available:
 
-| Variable        | Default                     | Purpose                                                                                             |
-| --------------- | --------------------------- | --------------------------------------------------------------------------------------------------- |
-| `step`          |                             | must be `start` for this step                                                                       |
-| `token`         |                             | provide your `${{ secrets.GITHUB_TOKEN }}` for API access                                           |
-| `logs`          | URL to GitHub commit checks | URL of your deployment logs                                                                         |
-| `desc`          |                             | description for this deployment                                                                     |
-| `env`           |                             | identifier for environment to deploy to (e.g. `staging`, `prod`, `master`)                          |
-| `no_override`   | `true`                      | toggle whether to mark existing deployments of this environment as inactive                         |
-| `deployment_id` |                             | Use an existing deployment instead of creating a new one (e.g. `${{ github.event.deployment.id }}`) |
-| `ref`           | `github.ref`                | Specify a particular git ref to use,  (e.g. `${{ github.head_ref }}`)                               |
+| Variable        | Default                     | Purpose                                                                                                |
+| --------------- | --------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `step`          |                             | must be `start` for this step                                                                          |
+| `token`         |                             | provide your `${{ secrets.GITHUB_TOKEN }}` for API access                                              |
+| `logs`          | URL to GitHub commit checks | URL of your deployment logs                                                                            |
+| `desc`          |                             | description for this deployment                                                                        |
+| `env`           |                             | identifier for environment to deploy to (e.g. `staging`, `prod`, `master`)                             |
+| `no_override`   | `true`                      | toggle whether to mark existing deployments of this environment as inactive once the deployment starts |
+| `transient`     | `false`                     | Mark deployment as transient. Transient deployments are not automatically deactivated                  |
+| `deployment_id` |                             | Use an existing deployment instead of creating a new one (e.g. `${{ github.event.deployment.id }}`)    |
+| `ref`           | `github.ref`                | Specify a particular git ref to use,  (e.g. `${{ github.head_ref }}`)                                  |
 
 The following [`outputs`](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#steps-context) are available:
 
@@ -158,6 +159,7 @@ The following [`inputs`](https://help.github.com/en/articles/workflow-syntax-for
 | `status`        |                             | provide the current deployment job status `${{ job.status }}`                     |
 | `deployment_id` |                             | identifier for deployment to update (see outputs of [`step: start`](#step-start)) |
 | `env_url`       |                             | URL to view deployed environment                                                  |
+| `auto_inactive` | `true`                      | Mark previous non-transient deployments as `inactive`                             |
 
 <details>
 <summary>Simple Example</summary>
