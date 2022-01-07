@@ -209,7 +209,6 @@ The following [`inputs`](https://help.github.com/en/articles/workflow-syntax-for
 | `desc`   |                             | description for this deployment                                            |
 | `env`    |                             | identifier for environment to deploy to (e.g. `staging`, `prod`, `master`) |
 
-
 <details>
 <summary>Simple Example</summary>
 <p>
