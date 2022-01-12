@@ -29,7 +29,7 @@ inputs:
     description: The git ref to use for the deploy, defaults to `github.ref`
   env:
     required: false
-    description: The name of the deployment environment for Github. (Required for `start` and `deactivate-env` only)
+    description: The name of the deployment environment for Github. You can also use an array of environments to activate automatically multi deployment (Required for `start` and `deactivate-env` only)
   transient:
     required: false
     description: Whether this is a transient (short-lived) environment. (For `start` only)
