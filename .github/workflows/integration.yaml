@@ -71,6 +71,7 @@ jobs:
             deployment_id: parseInt(deployment_id, 10),
             status_id: parseInt(status_id, 10),
           });
+          console.log(res)
           if (res.data.state !== "in_progress") {
             throw new Error(`unexpected status ${res.data.state}`);
           }
@@ -108,6 +109,7 @@ jobs:
             deployment_id: parseInt(deployment_id, 10),
             status_id: parseInt(status_id, 10),
           });
+          console.log(res)
           if (res.data.state !== expected_state) {
             throw new Error(`unexpected status ${res.data.state}`);
           }
