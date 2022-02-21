@@ -26,25 +26,17 @@ export async function run(step: Step, context: DeploymentContext) {
             console.log(`'${step}' arguments`, args);
           }
 
-          let environments;
+          const environments = args.environment.split(",");
 
-          const isMulti = args.environment.split(",").length > 1;
-
-          if (isMulti) {
-            environments = JSON.parse(args.environment);
-          } else {
-            environments = [args.environment];
-          }
-
-          const promises: any = [];
-          const deactivatePromises: any = [];
+          const createDeployments: Array<Promise<any>> = [];
+          const deactivateDeployments: Array<Promise<any>> = [];
           for (let i = 0; i < environments.length; i++) {
             if (!args.noOverride) {
-              deactivatePromises.push(
+              deactivateDeployments.push(
                 deactivateEnvironment(context, environments[i])
               );
             }
-            promises.push(
+            createDeployments.push(
               github.rest.repos.createDeployment({
                 owner: context.owner,
                 repo: context.repo,
@@ -58,13 +50,15 @@ export async function run(step: Step, context: DeploymentContext) {
             );
           }
 
-          let deploymentsData: any = [];
-
-          try {
-            await Promise.all(deactivatePromises);
-            deploymentsData = await Promise.all(promises);
-          } catch {
-            error("Cannot generate deployments");
+          let deploymentsData: Array<{ data: { id: string; url: string } }> =
+            [];
+          if (deactivateDeployments.length > 0) {
+            try {
+              await Promise.all(deactivateDeployments);
+              deploymentsData = await Promise.all(createDeployments);
+            } catch {
+              error("Cannot generate deployments");
+            }
           }
 
           if (args.logArgs) {
@@ -72,34 +66,28 @@ export async function run(step: Step, context: DeploymentContext) {
             console.log(deploymentsData);
           }
 
-          const secondPromises: any = [];
-
-          deploymentsData.map((deployment: any) => {
-            secondPromises.push(
-              github.rest.repos.createDeploymentStatus({
-                owner: context.owner,
-                repo: context.repo,
-                deployment_id: parseInt(deployment.data.id, 10),
-                state: "in_progress",
-                auto_inactive: args.autoInactive,
-                log_url: args.logsURL,
-                description: args.description,
-              })
-            );
-          });
+          const createStatues = deploymentsData.map((deployment) =>
+            github.rest.repos.createDeploymentStatus({
+              owner: context.owner,
+              repo: context.repo,
+              deployment_id: parseInt(deployment.data.id, 10),
+              state: "in_progress",
+              auto_inactive: args.autoInactive,
+              log_url: args.logsURL,
+              description: args.description,
+            })
+          );
 
           try {
-            await Promise.all(secondPromises);
+            await Promise.all(createStatues);
             setOutput(
-              "deployment_id",
-              isMulti
-                ? JSON.stringify(
-                    deploymentsData.map((deployment: any, index: number) => ({
-                      ...deployment,
-                      url: environments[index],
-                    }))
-                  )
-                : deploymentsData[0].data.id
+              "deployments",
+              JSON.stringify(
+                deploymentsData.map((deployment, index) => ({
+                  id: deployment.data.id,
+                  url: environments[index],
+                }))
+              )
             );
             setOutput("env", args.environment);
           } catch (e) {
@@ -113,7 +101,7 @@ export async function run(step: Step, context: DeploymentContext) {
           const args = {
             ...context.coreArgs,
             status: getInput("status", { required: true }).toLowerCase(),
-            deploymentID: getInput("deployment_id", { required: true }),
+            deployment: getInput("deployment_id", { required: true }),
             envURL: getInput("env_url", { required: false }),
           };
 
@@ -137,46 +125,29 @@ export async function run(step: Step, context: DeploymentContext) {
 
           if (args.logArgs) {
             console.log(
-              `finishing deployment for ${args.deploymentID} with status ${args.status}`
+              `finishing deployment for ${args.deployment} with status ${args.status}`
             );
           }
 
           const newStatus =
             args.status === "cancelled" ? "inactive" : args.status;
 
-          let deployments;
+          const deployments: Array<{ id: string; url: string }> = JSON.parse(
+            args.deployment
+          );
 
-          const isMulti = args.deploymentID.split(",").length > 1;
-
-          if (isMulti) {
-            deployments = JSON.parse(args.deploymentID);
-          } else {
-            deployments = [args.deploymentID];
-          }
-
-          const promises: any = [];
-
-          deployments.map((deployment: any) => {
-            promises.push(
-              github.rest.repos.createDeploymentStatus({
-                owner: context.owner,
-                repo: context.repo,
-                deployment_id: isMulti
-                  ? parseInt(deployment.data.id, 10)
-                  : parseInt(deployment, 10),
-                auto_inactive: args.autoInactive,
-                state: newStatus,
-                description: args.description,
-                environment_url:
-                  newStatus === "success" && isMulti
-                    ? `${deployment.url}`
-                    : newStatus === "success"
-                    ? args.envURL
-                    : "",
-                log_url: args.logsURL,
-              })
-            );
-          });
+          const promises = deployments.map((deployment) =>
+            github.rest.repos.createDeploymentStatus({
+              owner: context.owner,
+              repo: context.repo,
+              deployment_id: parseInt(deployment.id, 10),
+              auto_inactive: args.autoInactive,
+              state: newStatus,
+              description: args.description,
+              environment_url: args.envURL || deployment.url,
+              log_url: args.logsURL,
+            })
+          );
 
           try {
             if (args.logArgs) {
