@@ -26,7 +26,6 @@ async function deactivateEnvironment(
   log.info(`${environment}: found ${existing} existing deployments for env`);
   for (let i = 0; i < existing; i++) {
     const deployment = deployments.data[i];
-
     log.info(
       `${environment}.${deployment.id}: setting deployment (${deployment.sha}) state to "${deactivatedState}"`
     );
@@ -37,7 +36,8 @@ async function deactivateEnvironment(
       state: deactivatedState,
     });
     log.debug(`${environment}.${deployment.id} updated`, {
-      response: res.data,
+      state: res.data.state,
+      url: res.data.url,
     });
   }
 

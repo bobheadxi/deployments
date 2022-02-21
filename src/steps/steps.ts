@@ -96,6 +96,10 @@ export async function run(
           };
           log.debug(`'${step}' arguments`, args);
 
+          if (args.override) {
+            await deactivateEnvironment(github, context, args.environment);
+          }
+
           if (
             args.status !== "success" &&
             args.status !== "failure" &&
