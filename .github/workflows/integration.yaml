@@ -3,15 +3,20 @@ name: pipeline
 on: [push]
 
 jobs:
-  deploy-success:
+  test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        scenario: [ 'success', 'failure' ]
+    # We test failure scenarios, so rely on manual inspection of run
+    continue-on-error: true
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v2
       with:
         node-version: '12'
 
-    - name: Extract branch name
+    - name: extract branch name
       id: get_branch
       shell: bash
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/} | tr / -)"
@@ -22,11 +27,19 @@ jobs:
       with:
         step: start
         token: ${{ secrets.GITHUB_TOKEN }}
-        env: succeed-${{ steps.get_branch.outputs.branch }}
+        env: ${{ steps.get_branch.outputs.branch }}-${{ matrix.scenario }}
 
-    - run: exit 0
+    - name: wait
+      run: sleep 3s
+      shell: bash
 
-    - run: sleep 30s
+    - name: emulate success
+      if: ${{ matrix.scenario }} == 'success'
+      run: exit 0
+      shell: bash
+    - name: emulate success
+      if: ${{ matrix.scenario }} == 'failure'
+      run: exit 1
       shell: bash
 
     - name: update deployment status
@@ -38,7 +51,9 @@ jobs:
         status: ${{ job.status }}
         deployment_id: ${{ steps.deployment.outputs.deployment_id }}
 
-    - run: sleep 30s
+    - name: wait
+      run: sleep 3s
+      if: always()
       shell: bash
 
     - name: mark environment as deactivated
@@ -47,53 +62,5 @@ jobs:
       with:
         step: deactivate-env
         token: ${{ secrets.GITHUB_TOKEN }}
-        env: succeed-${{ steps.get_branch.outputs.branch }}
-        desc: Deployment was pruned
-
-  deploy-failure:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '12'
-
-    - name: Extract branch name
-      id: get_branch
-      shell: bash
-      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/} | tr / -)"
-
-    - name: start deployment
-      uses: ./
-      id: deployment
-      with:
-        step: start
-        token: ${{ secrets.GITHUB_TOKEN }}
-        env: fail-${{ steps.get_branch.outputs.branch }}
-
-    - run: exit 1
-
-    - run: sleep 30s
-      if: always()
-      shell: bash
-
-    - name: update deployment status
-      uses: ./
-      if: always()
-      with:
-        step: finish
-        token: ${{ secrets.GITHUB_TOKEN }}
-        status: ${{ job.status }}
-        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-
-    - run: sleep 30s
-      shell: bash
-
-    - name: mark environment as deactivated
-      uses: ./
-      if: always()
-      with:
-        step: deactivate-env
-        token: ${{ secrets.GITHUB_TOKEN }}
-        env: fail-${{ steps.get_branch.outputs.branch }}
+        env: ${{ steps.get_branch.outputs.branch }}-${{ matrix.scenario }}
         desc: Deployment was pruned
