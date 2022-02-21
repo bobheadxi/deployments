@@ -15,7 +15,7 @@ A simple example:
 on:
   push:
     branches:
-    - master
+    - main
 
 jobs:
   deploy:
@@ -69,7 +69,7 @@ The following [`inputs`](https://help.github.com/en/articles/workflow-syntax-for
 | `token`         |                             | provide your `${{ secrets.GITHUB_TOKEN }}` for API access                                              |
 | `logs`          | URL to GitHub commit checks | URL of your deployment logs                                                                            |
 | `desc`          |                             | description for this deployment                                                                        |
-| `env`           |                             | identifier for environment to deploy to (e.g. `staging`, `prod`, `master`)                             |
+| `env`           |                             | identifier for environment to deploy to (e.g. `staging`, `prod`, `main`)                             |
 | `no_override`   | `true`                      | toggle whether to mark existing deployments of this environment as inactive once the deployment starts |
 | `transient`     | `false`                     | Mark deployment as transient. Transient deployments are not automatically deactivated                  |
 | `deployment_id` |                             | Use an existing deployment instead of creating a new one (e.g. `${{ github.event.deployment.id }}`)    |
@@ -90,7 +90,7 @@ The following [`outputs`](https://help.github.com/en/actions/automating-your-wor
 on:
   push:
     branches:
-    - master
+    - main
 
 jobs:
   deploy:
@@ -207,7 +207,7 @@ The following [`inputs`](https://help.github.com/en/articles/workflow-syntax-for
 | `token`  |                             | provide your `${{ secrets.GITHUB_TOKEN }}` for API access                  |
 | `logs`   | URL to GitHub commit checks | URL of your deployment logs                                                |
 | `desc`   |                             | description for this deployment                                            |
-| `env`    |                             | identifier for environment to deploy to (e.g. `staging`, `prod`, `master`) |
+| `env`    |                             | identifier for environment to deploy to (e.g. `staging`, `prod`, `main`) |
 
 <details>
 <summary>Simple Example</summary>
