@@ -49,9 +49,10 @@ jobs:
         step: start
         token: ${{ secrets.GITHUB_TOKEN }}
         env: integration-test-${{ steps.get_branch.outputs.branch }}-${{ matrix.scenario }}
+        desc: 'Deployment starting!'
 
     - name: wait
-      run: sleep 3s
+      run: sleep 10s
       shell: bash
 
     - name: emulate ${{ matrix.scenario }}
@@ -67,9 +68,10 @@ jobs:
         status: ${{ job.status }}
         deployment_id: ${{ steps.deployment.outputs.deployment_id }}
         env: ${{ steps.deployment.outputs.env }}
+        desc: 'Deployment complete'
 
     - name: wait
-      run: sleep 3s
+      run: sleep 10s
       if: always()
       shell: bash
 

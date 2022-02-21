@@ -257,10 +257,12 @@ If you run into an problems or have any questions, feel free to open an [issue](
 
 ## Migrating to V1
 
-`v1.0.0` makes the following breaking changes from `v0.7.x`:
+`v1.0.0` makes the following breaking changes from `v0.6.x`:
 
 - **CHANGED `no_override` is now `override`**, and the default behaviour is `override: true`.
 - **CHANGED `log_args` is now `debug`**, but does the same thing as before.
+- **CHANGED `step: deactivate` is now `step: deactivate-env`**, but does the same thing as before.
+- **CHANGED `env` is now always required**.
 - **REMOVED `auto_inactive`** - use `override` instead.
 - **REMOVED `transient`** - all deployments created by this action are `transient` by default, with removals handled by `override` or `step: deactivate`.
 

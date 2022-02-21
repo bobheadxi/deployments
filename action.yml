@@ -8,3 +8,46 @@ runs:
   using: node16
   main: dist/index.js
   post: dist/index.js
+
+inputs:
+  token:
+    required: true
+    description: GitHub token
+  step:
+    required: true
+    description: One of 'start' and 'finish'
+  repository:
+    required: false
+    description: Set status for a different repository, using the format `$owner/$repository` (optional, defaults to the current repository)
+  logs:
+    required: false
+    description: URL to logs
+  desc:
+    required: false
+    description: Description to set in status
+  ref:
+    required: false
+    description: The git ref to use for the deploy, defaults to `github.ref`
+  env:
+    required: false
+    description: The name of the deployment environment for Github. (Required for `start` and `deactivate` only)
+  transient:
+    required: false
+    description: Whether this is a transient (short-lived) environment. (For `start` only)
+  deployment_id:
+    required: false
+    description: The deployment id to update (if specified during `start`, the deployment will be updated instead of a new one created)
+  env_url:
+    required: false
+    description: The environment URL. (For `finish` only)
+  status:
+    required: false
+    description: The deployment status. (For `finish` only)
+  override:
+    required: false
+    description: Whether to mark existing deployments of this environment as inactive
+    default: 'true'
+  debug:
+    required: false
+    description: Print arguments used by this action and other debug information.
+    default: 'false'
