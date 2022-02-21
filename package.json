@@ -19,7 +19,7 @@
   "dependencies": {
     "@actions/core": "1.6.0",
     "@actions/github": "5.0.0",
-    "@vercel/ncc": "0.33.1",
+    "@vercel/ncc": "0.33.3",
     "@types/node": "~13",
     "typescript": "4.5.4",
     "prettier": "2.5.1"
