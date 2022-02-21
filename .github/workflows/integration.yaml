@@ -53,19 +53,13 @@ jobs:
       run: sleep 10s
       shell: bash
 
-    - name: emulate ${{ matrix.scenario }}
-      # We test failure scenarios, so rely on manual inspection of run
-      continue-on-error: true
-      run: exit ${{ matrix.exit_code }}
-      shell: bash
-
-    - name: update deployment status
+    - name: set deployment status to ${{ matrix.scenario }}
       uses: ./
       if: always()
       with:
         step: finish
         token: ${{ secrets.GITHUB_TOKEN }}
-        status: ${{ job.status }}
+        status: ${{ matrix.scenario }}
         deployment_id: ${{ steps.deployment.outputs.deployment_id }}
         env: ${{ steps.deployment.outputs.env }}
         desc: 'Deployment complete'
