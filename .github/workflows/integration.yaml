@@ -114,11 +114,11 @@ jobs:
             throw new Error(`unexpected status ${res.data.state}`);
           }
 
-    # - name: mark environment as deactivated
-    #   uses: ./
-    #   with:
-    #     step: deactivate-env
-    #     token: ${{ secrets.GITHUB_TOKEN }}
-    #     env: ${{ steps.deployment.outputs.env }}
-    #     desc: Deployment was pruned
-    #     debug: true
+    - name: mark environment as deactivated
+      uses: ./
+      with:
+        step: deactivate-env
+        token: ${{ secrets.GITHUB_TOKEN }}
+        env: ${{ steps.deployment.outputs.env }}
+        desc: Environment was pruned
+        debug: true
