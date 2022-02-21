@@ -48,6 +48,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         env: integration-test-${{ steps.get_branch.outputs.branch }}-${{ matrix.scenario }}
         desc: 'Deployment starting!'
+        debug: true
 
     - name: wait
       run: sleep 10s
@@ -62,6 +63,7 @@ jobs:
         deployment_id: ${{ steps.deployment.outputs.deployment_id }}
         env: ${{ steps.deployment.outputs.env }}
         desc: 'Deployment complete'
+        debug: true
 
     - name: wait
       run: sleep 10s
@@ -74,3 +76,4 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         env: ${{ steps.deployment.outputs.env }}
         desc: Deployment was pruned
+        debug: true

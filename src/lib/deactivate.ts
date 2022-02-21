@@ -18,29 +18,30 @@ async function deactivateEnvironment(
   });
   const existing = deployments.data.length;
   if (existing === 0) {
-    console.info(`found no existing deployments for env ${environment}`);
+    log.info(`found no existing deployments for env ${environment}`);
     return;
   }
 
-  const deadState = "inactive";
-  log.info(
-    `found ${existing} existing deployments for env "${environment}" - marking all as "${deadState}"`
-  );
+  const deactivatedState = "inactive";
+  log.info(`${environment}: found ${existing} existing deployments for env`);
   for (let i = 0; i < existing; i++) {
     const deployment = deployments.data[i];
 
     log.info(
-      `setting deployment '${environment}.${deployment.id}' (${deployment.sha}) state to "${deadState}"`
+      `${environment}.${deployment.id}: setting deployment (${deployment.sha}) state to "${deactivatedState}"`
     );
-    await github.rest.repos.createDeploymentStatus({
+    const res = await github.rest.repos.createDeploymentStatus({
       owner,
       repo,
       deployment_id: deployment.id,
-      state: deadState,
+      state: deactivatedState,
+    });
+    log.debug(`${environment}.${deployment.id} updated`, {
+      response: res.data,
     });
   }
 
-  log.info(`${existing} deployments updated`);
+  log.info(`${environment}: ${existing} deployments updated`);
 }
 
 export default deactivateEnvironment;
