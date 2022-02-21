@@ -48,7 +48,7 @@ jobs:
       with:
         step: start
         token: ${{ secrets.GITHUB_TOKEN }}
-        env: ${{ steps.get_branch.outputs.branch }}-${{ matrix.scenario }}
+        env: integration-test-${{ steps.get_branch.outputs.branch }}-${{ matrix.scenario }}
 
     - name: wait
       run: sleep 3s
@@ -66,6 +66,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         status: ${{ job.status }}
         deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+        env: ${{ steps.deployment.outputs.env }}
 
     - name: wait
       run: sleep 3s
@@ -78,5 +79,5 @@ jobs:
       with:
         step: deactivate
         token: ${{ secrets.GITHUB_TOKEN }}
-        env: ${{ steps.get_branch.outputs.branch }}-${{ matrix.scenario }}
+        env: ${{ steps.deployment.outputs.env }}
         desc: Deployment was pruned

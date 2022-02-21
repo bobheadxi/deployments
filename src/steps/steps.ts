@@ -1,6 +1,13 @@
-import { getInput, setOutput, error } from "@actions/core";
-import { DeploymentContext, getBooleanInput } from "../lib/context";
+import { setOutput, error } from "@actions/core";
+import { GitHub } from "@actions/github/lib/utils";
+
+import { DeploymentContext } from "../lib/context";
 import deactivateEnvironment from "../lib/deactivate";
+import {
+  getBooleanInput,
+  getOptionalInput,
+  getRequiredInput,
+} from "../lib/input";
 
 export enum Step {
   Start = "start",
@@ -8,8 +15,12 @@ export enum Step {
   Deactivate = "deactivate",
 }
 
-export async function run(step: Step, context: DeploymentContext) {
-  const { log, github, coreArgs } = context;
+export async function run(
+  step: Step,
+  github: InstanceType<typeof GitHub>,
+  context: DeploymentContext
+) {
+  const { log, coreArgs } = context;
 
   try {
     switch (step) {
@@ -20,7 +31,7 @@ export async function run(step: Step, context: DeploymentContext) {
           };
           log.debug(`'${step}' arguments`, args);
 
-          let deploymentIDInput = getInput("deployment_id");
+          let deploymentIDInput = getOptionalInput("deployment_id");
           let deploymentID = -1;
           if (!deploymentIDInput) {
             log.info(
@@ -74,9 +85,9 @@ export async function run(step: Step, context: DeploymentContext) {
         {
           const args = {
             ...coreArgs,
-            deploymentID: getInput("deployment_id", { required: true }),
-            envURL: getInput("env_url", { required: false }),
-            status: getInput("status", { required: true }).toLowerCase(),
+            deploymentID: getRequiredInput("deployment_id"),
+            envURL: getOptionalInput("env_url"),
+            status: getRequiredInput("status").toLowerCase(),
             override: getBooleanInput("override", true),
           };
           log.debug(`'${step}' arguments`, args);
@@ -99,7 +110,7 @@ export async function run(step: Step, context: DeploymentContext) {
           );
 
           if (args.override) {
-            await deactivateEnvironment(context, args.environment);
+            await deactivateEnvironment(github, context, args.environment);
           }
 
           // Set cancelled jobs to inactive environment
@@ -130,7 +141,7 @@ export async function run(step: Step, context: DeploymentContext) {
           };
           log.debug(`'${step}' arguments`, args);
 
-          await deactivateEnvironment(context, args.environment);
+          await deactivateEnvironment(github, context, args.environment);
         }
         break;
 

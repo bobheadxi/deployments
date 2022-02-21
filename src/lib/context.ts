@@ -1,6 +1,5 @@
-import { getInput } from "@actions/core";
-import { context, getOctokit } from "@actions/github";
-import { GitHub } from "@actions/github/lib/utils";
+import { context } from "@actions/github";
+import { getBooleanInput, getOptionalInput, getRequiredInput } from "./input";
 import Logger from "./log";
 
 export interface DeploymentContext {
@@ -8,7 +7,6 @@ export interface DeploymentContext {
   sha: string;
   owner: string;
   repo: string;
-  github: InstanceType<typeof GitHub>;
   log: Logger;
 
   coreArgs: {
@@ -19,49 +17,31 @@ export interface DeploymentContext {
 }
 
 /**
- * Alternative to @actions/core.getBooleanInput that supports default values
- */
-export function getBooleanInput(key: string, defaultTrue: boolean) {
-  if (defaultTrue) {
-    // unless 'false', always true
-    return getInput(key) !== "false";
-  }
-  // unless 'true', always false
-  return getInput(key) === "true";
-}
-
-/**
  * Generates configuration for this action run.
  */
 export function collectDeploymentContext(): DeploymentContext {
   const { ref, sha } = context;
 
-  const customRepository = getInput("repository", { required: false });
+  const customRepository = getOptionalInput("repository");
 
   const [owner, repo] = customRepository
     ? customRepository.split("/")
     : [context.repo.owner, context.repo.repo];
-
   if (!owner || !repo) {
     throw new Error(`invalid target repository: ${owner}/${repo}`);
   }
 
-  const github = getOctokit(getInput("token", { required: true }), {
-    previews: ["ant-man-preview", "flash-preview"],
-  });
-
   return {
-    ref: getInput("ref") || ref,
+    ref: getOptionalInput("ref") || ref,
     sha,
     owner,
     repo,
-    github,
     log: new Logger({ debug: getBooleanInput("debug", false) }),
     coreArgs: {
-      environment: getInput("env", { required: true }),
-      description: getInput("desc"),
+      environment: getRequiredInput("env"),
+      description: getOptionalInput("desc"),
       logsURL:
-        getInput("logs") ||
+        getOptionalInput("logs") ||
         `https://github.com/${owner}/${repo}/commit/${sha}/checks`,
     },
   };

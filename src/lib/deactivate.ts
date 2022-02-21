@@ -1,13 +1,16 @@
+import { GitHub } from "@actions/github/lib/utils";
+
 import { DeploymentContext } from "./context";
 
 /**
  * Mark all deployments within this environment as `inactive`.
  */
 async function deactivateEnvironment(
-  { log, github: client, owner, repo }: DeploymentContext,
+  github: InstanceType<typeof GitHub>,
+  { log, owner, repo }: DeploymentContext,
   environment: string
 ) {
-  const deployments = await client.rest.repos.listDeployments({
+  const deployments = await github.rest.repos.listDeployments({
     owner,
     repo,
     environment,
@@ -28,7 +31,7 @@ async function deactivateEnvironment(
     log.info(
       `setting deployment '${environment}.${deployment.id}' (${deployment.sha}) state to "${deadState}"`
     );
-    await client.rest.repos.createDeploymentStatus({
+    await github.rest.repos.createDeploymentStatus({
       owner,
       repo,
       deployment_id: deployment.id,

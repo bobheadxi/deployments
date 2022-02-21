@@ -188,6 +188,7 @@ jobs:
         step: finish
         token: ${{ secrets.GITHUB_TOKEN }}
         status: ${{ job.status }}
+        env: ${{ steps.deployment.outputs.env }}
         deployment_id: ${{ steps.deployment.outputs.deployment_id }}
 ```
 
