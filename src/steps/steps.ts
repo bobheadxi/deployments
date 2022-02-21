@@ -12,8 +12,8 @@ import {
 export enum Step {
   Start = "start",
   Finish = "finish",
-  Deactivate = "deactivate",
-  Delete = "delete",
+  DeactivateEnv = "deactivate-env",
+  DeleteEnv = "delete-env",
 }
 
 export async function run(
@@ -137,7 +137,7 @@ export async function run(
         }
         break;
 
-      case Step.Deactivate:
+      case Step.DeactivateEnv:
         {
           const args = {
             ...coreArgs,
@@ -148,7 +148,7 @@ export async function run(
         }
         break;
 
-      case Step.Delete:
+      case Step.DeleteEnv:
         {
           const args = {
             ...coreArgs,

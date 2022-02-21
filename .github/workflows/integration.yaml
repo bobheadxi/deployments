@@ -72,7 +72,7 @@ jobs:
     - name: mark environment as deactivated
       uses: ./
       with:
-        step: deactivate
+        step: deactivate-env
         token: ${{ secrets.GITHUB_TOKEN }}
         env: ${{ steps.deployment.outputs.env }}
         desc: Deployment was pruned

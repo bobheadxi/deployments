@@ -7,7 +7,6 @@ branding:
 runs:
   using: node16
   main: dist/index.js
-  post: dist/index.js
 
 inputs:
   token:
@@ -15,7 +14,7 @@ inputs:
     description: GitHub token
   step:
     required: true
-    description: One of 'start', 'finish', 'deactivate', or 'delete'
+    description: One of 'start', 'finish', 'deactivate-env', or 'delete-env'
   repository:
     required: false
     description: Set status for a different repository, using the format `$owner/$repository` (optional, defaults to the current repository)
@@ -30,7 +29,7 @@ inputs:
     description: The git ref to use for the deploy, defaults to `github.ref`
   env:
     required: false
-    description: The name of the deployment environment for Github. (Required for `start` and `deactivate` only)
+    description: The name of the deployment environment for Github. (Required for `start` and `deactivate-env` only)
   transient:
     required: false
     description: Whether this is a transient (short-lived) environment. (For `start` only)

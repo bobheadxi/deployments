@@ -42,7 +42,7 @@ jobs:
     - name: delete environment
       uses: ./
       with:
-        step: deactivate
+        step: deactivate-env
         token: ${{ secrets.GITHUB_TOKEN }}
         env: integration-test-${{ steps.get_branch.outputs.branch }}-${{ matrix.scenario }}
         debug: true

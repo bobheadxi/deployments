@@ -6,7 +6,7 @@ Instead of exposing convoluted Action configuration that mirrors that of the [Gi
 - [Features](#features)
   - [`step: start`](#step-start)
   - [`step: finish`](#step-finish)
-  - [`step: deactivate`](#step-deactivate)
+  - [`step: deactivate-env`](#step-deactivate)
 - [Debugging](#debugging)
 - [Migrating to V1](#migrating-to-v1)
 
@@ -60,7 +60,7 @@ The following configuration options are for *all steps*:
 
 | Variable     | Default                     | Purpose                                                                                          |
 | ------------ | --------------------------- | ------------------------------------------------------------------------------------------------ |
-| `step`       |                             | One of [`start`](#step-start), [`finish`](#step-finish), or [`deactivate`](#step-deactivate) |
+| `step`       |                             | One of [`start`](#step-start), [`finish`](#step-finish), or [`deactivate-env`](#step-deactivate-env) |
 | `token`      |                             | provide your `${{ secrets.GITHUB_TOKEN }}` for API access                                        |
 | `repository` | Current repository          | target a specific repository for updates                                                         |
 | `logs`       | URL to GitHub commit checks | URL of your deployment logs                                                                      |
@@ -197,7 +197,7 @@ jobs:
 
 <br />
 
-### `step: deactivate`
+### `step: deactivate-env`
 
 This is best used on the `pull_request: { types: [ closed ] }` event, since GitHub does not seem to provide a event to detect when branches are deleted.
 This step can be used to automatically shut down deployments you create on pull requests and mark environments as destroyed:
@@ -208,7 +208,7 @@ The following [`inputs`](https://help.github.com/en/articles/workflow-syntax-for
 
 | Variable | Default                     | Purpose                                                                    |
 | -------- | --------------------------- | -------------------------------------------------------------------------- |
-| `step`   |                             | must be `deactivate` for this step                                     |
+| `step`   |                             | must be `deactivate-env` for this step                                     |
 | `token`  |                             | provide your `${{ secrets.GITHUB_TOKEN }}` for API access                  |
 | `logs`   | URL to GitHub commit checks | URL of your deployment logs                                                |
 | `desc`   |                             | description for this deployment                                            |
@@ -240,7 +240,7 @@ jobs:
     - name: mark environment as deactivated
       uses: bobheadxi/deployments@v1
       with:
-        step: deactivate
+        step: deactivate-env
         token: ${{ secrets.GITHUB_TOKEN }}
         env: ${{ steps.get_branch.outputs.branch }}
         desc: Deployment was pruned
@@ -261,7 +261,6 @@ If you run into an problems or have any questions, feel free to open an [issue](
 
 - **CHANGED `no_override` is now `override`**, and the default behaviour is `override: true`.
 - **CHANGED `log_args` is now `debug`**, but does the same thing as before.
-- **CHANGED `step: deactivate` is now `step: deactivate-env`**, but does the same thing as before.
 - **CHANGED `env` is now always required**. You can use `env: ${{ steps.deployment.outputs.env }}` to avoid repeating your env configuration.
 - **REMOVED `auto_inactive`** - use `override` instead.
 - **REMOVED `transient`** - all deployments created by this action are `transient` by default, with removals handled by `override` or `step: deactivate`.
