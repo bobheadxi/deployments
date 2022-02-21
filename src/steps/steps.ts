@@ -112,10 +112,6 @@ export async function run(
             `finishing deployment for ${args.deploymentID} with status ${args.status}`
           );
 
-          if (args.override) {
-            await deactivateEnvironment(github, context, args.environment);
-          }
-
           // Set cancelled jobs to inactive environment
           const newStatus =
             args.status === "cancelled" ? "inactive" : args.status;
