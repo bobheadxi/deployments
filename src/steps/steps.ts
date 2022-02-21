@@ -32,6 +32,7 @@ export async function run(step: Step, context: DeploymentContext) {
               ref: context.ref,
               required_contexts: [],
               environment: args.environment,
+              description: args.description,
               auto_merge: false,
               transient_environment: true,
             });
@@ -83,7 +84,12 @@ export async function run(step: Step, context: DeploymentContext) {
           if (
             args.status !== "success" &&
             args.status !== "failure" &&
-            args.status !== "cancelled"
+            args.status !== "cancelled" &&
+            args.status !== "error" &&
+            args.status !== "inactive" &&
+            args.status !== "in_progress" &&
+            args.status !== "queued" &&
+            args.status !== "pending"
           ) {
             error(`unexpected status ${args.status}`);
             return;
@@ -132,6 +138,6 @@ export async function run(step: Step, context: DeploymentContext) {
         log.fail(`unknown step type ${step}`);
     }
   } catch (error) {
-    log.fail(`unexpected error encountered: ${error.message}`);
+    log.fail(`unexpected error encountered: ${error}`);
   }
 }
