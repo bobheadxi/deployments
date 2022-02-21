@@ -60,7 +60,7 @@ jobs:
       uses: ./
       if: always()
       with:
-        step: deactivate-env
+        step: deactivate
         token: ${{ secrets.GITHUB_TOKEN }}
         env: ${{ steps.get_branch.outputs.branch }}-${{ matrix.scenario }}
         desc: Deployment was pruned

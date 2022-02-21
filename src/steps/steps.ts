@@ -5,7 +5,7 @@ import deactivateEnvironment from "../lib/deactivate";
 export enum Step {
   Start = "start",
   Finish = "finish",
-  DeactivateEnv = "deactivate-env",
+  Deactivate = "deactivate",
 }
 
 export async function run(step: Step, context: DeploymentContext) {
@@ -123,7 +123,7 @@ export async function run(step: Step, context: DeploymentContext) {
         }
         break;
 
-      case Step.DeactivateEnv:
+      case Step.Deactivate:
         {
           const args = {
             ...coreArgs,
