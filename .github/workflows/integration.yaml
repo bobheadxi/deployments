@@ -8,6 +8,11 @@ jobs:
     strategy:
       matrix:
         scenario: [ 'success', 'failure' ]
+        include:
+        - scenario: 'success'
+          exit_code: 0
+        - scenario: 'failure'
+          exit_code: 1
     # We test failure scenarios, so rely on manual inspection of run
     continue-on-error: true
     steps:
@@ -49,13 +54,8 @@ jobs:
       run: sleep 3s
       shell: bash
 
-    - name: emulate success
-      if: ${{ matrix.scenario }} == 'success'
-      run: exit 0
-      shell: bash
-    - name: emulate success
-      if: ${{ matrix.scenario }} == 'failure'
-      run: exit 1
+    - name: emulate ${{ matrix.scenario }}
+      run: exit ${{ matrix.exit_code }}
       shell: bash
 
     - name: update deployment status
