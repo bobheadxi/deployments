@@ -71,7 +71,9 @@ export async function run(
           setOutput("deployment_id", deploymentID);
           setOutput("env", args.environment);
 
-          await github.rest.repos.createDeploymentStatus({
+          const {
+            data: { id: statusID },
+          } = await github.rest.repos.createDeploymentStatus({
             owner: context.owner,
             repo: context.repo,
             deployment_id: deploymentID,
@@ -80,8 +82,10 @@ export async function run(
             description: args.description,
             ref: context.ref,
           });
-
-          log.info('deployment status set to "in_progress"');
+          log.info('deployment status created, set to "in_progress"', {
+            id: statusID,
+          });
+          setOutput("status_id", statusID);
         }
         break;
 
@@ -120,7 +124,9 @@ export async function run(
           // Set cancelled jobs to inactive environment
           const newStatus =
             args.status === "cancelled" ? "inactive" : args.status;
-          await github.rest.repos.createDeploymentStatus({
+          const {
+            data: { id: statusID },
+          } = await github.rest.repos.createDeploymentStatus({
             owner: context.owner,
             repo: context.repo,
             deployment_id: parseInt(args.deploymentID, 10),
@@ -136,6 +142,11 @@ export async function run(
             // deployments for us as a fallback
             auto_inactive: args.override,
           });
+
+          log.info('deployment status created, set to "in_progress"', {
+            id: statusID,
+          });
+          setOutput("status_id", statusID);
 
           log.info(`${args.deploymentID} status set to ${newStatus}`);
         }

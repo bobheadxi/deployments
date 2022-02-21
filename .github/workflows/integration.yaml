@@ -13,12 +13,13 @@ jobs:
           exit_code: 0
         - scenario: 'failure'
           exit_code: 1
+      fail-fast: false
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v2
       with:
         node-version: '12'
-      
+
     # Dependencies
     # https://docs.github.com/en/actions/guides/caching-dependencies-to-speed-up-workflows#example-using-the-cache-action
     - name: Cache node modules
@@ -50,12 +51,33 @@ jobs:
         desc: 'Deployment starting!'
         debug: true
 
-    - name: wait
-      run: sleep 10s
-      shell: bash
+    - name: assert deployment in progress
+      uses: actions/github-script@v6
+      env:
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+        status_id: ${{ steps.deployment.outputs.status_id }}
+      with:
+        script: |
+          const { deployment_id, status_id } = process.env;
+          if (!deployment_id) {
+            throw new Error("deployment_id not set");
+          }
+          if (!status_id) {
+            throw new Error("status_id not set");
+          }
+          const res = await github.rest.repos.getDeploymentStatus({
+            owner: "bobheadxi",
+            repo: "deployments",
+            deployment_id: parseInt(deployment_id, 10),
+            status_id: parseInt(status_id, 10),
+          });
+          if (res.data.state !== "in_progress") {
+            throw new Error(`unexpected status ${res.data.state}`);
+          }
 
     - name: set deployment status to ${{ matrix.scenario }}
       uses: ./
+      id: finish
       with:
         step: finish
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -65,9 +87,30 @@ jobs:
         desc: 'Deployment complete'
         debug: true
 
-    - name: wait
-      run: sleep 10s
-      shell: bash
+    - name: assert deployment complete
+      uses: actions/github-script@v6
+      env:
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+        status_id: ${{ steps.finish.outputs.status_id }}
+        expected_state: ${{ matrix.scenario }}
+      with:
+        script: |
+          const { deployment_id, status_id, expected_state } = process.env;
+          if (!deployment_id) {
+            throw new Error("deployment_id not set");
+          }
+          if (!status_id) {
+            throw new Error("status_id not set");
+          }
+          const res = await github.rest.repos.getDeploymentStatus({
+            owner: "bobheadxi",
+            repo: "deployments",
+            deployment_id: parseInt(deployment_id, 10),
+            status_id: parseInt(status_id, 10),
+          });
+          if (res.data.state !== expected_state) {
+            throw new Error(`unexpected status ${res.data.state}`);
+          }
 
     # - name: mark environment as deactivated
     #   uses: ./
