@@ -1,5 +1,6 @@
-on:
-  push:
+name: pipeline
+
+on: [push]
 
 jobs:
   deploy-success:
