@@ -16,7 +16,7 @@ A simple example:
 on:
   push:
     branches:
-    - master
+    - main
 
 jobs:
   deploy:
@@ -65,7 +65,7 @@ The following configuration options are for *all steps*:
 | `repository` | Current repository          | target a specific repository for updates                                                         |
 | `logs`       | URL to GitHub commit checks | URL of your deployment logs                                                                      |
 | `desc`       | GitHub-generated description | description for this deployment                                                                  |
-| `env`           |                             | identifier for environment to deploy to (e.g. `staging`, `prod`, `master`)                          |
+| `env`           |                             | identifier for environment to deploy to (e.g. `staging`, `prod`, `main`)                          |
 
 ### `step: start`
 
@@ -97,7 +97,7 @@ The following [`outputs`](https://help.github.com/en/actions/automating-your-wor
 on:
   push:
     branches:
-    - master
+    - main
 
 jobs:
   deploy:
@@ -211,7 +211,7 @@ The following [`inputs`](https://help.github.com/en/articles/workflow-syntax-for
 | `token`  |                             | provide your `${{ secrets.GITHUB_TOKEN }}` for API access                  |
 | `logs`   | URL to GitHub commit checks | URL of your deployment logs                                                |
 | `desc`   |                             | description for this deployment                                            |
-| `env`    |                             | identifier for environment to deploy to (e.g. `staging`, `prod`, `master`) |
+| `env`    |                             | identifier for environment to deploy to (e.g. `staging`, `prod`, `main`) |
 
 <details>
 <summary>Simple Example</summary>
