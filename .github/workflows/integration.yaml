@@ -13,8 +13,6 @@ jobs:
           exit_code: 0
         - scenario: 'failure'
           exit_code: 1
-    # We test failure scenarios, so rely on manual inspection of run
-    continue-on-error: true
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v2
@@ -56,6 +54,8 @@ jobs:
       shell: bash
 
     - name: emulate ${{ matrix.scenario }}
+      # We test failure scenarios, so rely on manual inspection of run
+      continue-on-error: true
       run: exit ${{ matrix.exit_code }}
       shell: bash
 
