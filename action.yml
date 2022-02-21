@@ -15,7 +15,7 @@ inputs:
     description: GitHub token
   step:
     required: true
-    description: One of 'start' and 'finish'
+    description: One of 'start', 'finish', 'deactivate', or 'delete'
   repository:
     required: false
     description: Set status for a different repository, using the format `$owner/$repository` (optional, defaults to the current repository)

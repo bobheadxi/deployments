@@ -13,6 +13,7 @@ export enum Step {
   Start = "start",
   Finish = "finish",
   Deactivate = "deactivate",
+  Delete = "delete",
 }
 
 export async function run(
@@ -144,6 +145,21 @@ export async function run(
           log.debug(`'${step}' arguments`, args);
 
           await deactivateEnvironment(github, context, args.environment);
+        }
+        break;
+
+      case Step.Delete:
+        {
+          const args = {
+            ...coreArgs,
+          };
+          log.debug(`'${step}' arguments`, args);
+
+          await github.rest.repos.deleteAnEnvironment({
+            owner: context.owner,
+            repo: context.repo,
+            environment_name: args.environment,
+          });
         }
         break;
 
