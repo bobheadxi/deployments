@@ -14,9 +14,10 @@ async function deactivateEnvironment(
     owner,
     repo,
     environment,
+    per_page: 100,
   });
   const existing = deployments.data.length;
-  if (existing < 1) {
+  if (existing === 0) {
     console.info(`found no existing deployments for env ${environment}`);
     return;
   }

@@ -128,6 +128,9 @@ export async function run(
             environment_url: newStatus === "success" ? args.envURL : "",
             // set log_url to action by default
             log_url: args.logsURL,
+            // if we are overriding previous deployments, let GitHub deactivate past
+            // deployments for us as a fallback
+            auto_inactive: args.override,
           });
 
           log.info(`${args.deploymentID} status set to ${newStatus}`);
