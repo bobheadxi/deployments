@@ -55,7 +55,6 @@ jobs:
 
     - name: set deployment status to ${{ matrix.scenario }}
       uses: ./
-      if: always()
       with:
         step: finish
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -66,38 +65,12 @@ jobs:
 
     - name: wait
       run: sleep 10s
-      if: always()
       shell: bash
 
     - name: mark environment as deactivated
       uses: ./
-      if: always()
       with:
         step: deactivate
         token: ${{ secrets.GITHUB_TOKEN }}
         env: ${{ steps.deployment.outputs.env }}
-        desc: Deployment was pruned
-    - name: mark environment as deactivated
-      uses: ./
-      if: always()
-      with:
-        step: deactivate
-        token: ${{ secrets.GITHUB_TOKEN }}
-        env: ${{ steps.get_branch.outputs.branch }}-${{ matrix.scenario }}
-        desc: Deployment was pruned
-    - name: mark environment as deactivated
-      uses: ./
-      if: always()
-      with:
-        step: deactivate
-        token: ${{ secrets.GITHUB_TOKEN }}
-        env: succeed-refs-pull-40-merge
-        desc: Deployment was pruned
-    - name: mark environment as deactivated
-      uses: ./
-      if: always()
-      with:
-        step: deactivate
-        token: ${{ secrets.GITHUB_TOKEN }}
-        env: fail-refs-pull-40-merge
         desc: Deployment was pruned

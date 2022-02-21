@@ -50,9 +50,12 @@ export async function run(
             if (deployment.status == 201) {
               deploymentID = deployment.data.id;
             } else {
-              log.fail("unexpected 202 on deployment creation", {
-                response: deployment,
-              });
+              log.fail(
+                `unexpected ${deployment.status} on deployment creation`,
+                {
+                  response: deployment,
+                }
+              );
             }
           } else {
             deploymentID = parseInt(deploymentIDInput, 10);
