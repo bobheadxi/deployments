@@ -266,7 +266,7 @@ If you run into an problems or have any questions, feel free to open an [issue](
 - **CHANGED: `no_override` is now `override`**, and the default behaviour is `override: true` in `step: finish` (`step: start` behaviour remains unchanged, but you can now set `override: true` on it now as well).
 - **CHANGED: `log_args` is now `debug`**, but does the same thing as before.
 - **CHANGED: `env` is now always required**. You can use `env: ${{ steps.deployment.outputs.env }}` to avoid repeating your env configuration.
-- **REMOVED: `transient`** - all deployments created by this action are `transient` by default, with removals handled by `override` or `step: deactivate`.
+- **REMOVED: `transient`** - all deployments created by this action are `transient` by default, with removals handled by `override`, `auto_inactive`, or `step: deactivate-env`.
 - **ADDED: `step: delete-env`** deletes an environment entirely.
 
 Then you can change your workflow to target the `v1` tag, and automatically receive updates going forward:
