@@ -45,15 +45,13 @@ jobs:
         deployment_id: ${{ steps.deployment.outputs.deployment_id }}
 ```
 
-You can also refer to other projects that also use this action:
+You can also refer to other projects that also use this action - you can find [more usages of this action on Sourcegraph](https://sourcegraph.com/search?q=context:global+uses:+bobheadxi/deployments%40.*+file:%5E%5C.github/workflows+-repo:bobheadxi+count:all&patternType=regexp), or check out the following examples:
 
 - [`github/super-linter`](https://sourcegraph.com/search?q=context:global+repo:%5Egithub%5C.com/github/super-linter%24+file:%5E%5C.github/workflows+bobheadxi/deployments&patternType=literal) [![GitHub Repo stars](https://img.shields.io/github/stars/github/super-linter?style=social)](https://github.com/github/super-linter) - [GitHub's all-in-one linter Action](https://github.blog/2020-06-18-introducing-github-super-linter-one-linter-to-rule-them-all/)
 - [`mxcl/PromiseKit`](https://sourcegraph.com/search?q=context:global+repo:%5Egithub%5C.com/mxcl/PromiseKit%24+file:%5E%5C.github/workflows+bobheadxi/deployments&patternType=literal) [![GitHub Repo stars](https://img.shields.io/github/stars/mxcl/PromiseKit?style=social)](https://github.com/mxcl/PromiseKit) - promises for Swift and Objective-C
 - [`mirumee/saleor`](https://sourcegraph.com/search?q=repo:%5Egithub%5C.com/mirumee/saleor%24+bobheadxi/deployments\&patternType=literal) [![GitHub Repo stars](https://img.shields.io/github/stars/mirumee/saleor?style=social)](https://github.com/mirumee/saleor) - modular, high performance, headless e-commerce storefront
 - [`sharetribe/sharetribe`](https://sourcegraph.com/search?q=context:global+repo:%5Egithub%5C.com/sharetribe/sharetribe%24+file:%5E%5C.github/workflows+bobheadxi/deployments&patternType=literal) [![GitHub Repo stars](https://img.shields.io/github/stars/sharetribe/sharetribe?style=social)](https://github.com/sharetribe/sharetribe) - marketplace software
 - [`skylines-project/skylines`](https://sourcegraph.com/search?q=repo:%5Egithub%5C.com/skylines-project/skylines%24+bobheadxi/deployments\&patternType=literal) [![GitHub Repo stars](https://img.shields.io/github/stars/skylines-project/skylines?style=social)](https://github.com/skylines-project/skylines) - live tracking, flight database and competition web platform
-
-You can find [more usages of this action on Sourcegraph](https://sourcegraph.com/search?q=context:global+uses:+bobheadxi/deployments%40.*+file:%5E%5C.github/workflows+-repo:bobheadxi+count:all&patternType=regexp)!
 
 See [this blog post](https://dev.to/bobheadxi/branch-previews-with-google-app-engine-and-github-actions-3pco) for a bit of background on the origins of this action.
 
