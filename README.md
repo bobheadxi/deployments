@@ -248,11 +248,15 @@ This is the same as `deactivate-env`, except deletes the environment entirely. S
 
 Refer to the [core configuration](#configuration) for available [`inputs`](https://help.github.com/en/articles/workflow-syntax-for-github-actions#jobsjob_idstepswith).
 
+<br />
+
 ## Debugging
 
 The argument `debug: true` can be provided to print arguments used by `deployments` and log debug information.
 
 If you run into an problems or have any questions, feel free to open an [issue](https://github.com/bobheadxi/deployments/issues) or [discussion](https://github.com/bobheadxi/deployments/discussions)!
+
+<br />
 
 ## Migrating to v1
 
