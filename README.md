@@ -1,5 +1,7 @@
 # GitHub Deployments [![View Action](https://img.shields.io/badge/view-github%20action-yellow.svg)](https://bobheadxi.dev/r/deployments/)
 
+> **⚠️ WARNING:** The `master` branch is still on `v0.6.x`, with the `main` branch being the new development branch for backwards compatibility, but this might not always be available - please update your actions as soon as possible to pin your usages of `bobheadxi/deployments` to a specific version! See [the `bobheadxi/deployments@v1` announcement](https://github.com/bobheadxi/deployments/discussions/82#discussioncomment-2230763) for more details.
+
 `bobheadxi/deployments` is a [GitHub Action](https://github.com/features/actions) for working painlessly with deployment statuses.
 Instead of exposing convoluted Action configuration that mirrors that of the [GitHub API](https://developer.github.com/v3/repos/deployments/) like some of the other available Actions do, this Action simply exposes a number of configurable, easy-to-use "steps" common to most deployment flows.
 
