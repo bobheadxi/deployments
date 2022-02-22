@@ -3,7 +3,7 @@ import { getOctokit } from "@actions/github";
 import { collectDeploymentContext } from "./lib/context";
 import { getRequiredInput } from "./lib/input";
 
-import { run, Step } from "./steps/steps";
+import { run, Step } from "./steps";
 
 const context = collectDeploymentContext();
 console.log(`targeting ${context.owner}/${context.repo}`);

@@ -7,8 +7,7 @@ import { DeploymentContext } from "./context";
  */
 async function deactivateEnvironment(
   github: InstanceType<typeof GitHub>,
-  { log, owner, repo }: DeploymentContext,
-  environment: string
+  { log, owner, repo, coreArgs: { environment } }: DeploymentContext
 ) {
   const deployments = await github.rest.repos.listDeployments({
     owner,
