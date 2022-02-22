@@ -1,0 +1,48 @@
+name: cleanup
+
+on:
+  pull_request:
+    types: [ closed ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        scenario: [ 'success', 'failure' ]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '12'
+      
+    # Dependencies
+    # https://docs.github.com/en/actions/guides/caching-dependencies-to-speed-up-workflows#example-using-the-cache-action
+    - name: Cache node modules
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-node-modules
+      with:
+        path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
+    - run: npm install
+    - run: npm run build
+
+    - name: extract branch name
+      id: get_branch
+      shell: bash
+      env:
+        PR_HEAD: ${{ github.head_ref }}
+      run: echo "##[set-output name=branch;]$(echo ${PR_HEAD#refs/heads/} | tr / -)"
+
+    - name: delete environment
+      uses: ./
+      with:
+        step: deactivate-env
+        token: ${{ secrets.GITHUB_TOKEN }}
+        env: integration-test-${{ steps.get_branch.outputs.branch }}-${{ matrix.scenario }}
+        debug: true

@@ -1,52 +1,48 @@
-import { getInput } from "@actions/core";
-import { context, getOctokit } from "@actions/github";
-import { GitHub } from "@actions/github/lib/utils";
+import { context } from "@actions/github";
+import { getBooleanInput, getOptionalInput, getRequiredInput } from "./input";
+import Logger from "./log";
 
 export interface DeploymentContext {
   ref: string;
   sha: string;
   owner: string;
   repo: string;
-  github: InstanceType<typeof GitHub>;
+  log: Logger;
 
   coreArgs: {
-    autoInactive: boolean;
-    logsURL: string;
     description?: string;
-    logArgs: boolean;
+    environment: string;
+    logsURL: string;
   };
 }
 
+/**
+ * Generates configuration for this action run.
+ */
 export function collectDeploymentContext(): DeploymentContext {
   const { ref, sha } = context;
 
-  const customRepository = getInput("repository", { required: false });
+  const customRepository = getOptionalInput("repository");
 
   const [owner, repo] = customRepository
     ? customRepository.split("/")
     : [context.repo.owner, context.repo.repo];
-
   if (!owner || !repo) {
     throw new Error(`invalid target repository: ${owner}/${repo}`);
   }
 
-  const github = getOctokit(getInput("token", { required: true }), {
-    previews: ["ant-man-preview", "flash-preview"],
-  });
-
   return {
-    ref,
+    ref: getOptionalInput("ref") || ref,
     sha,
     owner,
     repo,
-    github,
+    log: new Logger({ debug: getBooleanInput("debug", false) }),
     coreArgs: {
-      autoInactive: getInput("auto_inactive") !== "false",
+      environment: getRequiredInput("env"),
+      description: getOptionalInput("desc"),
       logsURL:
-        getInput("logs") ||
+        getOptionalInput("logs") ||
         `https://github.com/${owner}/${repo}/commit/${sha}/checks`,
-      description: getInput("desc"),
-      logArgs: getInput("log_args") === "true",
     },
   };
 }

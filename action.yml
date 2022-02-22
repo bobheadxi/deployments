@@ -5,19 +5,22 @@ branding:
   icon: bookmark
   color: yellow
 runs:
-  using: node12
+  using: node16
   main: dist/index.js
 
 inputs:
-  token:
-    required: true
-    description: GitHub token
   step:
     required: true
-    description: One of 'start' and 'finish'
-  auto_inactive:
+    description: One of 'start', 'finish', 'deactivate-env', or 'delete-env'
+  token:
+    required: true
+    description: GitHub access token
+  env:
+    required: true
+    description: The name of the deployment environment in GitHub to create statuses in.
+  repository:
     required: false
-    description: Set auto_inactive (see https://developer.github.com/v3/repos/deployments/#inactive-deployments)
+    description: Set status for a different repository, using the format `$owner/$repository` (optional, defaults to the current repository)
   logs:
     required: false
     description: URL to logs
@@ -27,29 +30,21 @@ inputs:
   ref:
     required: false
     description: The git ref to use for the deploy, defaults to `github.ref`
-  env:
+
+  debug:
     required: false
-    description: The name of the deployment environment for Github. (Required for `start` and `deactivate-env` only)
-  transient:
-    required: false
-    description: Whether this is a transient (short-lived) environment. (For `start` only)
+    description: Print arguments used by this action and other debug information.
+    default: 'false'
+
   deployment_id:
     required: false
-    description: The deployment id to update (if specified during `start`, the deployment will be updated instead of a new one created)
+    description: The deployment ID to update (if specified during `start`, the deployment will be updated instead of creating a new one)
   env_url:
     required: false
-    description: The environment URL. (For `finish` only)
+    description: The environment URL (for `finish` only)
   status:
     required: false
-    description: The deployment status. (For `finish` only)
-  no_override:
+    description: The deployment status (for `finish` only)
+  override:
     required: false
-    description: Whether to mark existing deployments of this environment as inactive
-    default: 'true'
-  log_args:
-    required: false
-    description: Print arguments used by this action.
-    default: 'false'
-  repository:
-    required: false
-    description: Set status for a different repository, using the format `$owner/$repository` (optional, defaults to the current repository)
+    description: Whether to mark existing deployments of this environment as inactive (for `start` and `finish` only)

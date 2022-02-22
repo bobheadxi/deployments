@@ -1,9 +1,17 @@
-import * as core from "@actions/core";
+import { getOctokit } from "@actions/github";
+
 import { collectDeploymentContext } from "./lib/context";
-import { run, Step } from "./steps/steps";
+import { getRequiredInput } from "./lib/input";
+
+import { run, Step } from "./steps";
 
 const context = collectDeploymentContext();
 console.log(`targeting ${context.owner}/${context.repo}`);
 
-const step = core.getInput("step", { required: true }) as Step;
-run(step, context);
+const token = getRequiredInput("token");
+const github = getOctokit(token, {
+  previews: ["ant-man-preview", "flash-preview"],
+});
+
+const step = getRequiredInput("step") as Step;
+run(step, github, context);
