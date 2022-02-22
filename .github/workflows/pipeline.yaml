@@ -1,6 +1,6 @@
 name: pipeline
 
-on: [push]
+on: [ push ]
 
 jobs:
   build:
@@ -30,3 +30,123 @@ jobs:
       # Checks
       - run: npm run prettier:check
       - run: npm run build:check
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        scenario: [ 'success', 'failure' ]
+        include:
+        - scenario: 'success'
+          exit_code: 0
+        - scenario: 'failure'
+          exit_code: 1
+      fail-fast: false
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '12'
+
+    # Dependencies
+    # https://docs.github.com/en/actions/guides/caching-dependencies-to-speed-up-workflows#example-using-the-cache-action
+    - name: Cache node modules
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-node-modules
+      with:
+        path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
+    - run: npm install
+    - run: npm run build
+
+    - name: extract branch name
+      id: get_branch
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/} | tr / -)"
+
+    - name: start deployment
+      uses: ./
+      id: deployment
+      with:
+        step: start
+        token: ${{ secrets.GITHUB_TOKEN }}
+        env: integration-test-${{ steps.get_branch.outputs.branch }}-${{ matrix.scenario }}
+        desc: 'Deployment starting!'
+        debug: true
+
+    - name: assert deployment in progress
+      uses: actions/github-script@v6
+      env:
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+        status_id: ${{ steps.deployment.outputs.status_id }}
+      with:
+        script: |
+          const { deployment_id, status_id } = process.env;
+          if (!deployment_id) {
+            throw new Error("deployment_id not set");
+          }
+          if (!status_id) {
+            throw new Error("status_id not set");
+          }
+          const res = await github.rest.repos.getDeploymentStatus({
+            owner: "bobheadxi",
+            repo: "deployments",
+            deployment_id: parseInt(deployment_id, 10),
+            status_id: parseInt(status_id, 10),
+          });
+          console.log(res)
+          if (res.data.state !== "in_progress") {
+            throw new Error(`unexpected status ${res.data.state}`);
+          }
+
+    - name: set deployment status to ${{ matrix.scenario }}
+      uses: ./
+      id: finish
+      with:
+        step: finish
+        token: ${{ secrets.GITHUB_TOKEN }}
+        status: ${{ matrix.scenario }}
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+        env: ${{ steps.deployment.outputs.env }}
+        desc: 'Deployment complete'
+        debug: true
+
+    - name: assert deployment complete
+      uses: actions/github-script@v6
+      env:
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+        status_id: ${{ steps.finish.outputs.status_id }}
+        expected_state: ${{ matrix.scenario }}
+      with:
+        script: |
+          const { deployment_id, status_id, expected_state } = process.env;
+          if (!deployment_id) {
+            throw new Error("deployment_id not set");
+          }
+          if (!status_id) {
+            throw new Error("status_id not set");
+          }
+          const res = await github.rest.repos.getDeploymentStatus({
+            owner: "bobheadxi",
+            repo: "deployments",
+            deployment_id: parseInt(deployment_id, 10),
+            status_id: parseInt(status_id, 10),
+          });
+          console.log(res)
+          if (res.data.state !== expected_state) {
+            throw new Error(`unexpected status ${res.data.state}`);
+          }
+
+    - name: mark environment as deactivated
+      uses: ./
+      with:
+        step: deactivate-env
+        token: ${{ secrets.GITHUB_TOKEN }}
+        env: ${{ steps.deployment.outputs.env }}
+        desc: Environment was pruned
+        debug: true

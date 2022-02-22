@@ -1,4 +1,4 @@
-name: integration-cleanup
+name: cleanup
 
 on:
   pull_request:
