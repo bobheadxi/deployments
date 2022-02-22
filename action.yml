@@ -47,4 +47,8 @@ inputs:
     description: The deployment status (for `finish` only)
   override:
     required: false
-    description: Whether to mark existing deployments of this environment as inactive (for `start` and `finish` only)
+    description: Whether to manually mark existing deployments of this environment as inactive (for `start` and `finish` only)
+  auto_inactive:
+    required: false
+    description: Whether to mark existing deployments as inactive if a deployment succeeds (for `finish` only)
+    default: 'false'

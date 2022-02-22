@@ -56,7 +56,8 @@ export async function run(
             status: getRequiredInput("status").toLowerCase(),
             deploymentID: getRequiredInput("deployment_id"),
             envURL: getOptionalInput("env_url"),
-            override: getBooleanInput("override", true), // default to false on finish
+            override: getBooleanInput("override", true), // default to true on finish
+            autoInactive: getBooleanInput("auto_inactive", false),
           };
           log.debug(`'${step}' arguments`, {
             stepArgs,

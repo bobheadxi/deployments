@@ -8,6 +8,7 @@ export type FinishArgs = {
   override: boolean;
   status: string;
   envURL?: string;
+  autoInactive: boolean;
 };
 
 async function createFinish(
@@ -17,7 +18,7 @@ async function createFinish(
 ) {
   const {
     log,
-    coreArgs: { environment, description, logsURL },
+    coreArgs: { description, logsURL },
   } = context;
   if (stepArgs.override) {
     await deactivateEnvironment(github, context);
@@ -59,8 +60,9 @@ async function createFinish(
     // set log_url to action by default
     log_url: logsURL,
     // if we are overriding previous deployments, let GitHub deactivate past
-    // deployments for us as a fallback
-    auto_inactive: stepArgs.override,
+    // deployments for us as a fallback, or see if a user explicitly wants to
+    // use this feature.
+    auto_inactive: stepArgs.override || stepArgs.autoInactive,
   });
 
   log.info(`${stepArgs.deploymentID} status set to ${newStatus}`, {

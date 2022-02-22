@@ -164,7 +164,8 @@ In addition to the [core configuration](#configuration), the following [`inputs`
 | `status`        |         | provide the current deployment job status `${{ job.status }}`                     |
 | `deployment_id` |         | identifier for deployment to update (see outputs of [`step: start`](#step-start)) |
 | `env_url`       |         | URL to view deployed environment                                                  |
-| `override`      | `true`  | whether to mark existing deployments of this environment as inactive              |
+| `override`      | `true`  | whether to manually mark existing deployments of this environment as inactive              |
+| `auto_inactive`      | `true`  | whether to let GitHub handle marking existing deployments of this environment as inactive ([if and only if a new deployment succeeds](https://docs.github.com/en/rest/reference/deployments#inactive-deployments)). |
 
 <details>
 <summary>Simple Example</summary>
@@ -265,7 +266,6 @@ If you run into an problems or have any questions, feel free to open an [issue](
 - **CHANGED: `no_override` is now `override`**, and the default behaviour is `override: true` in `step: finish` (`step: start` behaviour remains unchanged, but you can now set `override: true` on it now as well).
 - **CHANGED: `log_args` is now `debug`**, but does the same thing as before.
 - **CHANGED: `env` is now always required**. You can use `env: ${{ steps.deployment.outputs.env }}` to avoid repeating your env configuration.
-- **REMOVED: `auto_inactive`** - use `override` instead.
 - **REMOVED: `transient`** - all deployments created by this action are `transient` by default, with removals handled by `override` or `step: deactivate`.
 - **ADDED: `step: delete-env`** deletes an environment entirely.
 
