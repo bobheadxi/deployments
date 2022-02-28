@@ -30,9 +30,15 @@ export async function run(
     switch (step) {
       case Step.Start:
         {
+          const rawPayload = getOptionalInput("payload");
+          let payload: { [key: string]: any } | undefined = undefined;
+          if (rawPayload) {
+            payload = JSON.parse(rawPayload);
+          }
           const stepArgs: StartArgs = {
             deploymentID: getOptionalInput("deployment_id"),
             override: getBooleanInput("override", false), // default to false on start
+            payload,
           };
           log.debug(`'${step}' arguments`, {
             stepArgs,

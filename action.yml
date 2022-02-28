@@ -52,3 +52,6 @@ inputs:
     required: false
     description: Whether to mark existing deployments as inactive if a deployment succeeds (for `finish` only)
     default: 'false'
+  payload:
+    required: false
+    description: JSON-formatted dictionary with extra information about the deployment (for `start` only)
