@@ -6,6 +6,7 @@ import deactivateEnvironment from "../lib/deactivate";
 export type StartArgs = {
   deploymentID?: string;
   override: boolean;
+  payload?: { [key: string]: any };
 };
 
 async function createStart(
@@ -37,6 +38,7 @@ async function createStart(
       description: description,
       auto_merge: false,
       transient_environment: true,
+      payload: stepArgs.payload,
     });
     if (deployment.status == 201) {
       deploymentID = deployment.data.id;

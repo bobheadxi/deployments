@@ -84,6 +84,7 @@ In addition to the [core configuration](#configuration), the following [`inputs`
 | --------------- | ------- | --------------------------------------------------------------------------------------------------- |
 | `deployment_id` |         | Use an existing deployment instead of creating a new one (e.g. `${{ github.event.deployment.id }}`) |
 | `override`      | `false` | whether to mark existing deployments of this environment as inactive                                |
+| `payload`       |         | JSON-formatted dictionary with extra information about the deployment                               |
 
 The following [`outputs`](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#steps-context) are available:
 
@@ -161,13 +162,13 @@ This is best used after `step: start` and should follow whatever deployment task
 
 In addition to the [core configuration](#configuration), the following [`inputs`](https://help.github.com/en/articles/workflow-syntax-for-github-actions#jobsjob_idstepswith) are available:
 
-| Variable        | Default | Purpose                                                                           |
-| --------------- | ------- | --------------------------------------------------------------------------------- |
-| `status`        |         | provide the current deployment job status `${{ job.status }}`                     |
-| `deployment_id` |         | identifier for deployment to update (see outputs of [`step: start`](#step-start)) |
-| `env_url`       |         | URL to view deployed environment                                                  |
-| `override`      | `true`  | whether to manually mark existing deployments of this environment as inactive              |
-| `auto_inactive`      | `true`  | whether to let GitHub handle marking existing deployments of this environment as inactive ([if and only if a new deployment succeeds](https://docs.github.com/en/rest/reference/deployments#inactive-deployments)). |
+| Variable        | Default | Purpose                                                                                                                                                                                                             |
+| --------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `status`        |         | provide the current deployment job status `${{ job.status }}`                                                                                                                                                       |
+| `deployment_id` |         | identifier for deployment to update (see outputs of [`step: start`](#step-start))                                                                                                                                   |
+| `env_url`       |         | URL to view deployed environment                                                                                                                                                                                    |
+| `override`      | `true`  | whether to manually mark existing deployments of this environment as inactive                                                                                                                                       |
+| `auto_inactive` | `true`  | whether to let GitHub handle marking existing deployments of this environment as inactive ([if and only if a new deployment succeeds](https://docs.github.com/en/rest/reference/deployments#inactive-deployments)). |
 
 <details>
 <summary>Simple Example</summary>
