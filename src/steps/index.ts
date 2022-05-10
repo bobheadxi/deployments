@@ -3,6 +3,7 @@ import { GitHub } from "@actions/github/lib/utils";
 
 import { DeploymentContext } from "../lib/context";
 import deactivateEnvironment from "../lib/deactivate";
+import deleteEnvironment from "../lib/delete";
 import {
   getBooleanInput,
   getOptionalInput,
@@ -90,11 +91,7 @@ export async function run(
         {
           log.debug(`'${step}' arguments`, { coreArgs });
 
-          await github.rest.repos.deleteAnEnvironment({
-            owner: context.owner,
-            repo: context.repo,
-            environment_name: coreArgs.environment,
-          });
+          await deleteEnvironment(github, context);
         }
         break;
 

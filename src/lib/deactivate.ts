@@ -41,6 +41,7 @@ async function deactivateEnvironment(
   }
 
   log.info(`${environment}: ${existing} deployments updated`);
+  return deployments;
 }
 
 export default deactivateEnvironment;
