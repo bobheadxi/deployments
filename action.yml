@@ -15,6 +15,7 @@ inputs:
   token:
     required: true
     description: GitHub access token
+    default: ${{ github.token }}
   env:
     required: true
     description: The name of the deployment environment in GitHub to create statuses in.
