@@ -36,11 +36,16 @@ async function deactivateEnvironment(
       repo,
       deployment_id: deployment.id,
       per_page: 1, // we only need the latest status
-    })
+    });
 
     // If a previous status exists, and it is inactive, then we don't need to update it.
-    if (getStatusRes.data.length === 1 && getStatusRes.data[0].state === deactivatedState) {
-      log.debug(`${environment}.${deployment.id} is already ${deactivatedState}; skipping.`);
+    if (
+      getStatusRes.data.length === 1 &&
+      getStatusRes.data[0].state === deactivatedState
+    ) {
+      log.debug(
+        `${environment}.${deployment.id} is already ${deactivatedState}; skipping.`
+      );
       continue;
     }
 
