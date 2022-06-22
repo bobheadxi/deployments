@@ -28,15 +28,37 @@ async function deactivateEnvironment(
     log.info(
       `${environment}.${deployment.id}: setting deployment (${deployment.sha}) state to "${deactivatedState}"`
     );
-    const res = await github.rest.repos.createDeploymentStatus({
+
+    // Check existing status, to avoid setting it to the already current value.
+    // See https://github.com/bobheadxi/deployments/issues/92.
+    const getStatusRes = await github.rest.repos.listDeploymentStatuses({
+      owner,
+      repo,
+      deployment_id: deployment.id,
+      per_page: 1, // we only need the latest status
+    });
+
+    // If a previous status exists, and it is inactive, then we don't need to update it.
+    if (
+      getStatusRes.data.length === 1 &&
+      getStatusRes.data[0].state === deactivatedState
+    ) {
+      log.debug(
+        `${environment}.${deployment.id} is already ${deactivatedState}; skipping.`
+      );
+      continue;
+    }
+
+    // Otherwise, set the deployment to "inactive".
+    const createStatusRes = await github.rest.repos.createDeploymentStatus({
       owner,
       repo,
       deployment_id: deployment.id,
       state: deactivatedState,
     });
     log.debug(`${environment}.${deployment.id} updated`, {
-      state: res.data.state,
-      url: res.data.url,
+      state: createStatusRes.data.state,
+      url: createStatusRes.data.url,
     });
   }
 
