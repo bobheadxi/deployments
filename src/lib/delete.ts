@@ -17,24 +17,24 @@ async function deleteEnvironment(
     coreArgs: { environment },
   } = context;
   const deployments = await deactivateEnvironment(github, context);
-  if (!deployments) {
-    return;
-  }
-  const existing = deployments.data.length;
-  for (let i = 0; i < existing; i++) {
-    const deployment = deployments.data[i];
-    log.info(
-      `${environment}.${deployment.id}: deleting deployment (${deployment.sha})"`
-    );
-    await github.rest.repos.deleteDeployment({
-      owner,
-      repo,
-      deployment_id: deployment.id,
-    });
-    log.debug(`${environment}.${deployment.id} deleted`);
-  }
 
-  log.info(`${environment}: ${existing} deployments deleted`);
+  if (deployments) {
+    const existing = deployments.data.length;
+    for (let i = 0; i < existing; i++) {
+      const deployment = deployments.data[i];
+      log.info(
+        `${environment}.${deployment.id}: deleting deployment (${deployment.sha})"`
+      );
+      await github.rest.repos.deleteDeployment({
+        owner,
+        repo,
+        deployment_id: deployment.id,
+      });
+      log.debug(`${environment}.${deployment.id} deleted`);
+    }
+
+    log.info(`${environment}: ${existing} deployments deleted`);
+  }
 
   await github.rest.repos.deleteAnEnvironment({
     owner: context.owner,
