@@ -252,7 +252,7 @@ jobs:
 
 This is the same as `deactivate-env`, except deletes the environment entirely. See [`step: deactivate-env`](#step-deactivate-env) for more details.
 
-GITHUB_TOKEN doesn't not allow to delete environment, you have to set a personal access token and provide it as `token` option.
+Note that the default `GITHUB_TOKEN` does not allow environment deletion - you have to set a personal access token and provide it in the `token` input.
 
 Refer to the [core configuration](#configuration) for available [`inputs`](https://help.github.com/en/articles/workflow-syntax-for-github-actions#jobsjob_idstepswith).
 
