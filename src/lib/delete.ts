@@ -36,7 +36,7 @@ async function deleteEnvironment(
 
   log.info(`${environment}: ${existing} deployments deleted`);
 
-  github.rest.repos.deleteAnEnvironment({
+  await github.rest.repos.deleteAnEnvironment({
     owner: context.owner,
     repo: context.repo,
     environment_name: environment,
