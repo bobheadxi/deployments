@@ -72,6 +72,7 @@ The following [`inputs`](https://help.github.com/en/articles/workflow-syntax-for
 | `logs`       | URL to GitHub commit checks  | URL of your deployment logs                                                                                                            |
 | `desc`       | GitHub-generated description | description for this deployment                                                                                                        |
 | `ref`        | `github.ref`                 | Specify a particular git ref to use,  (e.g. `${{ github.head_ref }}`)                                                                  |
+| `task`       | `'deploy'`                   | change the task associated with this deployment, can be any string
 
 ### `step: start`
 
