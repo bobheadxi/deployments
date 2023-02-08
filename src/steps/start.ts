@@ -23,7 +23,7 @@ async function createStart(
     owner,
     repo,
     ref,
-    task, 
+    task,
     coreArgs: { environment, description, logsURL },
   } = context;
 
