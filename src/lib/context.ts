@@ -8,6 +8,7 @@ export interface DeploymentContext {
   owner: string;
   repo: string;
   log: Logger;
+  task: string | undefined;
 
   coreArgs: {
     description?: string;
@@ -36,6 +37,7 @@ export function collectDeploymentContext(): DeploymentContext {
     sha,
     owner,
     repo,
+    task: getOptionalInput("task"),
     log: new Logger({ debug: getBooleanInput("debug", false) }),
     coreArgs: {
       environment: getRequiredInput("env"),

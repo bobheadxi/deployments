@@ -31,6 +31,9 @@ inputs:
   ref:
     required: false
     description: The git ref to use for the deploy, defaults to `github.ref`
+  task:
+    required: false
+    description: The task to assign to the deployment, defaults to 'deploy'
 
   debug:
     required: false
