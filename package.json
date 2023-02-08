@@ -8,7 +8,8 @@
     "prettier": "prettier src --write",
     "prettier:check": "prettier src --check",
     "build": "ncc build src/main.ts --out dist --minify --source-map --license LICENSES",
-    "build:check": "npm run build && git diff --quiet dist"
+    "build:check": "npm run build && git diff --quiet dist",
+    "test": "npm run prettier:check & npm run build:check"
   },
   "repository": {
     "type": "git",
