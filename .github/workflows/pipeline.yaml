@@ -84,6 +84,15 @@ jobs:
         desc: 'Deployment starting!'
         debug: true
 
+    - name: parse repo name and owner
+      id: parse_repo
+      shell: bash
+      # outputs: owner, name
+      run: |
+        echo "owner=$(cut -d "/" -f 1 <<<"${{ github.repository }}")" >> $GITHUB_OUTPUT
+        echo "name=$(cut -d "/" -f 2 <<<"${{ github.repository }}")" >> $GITHUB_OUTPUT
+
+
     - name: assert deployment in progress
       uses: actions/github-script@v6
       env:
@@ -99,8 +108,8 @@ jobs:
             throw new Error("status_id not set");
           }
           const res = await github.rest.repos.getDeploymentStatus({
-            owner: "bobheadxi",
-            repo: "deployments",
+            owner: "${{ steps.parse_repo.outputs.owner }}",
+            repo: "${{ steps.parse_repo.outputs.name }}",
             deployment_id: parseInt(deployment_id, 10),
             status_id: parseInt(status_id, 10),
           });
@@ -137,8 +146,8 @@ jobs:
             throw new Error("status_id not set");
           }
           const res = await github.rest.repos.getDeploymentStatus({
-            owner: "bobheadxi",
-            repo: "deployments",
+            owner: "${{ steps.parse_repo.outputs.owner }}",
+            repo: "${{ steps.parse_repo.outputs.name }}",
             deployment_id: parseInt(deployment_id, 10),
             status_id: parseInt(status_id, 10),
           });
