@@ -66,7 +66,7 @@ The following [`inputs`](https://help.github.com/en/articles/workflow-syntax-for
 | Variable     | Default                      | Purpose                                                                                                                                |
 | ------------ | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | `step`       |                              | One of [`start`](#step-start), [`finish`](#step-finish), [`deactivate-env`](#step-deactivate-env), or [`delete-env`](#step-delete-env) |
-| `token`      |                              | provide your `${{ secrets.GITHUB_TOKEN }}` for API access                                                                              |
+| `token`      | `${{ github.token }}`          | provide your `${{ github.token }}` or `${{ secrets.GITHUB_TOKEN }}` for API access                                                                              |
 | `env`        |                              | identifier for environment to deploy to (e.g. `staging`, `prod`, `main`)                                                               |
 | `repository` | Current repository           | target a specific repository for updates, e.g. `owner/repo`                                                                            |
 | `logs`       | URL to GitHub commit checks  | URL of your deployment logs                                                                                                            |
@@ -114,7 +114,6 @@ jobs:
       id: deployment
       with:
         step: start
-        token: ${{ secrets.GITHUB_TOKEN }}
         env: release
 
     - name: do my deploy
@@ -143,7 +142,6 @@ jobs:
       id: deployment
       with:
         step: start
-        token: ${{ secrets.GITHUB_TOKEN }}
         env: integration
 
     - name: do my deploy
@@ -282,5 +280,9 @@ Then you can change your workflow to target the `v1` tag, and automatically rece
 - uses: bobheadxi/deployments@v0.6.2
 + uses: bobheadxi/deployments@v1
 ```
+
+## Migrating to v1.2.0
+
+The `token` configuration variable now has a default value so if you are happy with the default (`${{ github.secret }}`) you can simplify the action configuration by removing this from your actions.
 
 <br />
