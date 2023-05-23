@@ -168,7 +168,7 @@ In addition to the [core configuration](#configuration), the following [`inputs`
 | `deployment_id` |         | identifier for deployment to update (see outputs of [`step: start`](#step-start))                                                                                                                                   |
 | `env_url`       |         | URL to view deployed environment                                                                                                                                                                                    |
 | `override`      | `true`  | whether to manually mark existing deployments of this environment as inactive                                                                                                                                       |
-| `auto_inactive` | `true`  | whether to let GitHub handle marking existing deployments of this environment as inactive ([if and only if a new deployment succeeds](https://docs.github.com/en/rest/reference/deployments#inactive-deployments)). |
+| `auto_inactive` | `false` | whether to let GitHub handle marking existing deployments of this environment as inactive ([if and only if a new deployment succeeds](https://docs.github.com/en/rest/reference/deployments#inactive-deployments)). |
 
 <details>
 <summary>Simple Example</summary>
