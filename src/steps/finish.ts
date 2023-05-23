@@ -8,6 +8,7 @@ export type FinishArgs = {
   override: boolean;
   status: string;
   envURL?: string;
+  environment?: string;
   autoInactive: boolean;
 };
 
@@ -18,7 +19,7 @@ async function createFinish(
 ) {
   const {
     log,
-    coreArgs: { description, logsURL },
+    coreArgs: { description, logsURL, environment },
   } = context;
   if (stepArgs.override) {
     await deactivateEnvironment(github, context);
@@ -54,6 +55,7 @@ async function createFinish(
     state: newStatus,
     description: description,
     ref: context.ref,
+    environment: environment,
 
     // only set environment_url if deployment worked
     environment_url: newStatus === "success" ? stepArgs.envURL : "",
