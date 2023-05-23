@@ -17,5 +17,5 @@ export function getRequiredInput(key: string): string {
 }
 
 export function getOptionalInput(key: string): string | undefined {
-  return getInput(key, { required: false, trimWhitespace: true });
+  return getInput(key, { required: false, trimWhitespace: true }) || undefined;
 }

@@ -82,11 +82,13 @@ This is best used on the `push: { branches: [ ... ] }` event, but you can also h
 
 In addition to the [core configuration](#configuration), the following [`inputs`](https://help.github.com/en/articles/workflow-syntax-for-github-actions#jobsjob_idstepswith) are available:
 
-| Variable        | Default | Purpose                                                                                             |
-| --------------- | ------- | --------------------------------------------------------------------------------------------------- |
-| `deployment_id` |         | Use an existing deployment instead of creating a new one (e.g. `${{ github.event.deployment.id }}`) |
-| `override`      | `false` | whether to mark existing deployments of this environment as inactive                                |
-| `payload`       |         | JSON-formatted dictionary with extra information about the deployment                               |
+| Variable        | Default    | Purpose                                                                                             |
+| --------------- | -------    | --------------------------------------------------------------------------------------------------- |
+| `deployment_id` |            | Use an existing deployment instead of creating a new one (e.g. `${{ github.event.deployment.id }}`) |
+| `override`      | `false`    | whether to mark existing deployments of this environment as inactive                                |
+| `payload`       |            | JSON-formatted dictionary with extra information about the deployment                               |
+| `task`          | `'deploy'` | change the task associated with this deployment, can be any string
+
 
 The following [`outputs`](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#steps-context) are available:
 
