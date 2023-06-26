@@ -19,3 +19,22 @@ export function getRequiredInput(key: string): string {
 export function getOptionalInput(key: string): string | undefined {
   return getInput(key, { required: false, trimWhitespace: true }) || undefined;
 }
+
+export function parseOptionalStringArrayInput(
+  key: string
+): string[] | undefined {
+  const input = getOptionalInput(key);
+
+  if (input === undefined) {
+    return [];
+  } else if (input === "null") {
+    return undefined;
+  }
+
+  const strings: string[] = [];
+  for (const line of input.split(/\r|\n/)) {
+    strings.push(line);
+  }
+
+  return strings;
+}

@@ -6,6 +6,8 @@ import deactivateEnvironment from "../lib/deactivate";
 export type StartArgs = {
   deploymentID?: string;
   override: boolean;
+  auto_merge: boolean;
+  required_contexts: string[] | undefined;
   payload?: { [key: string]: any };
 };
 
@@ -30,18 +32,21 @@ async function createStart(
   let deploymentID = -1;
   if (!stepArgs.deploymentID) {
     log.info(`initializing new deployment for ${environment} @ ${ref}`);
-    const deployment = await github.rest.repos.createDeployment({
+    let options = {
       owner: owner,
       repo: repo,
       ref: ref,
       task: task,
-      required_contexts: [],
       environment: environment,
       description: description,
-      auto_merge: false,
+      auto_merge: stepArgs.auto_merge,
       transient_environment: true,
       payload: stepArgs.payload,
-    });
+    };
+    if (stepArgs.required_contexts !== undefined) {
+      options["required_contexts"] = stepArgs.required_contexts;
+    }
+    const deployment = await github.rest.repos.createDeployment(options);
     if (deployment.status == 201) {
       deploymentID = deployment.data.id;
     } else {

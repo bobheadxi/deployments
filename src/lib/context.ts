@@ -1,5 +1,10 @@
 import { context } from "@actions/github";
-import { getBooleanInput, getOptionalInput, getRequiredInput } from "./input";
+import {
+  getBooleanInput,
+  getOptionalInput,
+  getRequiredInput,
+  parseOptionalStringArrayInput,
+} from "./input";
 import Logger from "./log";
 
 export interface DeploymentContext {

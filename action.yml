@@ -34,6 +34,12 @@ inputs:
   task:
     required: false
     description: The task to assign to the deployment, defaults to 'deploy'
+  auto_merge:
+    required: false
+    description: Attempts to automatically merge the default branch into the requested ref, if it's behind the default branch. Defaults to `false`
+  required_contexts:
+    required: false
+    description: The status contexts to verify against commit status checks, separated by newlines. If you omit this parameter, GitHub verifies all unique contexts before creating a deployment. To bypass checking entirely, pass an empty string. Defaults to `""`.
 
   debug:
     required: false

@@ -8,6 +8,7 @@ import {
   getBooleanInput,
   getOptionalInput,
   getRequiredInput,
+  parseOptionalStringArrayInput,
 } from "../lib/input";
 
 import createStart, { StartArgs } from "./start";
@@ -39,6 +40,9 @@ export async function run(
           const stepArgs: StartArgs = {
             deploymentID: getOptionalInput("deployment_id"),
             override: getBooleanInput("override", false), // default to false on start
+            auto_merge: getBooleanInput("auto_merge", false),
+            required_contexts:
+              parseOptionalStringArrayInput("required_contexts"),
             payload,
           };
           log.debug(`'${step}' arguments`, {
