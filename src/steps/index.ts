@@ -44,14 +44,15 @@ export async function run(
             payload,
           };
           const required_contexts = parseOptionalStringArrayInput("required_contexts")
-          if (required_contexts !== undefined) {
-            start_args["required_contexts"] = required_contexts;
-          };
+          // if (required_contexts !== undefined) {
+          //   start_args["required_contexts"] = required_contexts;
+          // };
           const stepArgs: StartArgs = start_args;
           log.debug(`'${step}' arguments`, {
             stepArgs,
             coreArgs,
           });
+          log.debug(`and required_contexts: ${required_contexts}`)
           const { deploymentID, statusID } = await createStart(
             github,
             context,
