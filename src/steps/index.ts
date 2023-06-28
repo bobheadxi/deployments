@@ -8,7 +8,7 @@ import {
   getBooleanInput,
   getOptionalInput,
   getRequiredInput,
-  parseOptionalStringArrayInput,
+  parseOptionalRequiredContexts,
 } from "../lib/input";
 
 import createStart, { StartArgs } from "./start";
@@ -41,18 +41,14 @@ export async function run(
             deploymentID: getOptionalInput("deployment_id"),
             override: getBooleanInput("override", false), // default to false on start
             auto_merge: getBooleanInput("auto_merge", false),
+            required_contexts: parseOptionalRequiredContexts("required_contexts"),
             payload,
           };
-          const required_contexts = parseOptionalStringArrayInput("required_contexts")
-          // if (required_contexts !== undefined) {
-          //   start_args["required_contexts"] = required_contexts;
-          // };
           const stepArgs: StartArgs = start_args;
           log.debug(`'${step}' arguments`, {
             stepArgs,
             coreArgs,
           });
-          log.debug(`and required_contexts: ${required_contexts}`)
           const { deploymentID, statusID } = await createStart(
             github,
             context,

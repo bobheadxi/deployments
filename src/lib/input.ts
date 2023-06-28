@@ -20,19 +20,16 @@ export function getOptionalInput(key: string): string | undefined {
   return getInput(key, { required: false, trimWhitespace: true }) || undefined;
 }
 
-export function parseOptionalStringArrayInput(
+export function parseOptionalRequiredContexts(
   key: string
 ): string[] | undefined {
-  const input = getOptionalInput(key);
+  const required_contexts = getOptionalInput(key);
 
-  if (input === undefined || input === "<<EMPTY>>") {
-    return [];
+  if (required_contexts !== '*') {
+    if (required_contexts == undefined || required_contexts === '' || required_contexts === '[]') {
+      return [];
+    } else {
+      return required_contexts.split(',');
+    }
   }
-
-  const strings: string[] = [];
-  for (const line of input.split(/\r|\n/)) {
-    strings.push(line);
-  }
-
-  return strings;
 }
