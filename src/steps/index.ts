@@ -37,14 +37,17 @@ export async function run(
           if (rawPayload) {
             payload = JSON.parse(rawPayload);
           }
-          const stepArgs: StartArgs = {
+          let start_args = {
             deploymentID: getOptionalInput("deployment_id"),
             override: getBooleanInput("override", false), // default to false on start
             auto_merge: getBooleanInput("auto_merge", false),
-            required_contexts:
-              parseOptionalStringArrayInput("required_contexts"),
             payload,
           };
+          const required_contexts = parseOptionalStringArrayInput("required_contexts")
+          if (required_contexts !== undefined) {
+            start_args["required_contexts"] = required_contexts;
+          };
+          const stepArgs: StartArgs = start_args;
           log.debug(`'${step}' arguments`, {
             stepArgs,
             coreArgs,

@@ -7,7 +7,7 @@ export type StartArgs = {
   deploymentID?: string;
   override: boolean;
   auto_merge: boolean;
-  required_contexts: string[] | undefined;
+  required_contexts?: string[];
   payload?: { [key: string]: any };
 };
 
@@ -40,12 +40,10 @@ async function createStart(
       environment: environment,
       description: description,
       auto_merge: stepArgs.auto_merge,
+      required_contexts: stepArgs.required_contexts,
       transient_environment: true,
       payload: stepArgs.payload,
     };
-    if (stepArgs.required_contexts !== undefined) {
-      options["required_contexts"] = stepArgs.required_contexts;
-    }
     const deployment = await github.rest.repos.createDeployment(options);
     if (deployment.status == 201) {
       deploymentID = deployment.data.id;

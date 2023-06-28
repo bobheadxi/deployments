@@ -3,7 +3,6 @@ import {
   getBooleanInput,
   getOptionalInput,
   getRequiredInput,
-  parseOptionalStringArrayInput,
 } from "./input";
 import Logger from "./log";
 
