@@ -25,10 +25,8 @@ export function parseOptionalStringArrayInput(
 ): string[] | undefined {
   const input = getOptionalInput(key);
 
-  if (input === undefined) {
+  if (input === undefined || input === "<<EMPTY>>") {
     return [];
-  } else if (input === "null") {
-    return undefined;
   }
 
   const strings: string[] = [];
