@@ -17,6 +17,10 @@ export interface DeploymentContext {
   };
 }
 
+function getGitHubServerUrl(): string {
+  return process.env["GITHUB_SERVER_URL"] || "https://github.com";
+}
+
 /**
  * Generates configuration for this action run.
  */
@@ -44,7 +48,7 @@ export function collectDeploymentContext(): DeploymentContext {
       description: getOptionalInput("desc"),
       logsURL:
         getOptionalInput("logs") ||
-        `https://github.com/${owner}/${repo}/commit/${sha}/checks`,
+        `${getGitHubServerUrl()}/${owner}/${repo}/commit/${sha}/checks`,
     },
   };
 }
