@@ -25,11 +25,15 @@ export function parseOptionalRequiredContexts(
 ): string[] | undefined {
   const required_contexts = getOptionalInput(key);
 
-  if (required_contexts !== '*') {
-    if (required_contexts == undefined || required_contexts === '' || required_contexts === '[]') {
+  if (required_contexts !== "*") {
+    if (
+      required_contexts == undefined ||
+      required_contexts === "" ||
+      required_contexts === "[]"
+    ) {
       return [];
     } else {
-      return required_contexts.split(',');
+      return required_contexts.split(",");
     }
   }
 }

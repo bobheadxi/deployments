@@ -41,7 +41,8 @@ export async function run(
             deploymentID: getOptionalInput("deployment_id"),
             override: getBooleanInput("override", false), // default to false on start
             auto_merge: getBooleanInput("auto_merge", false),
-            required_contexts: parseOptionalRequiredContexts("required_contexts"),
+            required_contexts:
+              parseOptionalRequiredContexts("required_contexts"),
             payload,
           };
           const stepArgs: StartArgs = start_args;
