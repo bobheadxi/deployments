@@ -34,6 +34,12 @@ inputs:
   task:
     required: false
     description: The task to assign to the deployment, defaults to 'deploy'
+  auto_merge:
+    required: false
+    description: Attempts to automatically merge the default branch into the requested ref, if it's behind the default branch. Defaults to `false`
+  required_contexts:
+    required: false
+    description: The status contexts to verify against commit status checks, separated by commas. If this argument is `"*"`, all checks are run. If this argument is omitted, or if it's set to `""`, checking is bypassed entirely. Defaults to `""`.
 
   debug:
     required: false
