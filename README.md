@@ -5,15 +5,13 @@ Instead of exposing convoluted Action configuration that mirrors that of the [Gi
 
 > 📢 This project is in need of additional maintainers - if you are interested in helping out please [let me know](https://github.com/bobheadxi/deployments/discussions/103)!
 
-- [GitHub Deployments ](#github-deployments--)
-  - [Configuration](#configuration)
-    - [`step: start`](#step-start)
-    - [`step: finish`](#step-finish)
-    - [`step: deactivate-env`](#step-deactivate-env)
-    - [`step: delete-env`](#step-delete-env)
-  - [Debugging](#debugging)
-  - [Migrating to v1](#migrating-to-v1)
-  - [Migrating to v1.2.0](#migrating-to-v120)
+- [Configuration](#configuration)
+  - [`step: start`](#step-start)
+  - [`step: finish`](#step-finish)
+  - [`step: deactivate-env`](#step-deactivate-env)
+  - [`step: delete-env`](#step-delete-env)
+- [Debugging](#debugging)
+- [Migrating to v1](#migrating-to-v1)
 
 A simple example:
 
@@ -21,41 +19,41 @@ A simple example:
 on:
   push:
     branches:
-      - main
+    - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: start deployment
-        uses: bobheadxi/deployments@v1
-        id: deployment
-        with:
-          step: start
-          token: ${{ secrets.GITHUB_TOKEN }}
-          env: release
+    - name: start deployment
+      uses: bobheadxi/deployments@v1
+      id: deployment
+      with:
+        step: start
+        token: ${{ secrets.GITHUB_TOKEN }}
+        env: release
 
-      - name: do my deploy
-        # ...
+    - name: do my deploy
+      # ...
 
-      - name: update deployment status
-        uses: bobheadxi/deployments@v1
-        if: always()
-        with:
-          step: finish
-          token: ${{ secrets.GITHUB_TOKEN }}
-          status: ${{ job.status }}
-          env: ${{ steps.deployment.outputs.env }}
-          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+    - name: update deployment status
+      uses: bobheadxi/deployments@v1
+      if: always()
+      with:
+        step: finish
+        token: ${{ secrets.GITHUB_TOKEN }}
+        status: ${{ job.status }}
+        env: ${{ steps.deployment.outputs.env }}
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
 ```
 
 You can also refer to other projects that also use this action - you can find [more usages of this action on Sourcegraph](https://sourcegraph.com/search?q=context:global+uses:+bobheadxi/deployments%40.*+file:%5E%5C.github/workflows+-repo:bobheadxi+count:all&patternType=regexp), or check out the following examples:
 
 - [`github/super-linter`](https://sourcegraph.com/search?q=context:global+repo:%5Egithub%5C.com/github/super-linter%24+file:%5E%5C.github/workflows+bobheadxi/deployments&patternType=literal) [![GitHub Repo stars](https://img.shields.io/github/stars/github/super-linter?style=social)](https://github.com/github/super-linter) - [GitHub's all-in-one linter Action](https://github.blog/2020-06-18-introducing-github-super-linter-one-linter-to-rule-them-all/)
 - [`mxcl/PromiseKit`](https://sourcegraph.com/search?q=context:global+repo:%5Egithub%5C.com/mxcl/PromiseKit%24+file:%5E%5C.github/workflows+bobheadxi/deployments&patternType=literal) [![GitHub Repo stars](https://img.shields.io/github/stars/mxcl/PromiseKit?style=social)](https://github.com/mxcl/PromiseKit) - promises for Swift and Objective-C
-- [`saleor/saleor`](https://sourcegraph.com/search?q=repo:%5Egithub%5C.com/saleor/saleor%24+bobheadxi/deployments&patternType=literal) [![GitHub Repo stars](https://img.shields.io/github/stars/saleor/saleor?style=social)](https://github.com/saleor/saleor) - modular, high performance, headless e-commerce storefront
+- [`saleor/saleor`](https://sourcegraph.com/search?q=repo:%5Egithub%5C.com/saleor/saleor%24+bobheadxi/deployments\&patternType=literal) [![GitHub Repo stars](https://img.shields.io/github/stars/saleor/saleor?style=social)](https://github.com/saleor/saleor) - modular, high performance, headless e-commerce storefront
 - [`sharetribe/sharetribe`](https://sourcegraph.com/search?q=context:global+repo:%5Egithub%5C.com/sharetribe/sharetribe%24+file:%5E%5C.github/workflows+bobheadxi/deployments&patternType=literal) [![GitHub Repo stars](https://img.shields.io/github/stars/sharetribe/sharetribe?style=social)](https://github.com/sharetribe/sharetribe) - marketplace software
-- [`skylines-project/skylines`](https://sourcegraph.com/search?q=repo:%5Egithub%5C.com/skylines-project/skylines%24+bobheadxi/deployments&patternType=literal) [![GitHub Repo stars](https://img.shields.io/github/stars/skylines-project/skylines?style=social)](https://github.com/skylines-project/skylines) - live tracking, flight database and competition web platform
+- [`skylines-project/skylines`](https://sourcegraph.com/search?q=repo:%5Egithub%5C.com/skylines-project/skylines%24+bobheadxi/deployments\&patternType=literal) [![GitHub Repo stars](https://img.shields.io/github/stars/skylines-project/skylines?style=social)](https://github.com/skylines-project/skylines) - live tracking, flight database and competition web platform
 
 Also feel free to chime in on the [show and tell discussion](https://github.com/bobheadxi/deployments/discussions/84) to share your usages of this Action!
 
@@ -63,17 +61,17 @@ Check out [this blog post](https://dev.to/bobheadxi/branch-previews-with-google-
 
 ## Configuration
 
-The following [`inputs`](https://help.github.com/en/articles/workflow-syntax-for-github-actions#jobsjob_idstepswith) configuration options are for _all steps_:
+The following [`inputs`](https://help.github.com/en/articles/workflow-syntax-for-github-actions#jobsjob_idstepswith) configuration options are for *all steps*:
 
 | Variable     | Default                      | Purpose                                                                                                                                |
 | ------------ | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | `step`       |                              | One of [`start`](#step-start), [`finish`](#step-finish), [`deactivate-env`](#step-deactivate-env), or [`delete-env`](#step-delete-env) |
-| `token`      | `${{ github.token }}`        | provide your `${{ github.token }}` or `${{ secrets.GITHUB_TOKEN }}` for API access                                                     |
+| `token`      | `${{ github.token }}`          | provide your `${{ github.token }}` or `${{ secrets.GITHUB_TOKEN }}` for API access                                                                              |
 | `env`        |                              | identifier for environment to deploy to (e.g. `staging`, `prod`, `main`)                                                               |
 | `repository` | Current repository           | target a specific repository for updates, e.g. `owner/repo`                                                                            |
 | `logs`       | URL to GitHub commit checks  | URL of your deployment logs                                                                                                            |
 | `desc`       | GitHub-generated description | description for this deployment                                                                                                        |
-| `ref`        | `github.ref`                 | Specify a particular git ref to use, (e.g. `${{ github.head_ref }}`)                                                                   |
+| `ref`        | `github.ref`                 | Specify a particular git ref to use,  (e.g. `${{ github.head_ref }}`)                                                                  |
 
 ### `step: start`
 
@@ -84,14 +82,13 @@ This is best used on the `push: { branches: [ ... ] }` event, but you can also h
 
 In addition to the [core configuration](#configuration), the following [`inputs`](https://help.github.com/en/articles/workflow-syntax-for-github-actions#jobsjob_idstepswith) are available:
 
-| Variable            | Default    | Purpose                                                                                                                             |
-| ------------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `deployment_id`     |            | Use an existing deployment instead of creating a new one (e.g. `${{ github.event.deployment.id }}`)                                 |
-| `override`          | `false`    | whether to mark existing deployments of this environment as inactive                                                                |
-| `auto_merge`        | `false`    | Attempts to automatically merge the default branch into the requested ref, if it's behind the default branch                        |
-| `required_contexts` | `'null'`   | The names of any status contexts to verify against, separated by newlines. To bypass checking entirely, pass a string called `null` |
-| `payload`           |            | JSON-formatted dictionary with extra information about the deployment                                                               |
-| `task`              | `'deploy'` | change the task associated with this deployment, can be any string                                                                  |
+| Variable        | Default    | Purpose                                                                                             |
+| --------------- | -------    | --------------------------------------------------------------------------------------------------- |
+| `deployment_id` |            | Use an existing deployment instead of creating a new one (e.g. `${{ github.event.deployment.id }}`) |
+| `override`      | `false`    | whether to mark existing deployments of this environment as inactive                                |
+| `payload`       |            | JSON-formatted dictionary with extra information about the deployment                               |
+| `task`          | `'deploy'` | change the task associated with this deployment, can be any string
+
 
 The following [`outputs`](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#steps-context) are available:
 
@@ -109,20 +106,20 @@ The following [`outputs`](https://help.github.com/en/actions/automating-your-wor
 on:
   push:
     branches:
-      - main
+    - main
 
 jobs:
   deploy:
     steps:
-      - name: start deployment
-        uses: bobheadxi/deployments@v1
-        id: deployment
-        with:
-          step: start
-          env: release
+    - name: start deployment
+      uses: bobheadxi/deployments@v1
+      id: deployment
+      with:
+        step: start
+        env: release
 
-      - name: do my deploy
-        # ...
+    - name: do my deploy
+      # ...
 ```
 
 </p>
@@ -142,15 +139,15 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: start deployment
-        uses: bobheadxi/deployments@v1
-        id: deployment
-        with:
-          step: start
-          env: integration
+    - name: start deployment
+      uses: bobheadxi/deployments@v1
+      id: deployment
+      with:
+        step: start
+        env: integration
 
-      - name: do my deploy
-        # ...
+    - name: do my deploy
+      # ...
 ```
 
 </p>
@@ -185,21 +182,21 @@ In addition to the [core configuration](#configuration), the following [`inputs`
 jobs:
   deploy:
     steps:
-      - name: start deployment
-        # ... see previous example
+    - name: start deployment
+      # ... see previous example
 
-      - name: do my deploy
-        # ...
+    - name: do my deploy
+      # ...
 
-      - name: update deployment status
-        uses: bobheadxi/deployments@v1
-        if: always()
-        with:
-          step: finish
-          token: ${{ secrets.GITHUB_TOKEN }}
-          status: ${{ job.status }}
-          env: ${{ steps.deployment.outputs.env }}
-          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+    - name: update deployment status
+      uses: bobheadxi/deployments@v1
+      if: always()
+      with:
+        step: finish
+        token: ${{ secrets.GITHUB_TOKEN }}
+        status: ${{ job.status }}
+        env: ${{ steps.deployment.outputs.env }}
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
 ```
 
 </p>
@@ -223,29 +220,29 @@ Refer to the [core configuration](#configuration) for available [`inputs`](https
 ```yml
 on:
   pull_request:
-    types: [closed]
+    types: [ closed ]
 
 jobs:
   prune:
     steps:
-      # see https://dev.to/bobheadxi/branch-previews-with-google-app-engine-and-github-actions-3pco
-      - name: extract branch name
-        id: get_branch
-        shell: bash
-        env:
-          PR_HEAD: ${{ github.head_ref }}
-        run: echo "##[set-output name=branch;]$(echo ${PR_HEAD#refs/heads/} | tr / -)"
+    # see https://dev.to/bobheadxi/branch-previews-with-google-app-engine-and-github-actions-3pco
+    - name: extract branch name
+      id: get_branch
+      shell: bash
+      env:
+        PR_HEAD: ${{ github.head_ref }}
+      run: echo "##[set-output name=branch;]$(echo ${PR_HEAD#refs/heads/} | tr / -)"
 
-      - name: do my deployment shutdown
-        # ...
+    - name: do my deployment shutdown
+      # ...
 
-      - name: mark environment as deactivated
-        uses: bobheadxi/deployments@v1
-        with:
-          step: deactivate-env
-          token: ${{ secrets.GITHUB_TOKEN }}
-          env: ${{ steps.get_branch.outputs.branch }}
-          desc: Environment was pruned
+    - name: mark environment as deactivated
+      uses: bobheadxi/deployments@v1
+      with:
+        step: deactivate-env
+        token: ${{ secrets.GITHUB_TOKEN }}
+        env: ${{ steps.get_branch.outputs.branch }}
+        desc: Environment was pruned
 ```
 
 </p>
