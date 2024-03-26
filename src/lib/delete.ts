@@ -36,12 +36,24 @@ async function deleteEnvironment(
     log.info(`${environment}: ${existing} deployments deleted`);
   }
 
-  await github.rest.repos.deleteAnEnvironment({
-    owner: context.owner,
-    repo: context.repo,
-    environment_name: environment,
-  });
-  log.info(`${environment}: environment deleted`);
+  log.info(`deleting environment: "${environment}"`);
+  try {
+    await github.rest.repos.deleteAnEnvironment({
+      owner: context.owner,
+      repo: context.repo,
+      environment_name: environment,
+    });
+    log.info(`${environment}: environment deleted`);
+  } catch (error: any) {
+    if ("status" in error && error.status == 404) {
+      log.fail(
+        `got a 404 deleting ${environment}, check that your PAT has repo scope and that the pat user is an admin`
+      );
+    } else {
+      log.fail(`error while deleting ${environment}: ${error}`);
+      log.debug(error);
+    }
+  }
 }
 
 export default deleteEnvironment;
