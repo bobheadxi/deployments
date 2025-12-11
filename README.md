@@ -24,6 +24,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions: 
+      deployments: write
     steps:
     - name: start deployment
       uses: bobheadxi/deployments@v1
@@ -63,15 +65,16 @@ Check out [this blog post](https://dev.to/bobheadxi/branch-previews-with-google-
 
 The following [`inputs`](https://help.github.com/en/articles/workflow-syntax-for-github-actions#jobsjob_idstepswith) configuration options are for *all steps*:
 
-| Variable     | Default                      | Purpose                                                                                                                                |
-| ------------ | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `step`       |                              | One of [`start`](#step-start), [`finish`](#step-finish), [`deactivate-env`](#step-deactivate-env), or [`delete-env`](#step-delete-env) |
-| `token`      | `${{ github.token }}`          | provide your `${{ github.token }}` or `${{ secrets.GITHUB_TOKEN }}` for API access                                                                              |
-| `env`        |                              | identifier for environment to deploy to (e.g. `staging`, `prod`, `main`)                                                               |
-| `repository` | Current repository           | target a specific repository for updates, e.g. `owner/repo`                                                                            |
-| `logs`       | URL to GitHub commit checks  | URL of your deployment logs                                                                                                            |
-| `desc`       | GitHub-generated description | description for this deployment                                                                                                        |
-| `ref`        | `github.ref`                 | Specify a particular git ref to use,  (e.g. `${{ github.head_ref }}`)                                                                  |
+| Variable     | Default                      | Purpose                                                                                                                                                                                                                                 |
+| ------------ | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `step`       |                              | One of [`start`](#step-start), [`finish`](#step-finish), [`deactivate-env`](#step-deactivate-env), or [`delete-env`](#step-delete-env)                                                                                                  |
+| `token`      | `${{ github.token }}`         | provide your `${{ github.token }}` or `${{ secrets.GITHUB_TOKEN }}` for API access. Don't forget to make sure that the token has the rights to work with the Deployments API. Or specify `permissions.deployments: write` for your job |
+| `env`        |                              | identifier for environment to deploy to (e.g. `staging`, `prod`, `main`)                                                                                                                                                                |
+| `repository` | Current repository           | target a specific repository for updates, e.g. `owner/repo`                                                                                                                                                                             |
+| `logs`       | URL to GitHub commit checks  | URL of your deployment logs                                                                                                                                                                                                             |
+| `desc`       | GitHub-generated description | description for this deployment                                                                                                                                                                                                         |
+| `ref`        | `github.ref`                 | Specify a particular git ref to use,  (e.g. `${{ github.head_ref }}`)                                                                                                                                                                   |
+
 
 ### `step: start`
 
