@@ -11,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Environment
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: '24'
           cache: 'npm'
@@ -37,8 +37,8 @@ jobs:
           exit_code: 1
       fail-fast: false
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - uses: actions/checkout@v6
+    - uses: actions/setup-node@v6
       with:
         node-version: '24'
         cache: 'npm'
@@ -72,7 +72,7 @@ jobs:
 
 
     - name: assert deployment in progress
-      uses: actions/github-script@v7
+      uses: actions/github-script@v9
       env:
         deployment_id: ${{ steps.deployment.outputs.deployment_id }}
         status_id: ${{ steps.deployment.outputs.status_id }}
@@ -109,7 +109,7 @@ jobs:
         debug: true
 
     - name: assert deployment complete
-      uses: actions/github-script@v7
+      uses: actions/github-script@v9
       env:
         deployment_id: ${{ steps.deployment.outputs.deployment_id }}
         status_id: ${{ steps.finish.outputs.status_id }}
