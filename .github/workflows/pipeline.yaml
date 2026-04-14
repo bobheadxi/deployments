@@ -11,24 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Environment
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '24'
+          cache: 'npm'
 
       # Dependencies
-      # https://docs.github.com/en/actions/guides/caching-dependencies-to-speed-up-workflows#example-using-the-cache-action
-      - name: Cache node modules
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
       - run: npm install
 
       # Checks
@@ -48,31 +37,20 @@ jobs:
           exit_code: 1
       fail-fast: false
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '24'
+        cache: 'npm'
 
     # Dependencies
-    # https://docs.github.com/en/actions/guides/caching-dependencies-to-speed-up-workflows#example-using-the-cache-action
-    - name: Cache node modules
-      uses: actions/cache@v2
-      env:
-        cache-name: cache-node-modules
-      with:
-        path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-build-${{ env.cache-name }}-
-          ${{ runner.os }}-build-
-          ${{ runner.os }}-
     - run: npm install
     - run: npm run build
 
     - name: extract branch name
       id: get_branch
       shell: bash
-      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/} | tr / -)"
+      run: echo "branch=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_OUTPUT
 
     - name: start deployment
       uses: ./
@@ -94,7 +72,7 @@ jobs:
 
 
     - name: assert deployment in progress
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       env:
         deployment_id: ${{ steps.deployment.outputs.deployment_id }}
         status_id: ${{ steps.deployment.outputs.status_id }}
@@ -131,7 +109,7 @@ jobs:
         debug: true
 
     - name: assert deployment complete
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       env:
         deployment_id: ${{ steps.deployment.outputs.deployment_id }}
         status_id: ${{ steps.finish.outputs.status_id }}
