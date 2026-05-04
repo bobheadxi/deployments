@@ -56,7 +56,7 @@ async function createFinish(
     ref: context.ref,
 
     // only set environment_url if deployment worked
-    environment_url: newStatus === "success" ? stepArgs.envURL : "",
+    ...(newStatus === "success" && stepArgs.envURL ? { environment_url: stepArgs.envURL } : {}),
     // set log_url to action by default
     log_url: logsURL,
     // if we are overriding previous deployments, let GitHub deactivate past
